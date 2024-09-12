@@ -9,8 +9,8 @@
   "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"],
   "configurations": [
     {
-      "command": "npm start",
-      "name": "Run npm start",
+      "command": "pnpm start",
+      "name": "Run pnpm start",
       "request": "launch",
       "type": "node-terminal"
     }
