@@ -4,7 +4,8 @@
     "module": "CommonJS",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@/utils/*": ["src/common/utils/*"]
     },
     "moduleResolution": "Node",
     "outDir": "dist",

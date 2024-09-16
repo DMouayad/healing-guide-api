@@ -32,9 +32,9 @@ importers:
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
-      pino-http:
-        specifier: ^10.0.0
-        version: 10.3.0
+      pino:
+        specifier: ^9.4.0
+        version: 9.4.0
       swagger-ui-express:
         specifier: ^5.0.0
         version: 5.0.1(express@4.21.0)
@@ -995,10 +995,6 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  get-caller-file@2.0.5:
-    resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
-    engines: {node: 6.* || 8.* || >= 10.*}
-
   get-east-asian-width@1.2.0:
     resolution: {integrity: sha512-2nk+7SIVb14QrgXFHcm84tD4bKQz0RxPuMT8Ag5KPOq7J5fEmAg0UbXdTOSHqNuHSU28k55qnceesxXRZGzKWA==}
     engines: {node: '>=18'}
@@ -1380,9 +1376,6 @@ packages:
 
   pino-abstract-transport@1.2.0:
     resolution: {integrity: sha512-Guhh8EZfPCfH+PMXAb6rKOjGQEoy0xlAIn+irODG5kgfYV+BQ0rGYYWTIel3P5mmyXqkYkPmdIkywsn6QKUR1Q==}
-
-  pino-http@10.3.0:
-    resolution: {integrity: sha512-kaHQqt1i5S9LXWmyuw6aPPqYW/TjoDPizPs4PnDW4hSpajz2Uo/oisNliLf7We1xzpiLacdntmw8yaZiEkppQQ==}
 
   pino-pretty@11.2.2:
     resolution: {integrity: sha512-2FnyGir8nAJAqD3srROdrF1J5BIcMT4nwj7hHSc60El6Uxlym00UbCCd8pYIterstVBFlMyF1yFV8XdGIPbj4A==}
@@ -2670,8 +2663,6 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  get-caller-file@2.0.5: {}
-
   get-east-asian-width@1.2.0: {}
 
   get-func-name@2.0.2: {}
@@ -3000,13 +2991,6 @@ snapshots:
     dependencies:
       readable-stream: 4.5.2
       split2: 4.2.0
-
-  pino-http@10.3.0:
-    dependencies:
-      get-caller-file: 2.0.5
-      pino: 9.4.0
-      pino-std-serializers: 7.0.0
-      process-warning: 4.0.0
 
   pino-pretty@11.2.2:
     dependencies:
