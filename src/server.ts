@@ -5,9 +5,9 @@ import helmet from "helmet";
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { userRouter } from "@/api/user/userRouter";
-import errorHandler from "@/common/middleware/errorHandler";
-import rateLimiter from "@/common/middleware/rateLimiter";
 import { env } from "@/common/utils/envConfig";
+import errorHandler from "@/middleware/errorHandler";
+import rateLimiter from "@/middleware/rateLimiter";
 
 const app: Express = express();
 
