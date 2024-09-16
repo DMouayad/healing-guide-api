@@ -5,7 +5,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@/utils/*": ["src/common/utils/*"]
+      "@utils/*": ["src/common/utils/*"],
+      "@api/*": ["src/api/*"],
+      "@middleware/*": ["src/middleware/*"]
     },
     "moduleResolution": "Node",
     "outDir": "dist",
