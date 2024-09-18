@@ -1,9 +1,9 @@
 {
-  "name": "express-typescript-boilerplate",
+  "name": "healing-guide-api",
   "version": "1.0.14",
-  "description": "An Express boilerplate backend",
-  "author": "Edwin Hernandez",
-  "repository": "edwinhern/express-typescript-2024",
+  "description": "A Restful API for the HealingGuide app",
+  "author": "Mouayad Alhamwi",
+  "repository": "DMouayad/healing-guide-api",
   "license": "MIT",
   "main": "index.ts",
   "private": true,
