@@ -1,13 +1,13 @@
 import cors from "cors";
-import express, { type Express } from "express";
+import express, { Router, type Express } from "express";
 import helmet from "helmet";
 
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
-import { userRouter } from "@/api/user/userRouter";
 import { env } from "@/common/utils/envConfig";
 import errorHandler from "@/middleware/errorHandler";
 import rateLimiter from "@/middleware/rateLimiter";
+import { apiV1Router } from "./api/routes";
 
 const app: Express = express();
 
@@ -21,12 +21,10 @@ app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
 
-// Request logging
-// app.use(requestLogger);
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
-// API Routes
-app.use("/users", userRouter);
+// API Routes - version 1
+app.use("/api/v1", apiV1Router);
 
 // Swagger UI
 app.use(openAPIRouter);
