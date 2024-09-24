@@ -2,7 +2,8 @@ import { app } from "@/server";
 import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
 
-import { db, testDBConnection } from "./db";
+import { db } from "./db";
+import { testDBConnection } from "./db/utils";
 
 // start Express app
 initServer()
