@@ -10,12 +10,15 @@ export const UserSchema = z.object({
 	id: z.number(),
 	name: z.string(),
 	email: z.string().email(),
-	age: z.number(),
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });
 
 // Input Validation for 'GET users/:id' endpoint
-export const GetUserSchema = z.object({
+export const GetUserRequestSchema = z.object({
 	params: z.object({ id: commonValidations.id }),
 });
+export const DeleteUserRequestSchema = z.object({
+	params: z.object({ id: commonValidations.id }),
+});
+export const requests = { get: GetUserRequestSchema, delete: DeleteUserRequestSchema };

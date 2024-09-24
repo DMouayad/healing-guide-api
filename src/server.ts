@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { Router, type Express } from "express";
+import express, { type Express } from "express";
 import helmet from "helmet";
 
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
@@ -23,7 +23,7 @@ app.use(rateLimiter);
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
-// API Routes - version 1
+// Restful API Routes - version 1
 app.use("/api/v1", apiV1Router);
 
 // Swagger UI
