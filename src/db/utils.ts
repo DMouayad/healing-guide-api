@@ -33,7 +33,6 @@ function handleMigrationResult(resultSet: MigrationResultSet) {
 	if (error) {
 		logger.error("failed to migrate");
 		logger.error(error);
-		process.exit(1);
 	}
 }
 export async function migrateDBDown() {
