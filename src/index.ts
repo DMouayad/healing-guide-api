@@ -10,6 +10,7 @@ import { migrateDBUp, testDBConnection } from "./db/utils";
 initServer()
 	.catch((err) => {
 		logger.fatal(`Server initialization failed | ${err}`);
+		process.exit(1);
 	})
 	.then(() => testDBConnection())
 	.catch((err) => {
