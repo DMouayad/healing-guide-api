@@ -2,8 +2,10 @@ import { app } from "@/server";
 import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
 
+import expressListEndpoints from "express-list-endpoints";
 import { db } from "./db";
 import { migrateDBUp, testDBConnection } from "./db/utils";
+
 // start Express app
 initServer()
 	.catch((err) => {
@@ -24,6 +26,9 @@ async function initServer() {
 	return await new Promise((resolve) => {
 		// start listening to the server
 		const server = app.listen(env.PORT);
+		if (env.NODE_ENV === "development") {
+			console.log(expressListEndpoints(app));
+		}
 		server.addListener("close", async () => {
 			await db.destroy();
 		});
