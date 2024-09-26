@@ -8,6 +8,7 @@ import { env } from "@/common/utils/envConfig";
 import errorHandler from "@/middleware/errorHandler";
 import rateLimiter from "@/middleware/rateLimiter";
 import { apiV1Router } from "./api/routes";
+import { requestLogger } from "./middleware/requestLogger";
 
 const app: Express = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
+app.use(requestLogger);
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
