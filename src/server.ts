@@ -5,9 +5,10 @@ import helmet from "helmet";
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { env } from "@/common/utils/envConfig";
-import errorHandler from "@/middleware/errorHandler";
+
 import rateLimiter from "@/middleware/rateLimiter";
 import { apiV1Router } from "./api/routes";
+import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";
 
 const app: Express = express();
@@ -30,8 +31,7 @@ app.use("/api/v1", apiV1Router);
 
 // Swagger UI
 app.use(openAPIRouter);
-
 // Error handlers
-app.use(errorHandler());
+app.use(unexpectedRequestHandler, errorHandler);
 
 export { app };
