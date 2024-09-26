@@ -28,7 +28,7 @@ async function initServer() {
 		// start listening to the server
 		const server = app.listen(env.PORT);
 		if (env.NODE_ENV === "development") {
-			console.log(expressListEndpoints(app));
+			console.log(expressListEndpoints(app.router));
 		}
 		server.addListener("close", async () => {
 			await db.destroy();
