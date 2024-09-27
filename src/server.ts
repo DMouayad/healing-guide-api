@@ -9,6 +9,8 @@ import { env } from "@/common/utils/envConfig";
 import rateLimiter from "@/middleware/rateLimiter";
 import { apiV1Router } from "./api/routes";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
+import { hasRequestBody } from "./middleware/hasRequestBody";
+import { hasValidContentType } from "./middleware/hasValidContentType";
 import { requestLogger } from "./middleware/requestLogger";
 
 const app: Express = express();
@@ -23,6 +25,12 @@ app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
 app.use(requestLogger);
+
+// for every PUT, POST or PATCH request will check if:
+// - Request has the correct headers for the content type
+// - Req body is not empty
+app.use(hasValidContentType, hasRequestBody);
+// End of Middlewares
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);

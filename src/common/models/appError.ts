@@ -24,10 +24,19 @@ class AppError {
 	static ROUTE_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
 	}
-	static EMPTY_OR_WRONG_REQ_BODY(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.REQUEST_BODY, StatusCodes.INTERNAL_SERVER_ERROR, {
-			description: params?.description ?? "Request body is empty or has wrong input. Please fill the body",
-			message: params?.message,
+	static ENTITY_NOT_FOUND(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.ENTITY_NOT_FOUND, StatusCodes.BAD_REQUEST, params);
+	}
+	static VALIDATION(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.VALIDATION, StatusCodes.BAD_REQUEST, params);
+	}
+	static UNSUPPORTED_MEDIA_TYPE(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.INVALID_CONTENT_TYPE, StatusCodes.UNSUPPORTED_MEDIA_TYPE, params);
+	}
+	static EMPTY_REQUEST_BODY(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.EMPTY_REQUEST_BODY, StatusCodes.BAD_REQUEST, {
+			message: "Request body cannot be empty!",
+			...params,
 		});
 	}
 }
