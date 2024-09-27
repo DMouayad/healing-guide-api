@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
 import { ActionResult } from "@/common/models/actionResult";
-import { handleActionResult } from "@/common/utils/httpHandlers";
 
 export const healthCheckRegistry = new OpenAPIRegistry();
 export const healthCheckRouter: Router = express.Router();
@@ -18,5 +17,5 @@ healthCheckRegistry.registerPath({
 
 healthCheckRouter.get("/", (_req: Request, res: Response) => {
 	const result = ActionResult.success("Service is healthy", null);
-	return handleActionResult(result, res);
+	res.status(result.statusCode).json(result);
 });
