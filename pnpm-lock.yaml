@@ -26,9 +26,6 @@ importers:
       express:
         specifier: ^5.0.0
         version: 5.0.0
-      express-list-endpoints:
-        specifier: ^7.1.0
-        version: 7.1.0
       express-rate-limit:
         specifier: ^7.4.0
         version: 7.4.0(express@5.0.0)
@@ -1049,10 +1046,6 @@ packages:
   execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
-
-  express-list-endpoints@7.1.0:
-    resolution: {integrity: sha512-7FyKxABfkRC0t6B6btxlAcFr0WrpPAL12MFAGhAxoIi/OyphxVQzVmyuWbcNxEApBmNzzgt2khjlqj/3wyHMMA==}
-    engines: {node: '>=18'}
 
   express-rate-limit@7.4.0:
     resolution: {integrity: sha512-v1204w3cXu5gCDmAvgvzI6qjzZzoMWKnyVDk3ACgfswTQLYiGen+r8w0VnXnGMmzEN/g8fwIQ4JrFFd4ZP6ssg==}
@@ -3066,8 +3059,6 @@ snapshots:
       onetime: 6.0.0
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
-
-  express-list-endpoints@7.1.0: {}
 
   express-rate-limit@7.4.0(express@5.0.0):
     dependencies:
