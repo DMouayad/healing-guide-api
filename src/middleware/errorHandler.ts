@@ -1,4 +1,4 @@
-import AppError from "@/common/models/appError";
+import type AppError from "@/common/models/appError";
 import { env } from "@/common/utils/envConfig";
 import { logger } from "@utils/logger";
 import type { ErrorRequestHandler, RequestHandler } from "express";
@@ -20,10 +20,12 @@ export const unexpectedRequestHandler: RequestHandler = (req, res) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-	if (err instanceof AppError) {
+	if (isAppErr(err)) {
 		res.status(err.status).json(err);
 	} else {
-		res.status(err.status || 500).send(err.message);
+		const errStatusCode = err.status || err.statusCode || 500;
+		const errMessage = errStatusCode === 500 ? "Internal Server Error" : err.message;
+		res.status(errStatusCode).json({ message: errMessage });
 	}
 	if (env.isDevelopment) {
 		logger.error(err);
@@ -31,6 +33,9 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 		logger.error(err);
 	}
 };
+function isAppErr(err: any): err is AppError {
+	return (err as AppError).errCode !== undefined;
+}
 function shouldLogErrorInProduction(err: any): boolean {
 	return notImportantCodes.includes(err.status) || notImportantCodes.includes(err.params.status);
 }
