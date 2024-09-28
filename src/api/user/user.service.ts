@@ -11,13 +11,13 @@ export class UserService implements IUserService {
 	): Promise<IUser | undefined> {
 		const query = db.updateTable("users").where("users.id", "=", id);
 		if (fullName) {
-			query.set("full_name", fullName);
+			query.set("fullName", fullName);
 		}
 		if (email) {
 			query.set("email", email);
 		}
 		if (phoneNumber) {
-			query.set("phone_number", phoneNumber);
+			query.set("phoneNumber", phoneNumber);
 		}
 
 		return await query.returningAll().executeTakeFirst();

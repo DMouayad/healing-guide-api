@@ -1,11 +1,11 @@
 export interface IUser {
 	id: string;
 	activated: boolean;
-	full_name: string;
+	fullName: string;
 	email: string;
-	password_hash: string;
-	phone_number: string;
-	email_verified_at: Date | null;
-	phone_number_verified_at: Date | null;
-	created_at: Date;
+	passwordHash: string;
+	phoneNumber: string;
+	emailVerifiedAt: Date | null;
+	phoneNumberVerifiedAt: Date | null;
+	createdAt: Date;
 }
