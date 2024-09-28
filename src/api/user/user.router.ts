@@ -1,8 +1,10 @@
 import express, { type Router } from "express";
 
-import { validateRequest } from "@/common/utils/httpHandlers";
-import { requests } from "./user.model";
-
+import { userActions } from "./user.actions";
 export const userRouter: Router = express.Router();
-
-userRouter.route("/:id").get(validateRequest(requests.get)).delete(validateRequest(requests.delete));
+// TODO:: ADD MIDDLEWARES: AUTH - VERIFIED
+// biome-ignore format: having methods on on line isn't good for readability
+userRouter.route("/me")
+    .get(userActions.get) //
+    .delete(userActions.delete) //
+    .post(userActions.update) //
