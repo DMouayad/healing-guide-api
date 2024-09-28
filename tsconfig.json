@@ -8,7 +8,8 @@
 			"@utils/*": ["src/common/utils/*"],
 			"@api/*": ["src/api/*"],
 			"@middleware/*": ["src/middleware/*"],
-			"@db/*": ["src/db/*"]
+			"@db/*": ["src/db/*"],
+			"@interfaces/*": ["src/interfaces/*"]
 		},
 		"moduleResolution": "Node",
 		"outDir": "dist",
