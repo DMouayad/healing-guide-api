@@ -21,6 +21,9 @@ class AppError {
 	static BAD_REQUEST(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.BAD_REQUEST, StatusCodes.BAD_REQUEST, params);
 	}
+	static UNAUTHORIZED(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, params);
+	}
 	static ROUTE_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
 	}
@@ -32,6 +35,9 @@ class AppError {
 	}
 	static UNSUPPORTED_MEDIA_TYPE(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.INVALID_CONTENT_TYPE, StatusCodes.UNSUPPORTED_MEDIA_TYPE, params);
+	}
+	static INVALID_ACCESS_TOKEN(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.INVALID_PAT, StatusCodes.UNAUTHORIZED, params);
 	}
 	static EMPTY_REQUEST_BODY(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.EMPTY_REQUEST_BODY, StatusCodes.BAD_REQUEST, {
