@@ -5,15 +5,15 @@ type ParamsOverride = {
 	message?: string;
 	description?: string;
 };
-class AppError {
+class AppError extends Error {
 	constructor(
 		readonly message: string,
 		readonly status: number,
 		readonly errCode: AppErrCode,
 		readonly description?: string,
-		readonly origin?: Error,
-		readonly layer?: string,
-	) {}
+	) {
+		super();
+	}
 
 	static SERVER_ERROR(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.SERVER, StatusCodes.INTERNAL_SERVER_ERROR, params);
@@ -47,11 +47,7 @@ class AppError {
 	}
 }
 function constructErr(errCode: AppErrCode, status: number, params?: ParamsOverride): AppError {
-	return {
-		errCode,
-		...{ message: getReasonPhrase(status), status: status },
-		...params,
-	};
+	return new AppError(params?.message ?? getReasonPhrase(status), status, errCode, params?.description);
 }
 
 export default AppError;

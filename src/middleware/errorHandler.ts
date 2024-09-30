@@ -21,8 +21,12 @@ export const unexpectedRequestHandler: RequestHandler = (req, res) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-	const stackTrace = refineStackTrace(err.stack);
-	err.stack = undefined; // it's important to set the stack as undefined so it won't be visible in the response
+	const shouldLogError = env.isDevelopment || (env.isProduction && shouldLogErrorInProduction(err));
+	err.stack = refineStackTrace(err.stack);
+	if (shouldLogError) {
+		logger.error(err);
+	}
+	err.stack = undefined; // it's important to set the stack as undefined so it won't be included in the response
 	if (isZodError(err)) {
 		const validationErr = AppError.VALIDATION({ message: JSON.stringify(err.format()) });
 		res.status(validationErr.status).json(validationErr);
@@ -33,12 +37,6 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 		const errStatusCode = err.status || err.statusCode || 500;
 		const errMessage = errStatusCode === 500 ? "Internal Server Error" : err.message;
 		res.status(errStatusCode).json({ message: errMessage });
-	}
-	const shouldLogError = env.isDevelopment || (env.isProduction && shouldLogErrorInProduction(err));
-
-	if (shouldLogError) {
-		logger.error(err);
-		logger.error(`Stack trace: Error\n${stackTrace}`);
 	}
 };
 function refineStackTrace(trace: string | undefined) {
