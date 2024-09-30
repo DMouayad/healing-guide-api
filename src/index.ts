@@ -3,7 +3,7 @@ import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
 
 import { db } from "./db";
-import { migrateDBUp, testDBConnection } from "./db/utils";
+import { migrateDBLatest, testDBConnection } from "./db/utils";
 
 // start Express app
 initServer()
@@ -16,7 +16,7 @@ initServer()
 		logger.fatal(`DB connection failed | ${err}`);
 		process.exit(1);
 	})
-	.then(() => migrateDBUp())
+	.then(() => migrateDBLatest())
 	.then(() => {
 		const { NODE_ENV, HOST, PORT } = env;
 		logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
