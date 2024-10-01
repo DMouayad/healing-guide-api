@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
 import type { IUserService } from "@/interfaces/IUserService";
+import { objectToCamel } from "ts-case-convert";
 
 export class UserService implements IUserService {
 	async updateUserById(
@@ -11,22 +12,29 @@ export class UserService implements IUserService {
 	): Promise<IUser | undefined> {
 		const query = db.updateTable("users").where("users.id", "=", id);
 		if (fullName) {
-			query.set("fullName", fullName);
+			query.set("full_name", fullName);
 		}
 		if (email) {
 			query.set("email", email);
 		}
 		if (phoneNumber) {
-			query.set("phoneNumber", phoneNumber);
+			query.set("phone_number", phoneNumber);
 		}
-
-		return await query.returningAll().executeTakeFirst();
+		const user = await query.returningAll().executeTakeFirst();
+		if (user) {
+			return objectToCamel(user);
+		}
 	}
 	async deleteUserById(id: string): Promise<IUser | undefined> {
-		return await db.deleteFrom("users").where("id", "=", id).returningAll().executeTakeFirst();
+		const user = await db.deleteFrom("users").where("id", "=", id).returningAll().executeTakeFirst();
+		if (user) {
+			return objectToCamel(user);
+		}
 	}
 	async getUserById(id: string): Promise<IUser | undefined> {
-		console.log(id);
-		return await db.selectFrom("users").selectAll("users").where("id", "=", id).executeTakeFirst();
+		const user = await db.selectFrom("users").selectAll("users").where("id", "=", id).executeTakeFirst();
+		if (user) {
+			return objectToCamel(user);
+		}
 	}
 }
