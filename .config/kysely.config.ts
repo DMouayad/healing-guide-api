@@ -3,10 +3,6 @@ import { db } from "../src/db";
 export default defineConfig({
 	kysely: db,
 	migrations: {
-		migrationFolder: "migrations",
+		migrationFolder: process.env.MIGRATIONS_FOLDER_PATH,
 	},
-	//   plugins: [],
-	//   seeds: {
-	//     seedFolder: "seeds",
-	//   }
 });

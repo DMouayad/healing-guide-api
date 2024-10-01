@@ -1,13 +1,17 @@
 import cors from "cors";
-import express, { Router, type Express } from "express";
+import express, { type Express } from "express";
 import helmet from "helmet";
 
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { env } from "@/common/utils/envConfig";
-import errorHandler from "@/middleware/errorHandler";
+
 import rateLimiter from "@/middleware/rateLimiter";
 import { apiV1Router } from "./api/routes";
+import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
+import { hasRequestBody } from "./middleware/hasRequestBody";
+import { hasValidContentType } from "./middleware/hasValidContentType";
+import { requestLogger } from "./middleware/requestLogger";
 
 const app: Express = express();
 
@@ -20,16 +24,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);
+app.use(requestLogger);
+
+// for every PUT, POST or PATCH request will check if:
+// - Request has the correct headers for the content type
+// - Req body is not empty
+app.use(hasValidContentType, hasRequestBody);
+// End of Middlewares
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
-// API Routes - version 1
+// Restful API Routes - version 1
 app.use("/api/v1", apiV1Router);
 
 // Swagger UI
 app.use(openAPIRouter);
-
 // Error handlers
-app.use(errorHandler());
+app.use(unexpectedRequestHandler, errorHandler);
 
 export { app };
