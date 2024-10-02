@@ -3,7 +3,7 @@ import type { IUser } from "@/interfaces/IUser";
 import type { IUserRepository } from "@/interfaces/IUserRepository";
 import { objectToCamel } from "ts-case-convert";
 
-export class UserRepository implements IUserRepository {
+export class DBUserRepository implements IUserRepository {
 	async updateUserById(
 		id: string,
 		fullName?: string,
