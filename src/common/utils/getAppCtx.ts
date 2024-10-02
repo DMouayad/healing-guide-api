@@ -1,9 +1,9 @@
-import { AuthTokensRepository } from "@/api/auth/AuthTokensRepository";
-import { UserService } from "@/api/user/user.service";
+import { AuthTokensRepository } from "@/api/auth/authTokensRepository";
+import { UserRepository } from "@/api/user/user.service";
 import type { AppCtx } from "../models/appCtx";
 
 const productionAppCtx: AppCtx = {
-	userService: new UserService(),
+	UserRepository: new UserRepository(),
 	AuthTokensRepository: new AuthTokensRepository(),
 } as const;
 

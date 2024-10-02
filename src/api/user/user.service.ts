@@ -1,9 +1,9 @@
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
-import type { IUserService } from "@/interfaces/IUserService";
+import type { IUserRepository } from "@/interfaces/IUserRepository";
 import { objectToCamel } from "ts-case-convert";
 
-export class UserService implements IUserService {
+export class UserRepository implements IUserRepository {
 	async updateUserById(
 		id: string,
 		fullName?: string,
