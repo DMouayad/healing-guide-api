@@ -9,7 +9,7 @@ export async function authenticated(req: Request, _res: Response, next: NextFunc
 	if (!bearerToken) {
 		throw AppError.UNAUTHORIZED({ description: "Bearer Token required" });
 	}
-	const [token, user] = await getAppCtx().authTokensService.findTokenAndUser(bearerToken);
+	const [token, user] = await getAppCtx().AuthTokensRepository.findTokenAndUser(bearerToken);
 	if (isExpired(token)) {
 		throw AppError.INVALID_ACCESS_TOKEN({ description: "Token expired" });
 	}

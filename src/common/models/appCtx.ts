@@ -1,7 +1,7 @@
-import type { IAuthTokensService } from "@/interfaces/IAuthTokensService";
+import type { IAuthTokensRepository } from "@/interfaces/IAuthTokensRepository";
 import type { IUserService } from "@/interfaces/IUserService";
 
 export type AppCtx = {
 	readonly userService: IUserService;
-	readonly authTokensService: IAuthTokensService;
+	readonly AuthTokensRepository: IAuthTokensRepository;
 };

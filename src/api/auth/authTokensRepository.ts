@@ -4,11 +4,11 @@ import type { ExtractedBearerToken } from "@/common/types";
 import { sha256 } from "@/common/utils/hashing";
 import { logger } from "@/common/utils/logger";
 import { db } from "@/db";
-import type { IAuthTokensService, TokenId } from "@/interfaces/IAuthTokensService";
+import type { IAuthTokensRepository, TokenId } from "@/interfaces/IAuthTokensRepository";
 import type { IUser } from "@/interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
 
-export class AuthTokensService implements IAuthTokensService {
+export class AuthTokensRepository implements IAuthTokensRepository {
 	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, IUser]> {
 		let matchingTokenAndUser: any;
 		const tokenHash = sha256(bearerToken.tokenStr);

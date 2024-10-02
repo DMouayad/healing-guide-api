@@ -1,10 +1,10 @@
-import { AuthTokensService } from "@/api/auth/authTokensService";
+import { AuthTokensRepository } from "@/api/auth/AuthTokensRepository";
 import { UserService } from "@/api/user/user.service";
 import type { AppCtx } from "../models/appCtx";
 
 const productionAppCtx: AppCtx = {
 	userService: new UserService(),
-	authTokensService: new AuthTokensService(),
+	AuthTokensRepository: new AuthTokensRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {
