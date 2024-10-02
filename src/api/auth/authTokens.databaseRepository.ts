@@ -8,7 +8,7 @@ import type { IAuthTokensRepository, TokenId } from "@/interfaces/IAuthTokensRep
 import type { IUser } from "@/interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
 
-export class AuthTokensRepository implements IAuthTokensRepository {
+export class DBAuthTokensRepository implements IAuthTokensRepository {
 	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, IUser]> {
 		let matchingTokenAndUser: any;
 		const tokenHash = sha256(bearerToken.tokenStr);
