@@ -4,7 +4,7 @@ import type { IUser } from "./IUser";
 
 export type TokenId = string | undefined;
 
-export interface IAuthTokensService<Token extends AccessToken = AccessToken, User extends IUser = IUser> {
+export interface IAuthTokensRepository<Token extends AccessToken = AccessToken, User extends IUser = IUser> {
 	findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[Token, User]>;
 	storeToken(token: AccessToken): Promise<TokenId>;
 }

@@ -8,7 +8,7 @@ async function deleteUser(req: Request, res: Response) {
 	const data = userRequests.delete.parse({ params: req.params });
 	await handleAsyncFunc({
 		res,
-		resultPromise: getAppCtx().userService.deleteUserById(data.params.id),
+		resultPromise: getAppCtx().userRepository.deleteUserById(data.params.id),
 		onSuccess: (_) => ({ message: "User was deleted successfully" }),
 		onResultUndefined: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
 	});
@@ -18,7 +18,7 @@ async function getUser(req: Request, res: Response) {
 	const data = userRequests.get.parse({ params: req.params });
 	await handleAsyncFunc({
 		res,
-		resultPromise: getAppCtx().userService.getUserById(data.params.id),
+		resultPromise: getAppCtx().userRepository.getUserById(data.params.id),
 		onSuccess: (user) => ({ responseData: user }),
 		onResultUndefined: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
 	});
@@ -28,7 +28,7 @@ async function updateUser(req: Request, res: Response) {
 	const { fullName, email, phoneNumber } = data.body;
 	await handleAsyncFunc({
 		res,
-		resultPromise: getAppCtx().userService.updateUserById(data.params.id, fullName, email, phoneNumber),
+		resultPromise: getAppCtx().userRepository.updateUserById(data.params.id, fullName, email, phoneNumber),
 		onSuccess: (user) => ({ message: "User was updated successfully", responseData: user }),
 		onResultUndefined: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
 	});
