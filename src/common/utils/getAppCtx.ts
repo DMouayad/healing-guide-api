@@ -1,4 +1,4 @@
-import { DBAuthTokensRepository } from "@/api/auth/authTokens.databaseRepository";
+import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import type { AppCtx } from "../models/appCtx";
 
