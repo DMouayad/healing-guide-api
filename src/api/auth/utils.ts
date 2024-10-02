@@ -25,7 +25,7 @@ export async function createAccessToken(params: CreateAccessTokenParams): Promis
 		createdAt: new Date(),
 		expiresAt: getExpiresAt(params.expirationInMinutes),
 	};
-	const tokenId = await getAppCtx().AuthTokensRepository.storeToken(token);
+	const tokenId = await getAppCtx().authTokensRepository.storeToken(token);
 	if (tokenId) {
 		return {
 			token,
