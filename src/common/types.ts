@@ -38,9 +38,9 @@ export type ObjectValues<T> = T[keyof T];
 export type Role = ObjectValues<typeof APP_ROLES>;
 
 export const APP_ROLES = {
-	guest: { slug: "guest" },
-	admin: { slug: "admin" },
-	patient: { slug: "patient" },
-	facilityManager: { slug: "facilityManager" },
-	physician: { slug: "physician" },
+	guest: { roleId: "1", slug: "guest" },
+	admin: { roleId: "2", slug: "admin" },
+	patient: { roleId: "3", slug: "patient" },
+	facilityManager: { roleId: "4", slug: "facilityManager" },
+	physician: { roleId: "5", slug: "physician" },
 } as const;
