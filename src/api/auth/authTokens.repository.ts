@@ -5,11 +5,11 @@ import { sha256 } from "@/common/utils/hashing";
 import { logger } from "@/common/utils/logger";
 import { db } from "@/db";
 import type { IAuthTokensRepository, TokenId } from "@/interfaces/IAuthTokensRepository";
-import type { IUser } from "@/interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
+import { DBUser } from "../user/user.model";
 
-export class DBAuthTokensRepository implements IAuthTokensRepository {
-	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, IUser]> {
+export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken, DBUser> {
+	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, DBUser]> {
 		let matchingTokenAndUser: any;
 		const tokenHash = sha256(bearerToken.tokenStr);
 
@@ -71,23 +71,13 @@ export class DBAuthTokensRepository implements IAuthTokensRepository {
 	private findTokenBaseQuery() {
 		return db.selectFrom("personal_access_tokens as pat");
 	}
-	private extractUserAndToken(kyselyJoinedQueryResult: any): [IUser | undefined, AccessToken | undefined] {
+	private extractUserAndToken(kyselyJoinedQueryResult: any): [DBUser | undefined, AccessToken | undefined] {
 		// this is because we get a snake_case variables from Kysely
 		const obj: any = objectToCamel(kyselyJoinedQueryResult);
-		let user: IUser | undefined;
+		let user: DBUser | undefined;
 		let token: AccessToken | undefined;
 		if (obj.userId) {
-			user = {
-				id: obj.userId,
-				fullName: obj.fullName,
-				email: obj.email,
-				activated: obj.activated,
-				phoneNumber: obj.phoneNumber,
-				phoneNumberVerifiedAt: obj.phoneNumberVerifiedAt,
-				emailVerifiedAt: obj.emailVerifiedAt,
-				passwordHash: obj.passwordHash,
-				createdAt: obj.userCreatedAt,
-			};
+			user = new DBUser(obj);
 		}
 		if (obj.userId && obj.hash) {
 			token = {
