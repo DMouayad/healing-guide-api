@@ -44,3 +44,8 @@ export const APP_ROLES = {
 	facilityManager: { roleId: "4", slug: "facilityManager" },
 	physician: { roleId: "5", slug: "physician" },
 } as const;
+
+export type ClassProperties<C> = {
+	// biome-ignore lint/complexity/noBannedTypes: it's ok to use Function here, I guess.
+	[Key in keyof C as C[Key] extends Function ? never : Key]: C[Key];
+};
