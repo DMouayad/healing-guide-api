@@ -13,12 +13,14 @@
 		},
 		"moduleResolution": "Node",
 		"outDir": "dist",
+		"strictNullChecks": true,
 		"importsNotUsedAsValues": "remove",
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"types": ["vitest/globals"]
+		"types": ["vitest/globals"],
+		"noErrorTruncation": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]

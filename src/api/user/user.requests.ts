@@ -9,13 +9,20 @@ const getUserRequestSchema = z.object({
 const deleteUserRequestSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
 });
+const updateUserReqBody = z.object({
+	fullName: z.string(),
+	email: z.string().email(),
+	phoneNumber: z.string().transform(validatePhoneNo),
+	activated: z.boolean(),
+});
 export const updateUserRequestSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
-	body: z.object({
-		fullName: z.string().optional(),
-		email: z.string().email().optional(),
-		phoneNumber: z.string().transform(validatePhoneNo).optional(),
-	}),
+	body: z.union([
+		updateUserReqBody,
+		updateUserReqBody.partial({ activated: true }),
+		updateUserReqBody.partial({ activated: true, fullName: true }),
+		updateUserReqBody.partial({ activated: true, fullName: true, email: true }),
+	]),
 });
 export const userRequests = {
 	get: getUserRequestSchema,

@@ -16,7 +16,7 @@ export async function authenticated(req: Request, _res: Response, next: NextFunc
 
 	// attach the user and token to response locals object
 	const authState: AuthState = { user: user, personalAccessToken: token };
-	_res.locals.authState = authState;
+	_res.locals.auth = authState;
 	next();
 }
 
