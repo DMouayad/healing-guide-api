@@ -42,6 +42,12 @@ class AppError extends Error {
 	static INVALID_ACCESS_TOKEN(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.INVALID_PAT, StatusCodes.UNAUTHORIZED, params);
 	}
+	static UNVERIFIED_EMAIL_OR_PHONE(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.UNVERIFIED_EMAIL_OR_PHONE, StatusCodes.FORBIDDEN);
+	}
+	static UNVERIFIED_EMAIL_AND_PHONE(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.UNVERIFIED_EMAIL_AND_PHONE, StatusCodes.FORBIDDEN);
+	}
 	static EMPTY_REQUEST_BODY(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.EMPTY_REQUEST_BODY, StatusCodes.BAD_REQUEST, {
 			message: "Request body cannot be empty!",
