@@ -10,20 +10,20 @@ type SuccessResponse = {
 type handleAsyncFuncParams<T> = {
 	res: Response;
 	resultPromise: Promise<T | undefined>;
-	onSuccess: (result: T) => SuccessResponse;
-	onResultUndefined: () => AppError;
+	onResult: (result: T) => SuccessResponse;
+	onResultUndefinedThrow: () => AppError;
 };
 export async function handleAsyncFunc<T>({
 	res,
 	resultPromise,
-	onSuccess,
-	onResultUndefined,
+	onResult,
+	onResultUndefinedThrow,
 }: handleAsyncFuncParams<T>): Promise<void> {
 	const result = await resultPromise;
 	if (result === undefined) {
-		throw onResultUndefined();
+		throw onResultUndefinedThrow();
 	}
-	const successResponse = onSuccess(result);
+	const successResponse = onResult(result);
 	if (successResponse.statusCode === undefined) {
 		successResponse.statusCode = StatusCodes.OK;
 	}

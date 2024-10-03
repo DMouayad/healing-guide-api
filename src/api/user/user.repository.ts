@@ -1,16 +1,32 @@
+import type { RequireAtLeastOne } from "@/common/types";
 import { db } from "@/db";
-import type { IUser } from "@/interfaces/IUser";
-import type { IUserRepository } from "@/interfaces/IUserRepository";
-import { objectToCamel } from "ts-case-convert";
+import type { IUserRepository, UpdateUserParams } from "@/interfaces/IUserRepository";
+import type { Expression } from "kysely";
+import { jsonObjectFrom } from "kysely/helpers/postgres";
+import { DBUser } from "./user.model";
 
-export class DBUserRepository implements IUserRepository {
-	async updateUserById(
-		id: string,
-		fullName?: string,
-		email?: string,
-		phoneNumber?: string,
-	): Promise<IUser | undefined> {
-		const query = db.updateTable("users").where("users.id", "=", id);
+export class DBUserRepository implements IUserRepository<DBUser> {
+	async find(id: string): Promise<DBUser | undefined> {
+		const query = db
+			.selectFrom("users")
+			.selectAll("users")
+			.where("id", "=", id)
+			.select(({ ref }) => this.appendSelectRole(ref("role_id")).as("role"));
+		return DBUser.fromQueryResult(await query.executeTakeFirst());
+	}
+
+	async delete(user: DBUser): Promise<DBUser | undefined> {
+		const queryResult = await db.deleteFrom("users").where("id", "=", user.id).returningAll().executeTakeFirst();
+		if (queryResult) {
+			return DBUser.fromQueryResult({ ...queryResult, role: user.role });
+		}
+	}
+
+	async update(
+		user: DBUser,
+		{ fullName, email, phoneNumber, activated }: RequireAtLeastOne<UpdateUserParams>,
+	): Promise<DBUser | undefined> {
+		const query = db.updateTable("users").where("users.id", "=", user.id);
 		if (fullName) {
 			query.set("full_name", fullName);
 		}
@@ -20,21 +36,16 @@ export class DBUserRepository implements IUserRepository {
 		if (phoneNumber) {
 			query.set("phone_number", phoneNumber);
 		}
-		const user = await query.returningAll().executeTakeFirst();
-		if (user) {
-			return objectToCamel(user);
+		if (activated) {
+			query.set("activated", activated);
+		}
+		const queryResult = await query.returningAll().executeTakeFirst();
+		if (queryResult) {
+			return DBUser.fromQueryResult({ ...queryResult, role: user.role });
 		}
 	}
-	async deleteUserById(id: string): Promise<IUser | undefined> {
-		const user = await db.deleteFrom("users").where("id", "=", id).returningAll().executeTakeFirst();
-		if (user) {
-			return objectToCamel(user);
-		}
-	}
-	async getUserById(id: string): Promise<IUser | undefined> {
-		const user = await db.selectFrom("users").selectAll("users").where("id", "=", id).executeTakeFirst();
-		if (user) {
-			return objectToCamel(user);
-		}
+
+	appendSelectRole(roleId: Expression<string>) {
+		return jsonObjectFrom(db.selectFrom("roles").select(["id as roleId", "slug"]).where("id", "=", roleId));
 	}
 }
