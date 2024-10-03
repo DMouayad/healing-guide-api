@@ -1,9 +1,10 @@
 import type { ClassProperties, Role } from "@/common/types";
+import { IHasAuthorization } from "./IHasAuthorization";
 
 export type IUserProps = ClassProperties<IUser>;
-export abstract class IUser {
+export abstract class IUser extends IHasAuthorization {
 	readonly id: string;
-	readonly role: Role;
+	override readonly role: Role;
 	readonly passwordHash: string;
 	fullName: string;
 	activated: boolean;
@@ -14,6 +15,7 @@ export abstract class IUser {
 	readonly createdAt: Date;
 
 	constructor(props: IUserProps) {
+		super();
 		this.activated = props.activated;
 		this.email = props.email;
 		this.emailVerifiedAt = props.emailVerifiedAt;
