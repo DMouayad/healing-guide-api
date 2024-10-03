@@ -7,7 +7,7 @@ type ParamsOverride = {
 };
 class AppError extends Error {
 	constructor(
-		readonly message: string,
+		override readonly message: string,
 		readonly status: number,
 		readonly errCode: AppErrCode,
 		readonly description?: string,
@@ -23,6 +23,9 @@ class AppError extends Error {
 	}
 	static UNAUTHORIZED(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, params);
+	}
+	static FORBIDDEN(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.FORBIDDEN, StatusCodes.FORBIDDEN, params);
 	}
 	static ROUTE_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
