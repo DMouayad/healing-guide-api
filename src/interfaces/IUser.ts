@@ -1,3 +1,5 @@
+import type { Role } from "@/common/types";
+
 export interface IUser {
 	id: string;
 	activated: boolean;
@@ -8,4 +10,5 @@ export interface IUser {
 	emailVerifiedAt: Date | null;
 	phoneNumberVerifiedAt: Date | null;
 	createdAt: Date;
+	get role(): Role;
 }
