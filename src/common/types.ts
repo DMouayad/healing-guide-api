@@ -9,7 +9,6 @@ export type ExtractedBearerToken = {
 export type CreateAccessTokenParams = {
 	tokenableId: string;
 	name: string;
-	abilities?: string | string[];
 	expirationInMinutes?: number;
 };
 export type NewAccessToken = {

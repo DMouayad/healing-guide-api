@@ -81,7 +81,6 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 		}
 		if (obj.userId && obj.hash) {
 			token = {
-				abilities: obj.abilities,
 				userId: obj.userId,
 				createdAt: obj.tokenCreatedAt,
 				expiresAt: obj.expiresAt,
@@ -100,7 +99,6 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 				created_at: token.createdAt,
 				last_used_at: token.lastUsedAt,
 				fingerprint: token.fingerprint,
-				abilities: this.joinAbilities(token.abilities),
 				user_id: token.userId,
 				expires_at: token.expiresAt,
 				token: token.hash,
@@ -110,11 +108,5 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 		if (storedToken) {
 			return storedToken.id;
 		}
-	}
-	private joinAbilities(abilities: string | string[] | null) {
-		if (!abilities) {
-			return;
-		}
-		return typeof abilities === "string" ? abilities : abilities.join(",");
 	}
 }

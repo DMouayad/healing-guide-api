@@ -21,7 +21,6 @@ export async function createAccessToken(params: CreateAccessTokenParams): Promis
 		userId: params.tokenableId,
 		hash: sha256(plainTextToken),
 		fingerprint: params.name,
-		abilities: params.abilities ?? null,
 		createdAt: new Date(),
 		expiresAt: getExpiresAt(params.expirationInMinutes),
 	};
