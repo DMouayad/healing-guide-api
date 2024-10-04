@@ -5,4 +5,7 @@ export default defineConfig({
 	migrations: {
 		migrationFolder: process.env.MIGRATIONS_FOLDER_PATH,
 	},
+	seeds: {
+		seedFolder: process.env.SEEDS_FOLDER_PATH,
+	},
 });
