@@ -39,8 +39,9 @@ function extractBearerToken(req: Request): ExtractedBearerToken | undefined {
 
 	if (canExtractId) {
 		const [id, tokenStr] = plainTextToken.split("|", 2);
-		if (id && validateId(id)) {
-			return { tokenId: id, tokenStr: tokenStr };
+		const parsedId = Number.parseInt(id, 10);
+		if (!Number.isNaN(parsedId)) {
+			return { tokenId: parsedId, tokenStr: tokenStr };
 		}
 	}
 	if (validateTokenValue(plainTextToken)) {
@@ -49,8 +50,4 @@ function extractBearerToken(req: Request): ExtractedBearerToken | undefined {
 }
 function validateTokenValue(token: string) {
 	return /^[a-zA-Z0-9]{64}$/.test(token);
-}
-function validateId(id: string) {
-	const parsedId = Number.parseInt(id, 0);
-	return !Number.isNaN(parsedId);
 }

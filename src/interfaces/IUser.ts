@@ -3,7 +3,7 @@ import { IHasAuthorization } from "./IHasAuthorization";
 
 export type IUserProps = ClassProperties<IUser>;
 export abstract class IUser extends IHasAuthorization {
-	readonly id: string;
+	readonly id: number;
 	override readonly role: Role;
 	readonly passwordHash: string;
 	fullName: string;

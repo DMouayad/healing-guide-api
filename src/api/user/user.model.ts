@@ -18,8 +18,8 @@ export class DBUser extends IUser {
 }
 
 export type KyselyQueryUser = {
-	id: string;
-	role_id: string;
+	id: number;
+	role_id: number;
 	created_at: Date;
 	activated: boolean;
 	email: string;

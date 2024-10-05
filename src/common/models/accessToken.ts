@@ -1,6 +1,6 @@
 export type AccessToken = {
-	readonly id: string;
-	readonly userId: string;
+	readonly id: number;
+	readonly userId: number;
 	readonly fingerprint: string | null;
 	readonly hash: string;
 	readonly expiresAt: Date;

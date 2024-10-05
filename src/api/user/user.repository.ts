@@ -4,7 +4,7 @@ import type { IUserRepository, UpdateUserParams } from "@/interfaces/IUserReposi
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
-	async find(id: string): Promise<DBUser | undefined> {
+	async find(id: number): Promise<DBUser | undefined> {
 		const query = db.selectFrom("users").selectAll("users").where("id", "=", id);
 		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
 	}

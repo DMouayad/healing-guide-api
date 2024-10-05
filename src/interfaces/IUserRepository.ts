@@ -2,7 +2,7 @@ import type { RequireAtLeastOne } from "@/common/types";
 import type { IUser } from "./IUser";
 
 export interface IUserRepository<User extends IUser = IUser> {
-	find(id: string): Promise<User | undefined>;
+	find(id: number): Promise<User | undefined>;
 	update(
 		user: User,
 		{ fullName, email, phoneNumber, activated }: RequireAtLeastOne<UpdateUserParams>,

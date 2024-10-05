@@ -2,12 +2,12 @@ import type { IUser } from "@/interfaces/IUser";
 import type { AccessToken } from "./models/accessToken";
 
 export type ExtractedBearerToken = {
-	tokenId?: string;
+	tokenId?: number;
 	tokenStr: string;
 };
 
 export type CreateAccessTokenParams = {
-	tokenableId: string;
+	tokenableId: number;
 	name: string;
 	expirationInMinutes?: number;
 };

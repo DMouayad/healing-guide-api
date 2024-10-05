@@ -3,8 +3,8 @@ import { type Kysely, sql } from "kysely";
 export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
 		.createTable("personal_access_tokens")
-		.addColumn("id", "bigserial", (col) => col.primaryKey())
-		.addColumn("user_id", "integer", (col) => col.notNull())
+		.addColumn("id", "serial", (col) => col.primaryKey())
+		.addColumn("user_id", "int4", (col) => col.notNull())
 		.addColumn("fingerprint", "varchar(255)")
 		.addColumn("token", "varchar(64)", (col) => col.unique().notNull())
 		.addColumn("last_used_at", "timestamp")
