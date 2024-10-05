@@ -22,7 +22,7 @@ function createUser(props?: UserFactoryParams, opts?: UserFactoryOpts): FakeUser
 	});
 }
 function createAdminUser(props?: UserFactoryParams, opts?: UserFactoryOpts) {
-	return createUser({ ...props, role: APP_ROLES.guest }, opts);
+	return createUser({ ...props, role: APP_ROLES.admin }, opts);
 }
 export const userFactory = {
 	create: createUser,
