@@ -24,10 +24,14 @@ export async function createAccessToken(params: CreateAccessTokenParams): Promis
 		createdAt: new Date(),
 		expiresAt: getExpiresAt(params.expirationInMinutes),
 	};
+	// @ts-ignore missing property `id`on `token` => will be assigned after saving the token
 	const tokenId = await getAppCtx().authTokensRepository.storeToken(token);
 	if (tokenId) {
 		return {
-			token,
+			token: {
+				...token,
+				id: tokenId,
+			},
 			plainTextToken: `${tokenId}|${plainTextToken}`,
 		};
 	}
