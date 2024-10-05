@@ -11,6 +11,9 @@ importers:
       '@asteasolutions/zod-to-openapi':
         specifier: ^7.1.1
         version: 7.1.1(zod@3.23.8)
+      '@faker-js/faker':
+        specifier: ^9.0.3
+        version: 9.0.3
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
@@ -459,6 +462,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@faker-js/faker@9.0.3':
+    resolution: {integrity: sha512-lWrrK4QNlFSU+13PL9jMbMKLJYXDFu3tQfayBsMXX7KL/GiQeqfB1CzHkqD5UHBUtPAuPo6XwGbMFNdVMZObRA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -2462,6 +2469,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.23.1':
     optional: true
+
+  '@faker-js/faker@9.0.3': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

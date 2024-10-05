@@ -1,8 +1,7 @@
 import type { RequireAtLeastOne } from "@/common/types";
 import { db } from "@/db";
+import { addRoleToUser } from "@/db/kyselyRelations";
 import type { IUserRepository, UpdateUserParams } from "@/interfaces/IUserRepository";
-import type { Expression } from "kysely";
-import { jsonObjectFrom } from "kysely/helpers/postgres";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
@@ -11,7 +10,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 			.selectFrom("users")
 			.selectAll("users")
 			.where("id", "=", id)
-			.select(({ ref }) => this.appendSelectRole(ref("role_id")).as("role"));
+			.select(({ ref }) => addRoleToUser(ref("role_id")).as("role"));
 		return DBUser.fromQueryResult(await query.executeTakeFirst());
 	}
 
@@ -43,9 +42,5 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		if (queryResult) {
 			return DBUser.fromQueryResult({ ...queryResult, role: user.role });
 		}
-	}
-
-	appendSelectRole(roleId: Expression<string>) {
-		return jsonObjectFrom(db.selectFrom("roles").select(["id as roleId", "slug"]).where("id", "=", roleId));
 	}
 }
