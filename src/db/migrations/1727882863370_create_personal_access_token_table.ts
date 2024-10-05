@@ -6,7 +6,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("id", "serial", (col) => col.primaryKey())
 		.addColumn("user_id", "int4", (col) => col.notNull())
 		.addColumn("fingerprint", "varchar(255)")
-		.addColumn("token", "varchar(64)", (col) => col.unique().notNull())
+		.addColumn("hash", "varchar(64)", (col) => col.unique().notNull())
 		.addColumn("last_used_at", "timestamp")
 		.addColumn("expires_at", "timestamp", (col) => col.notNull())
 		.addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())

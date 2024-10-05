@@ -4,13 +4,27 @@ import type { ExtractedBearerToken } from "@/common/types";
 import { sha256 } from "@/common/utils/hashing";
 import { logger } from "@/common/utils/logger";
 import { db } from "@/db";
+import { addSelectUser } from "@/db/kyselyRelations";
 import type { IAuthTokensRepository, TokenId } from "@/interfaces/IAuthTokensRepository";
+import { jsonObjectFrom } from "kysely/helpers/postgres";
 import { objectToCamel } from "ts-case-convert";
-import { DBUser } from "../user/user.model";
+import { DBUser, type KyselyQueryUser } from "../user/user.model";
 
+type TokenAndUserSelectQueryResult = {
+	user: KyselyQueryUser;
+	token: {
+		id: number;
+		user_id: number;
+		hash: string;
+		created_at: Date;
+		expires_at: Date;
+		fingerprint: string | null;
+		last_used_at: Date | null;
+	};
+};
 export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken, DBUser> {
 	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, DBUser]> {
-		let matchingTokenAndUser: any;
+		let matchingTokenAndUser: TokenAndUserSelectQueryResult | undefined;
 		const tokenHash = sha256(bearerToken.tokenStr);
 
 		if (bearerToken.tokenId) {
@@ -23,9 +37,13 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 		if (!matchingTokenAndUser) {
 			throw AppError.INVALID_ACCESS_TOKEN({ description: "Token not found" });
 		}
-		const [user, matchingToken] = this.extractUserAndToken(matchingTokenAndUser);
-
-		if (!matchingToken || tokenHash !== matchingToken.hash) {
+		const user = DBUser.fromQueryResult(matchingTokenAndUser.user);
+		const matchingToken: AccessToken = objectToCamel(matchingTokenAndUser.token);
+		if (
+			!matchingToken ||
+			tokenHash !== matchingToken.hash ||
+			(bearerToken.tokenId && matchingToken.id !== bearerToken.tokenId)
+		) {
 			logger.warn("Bearer token value does not match its original one");
 			throw AppError.INVALID_ACCESS_TOKEN();
 		}
@@ -40,60 +58,32 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 		return [matchingToken, user];
 	}
 
-	private async findByTokenHash(hash: string) {
-		return await this.findTokenBaseQuery()
-			.where("pat.token", "=", hash)
-			.innerJoin("users", "pat.user_id", "users.id")
-			.select([
-				"pat.id as tokenId",
-				"users.id as userId",
-				"pat.created_at as tokenCreatedAt",
-				"users.created_at as userCreatedAt",
-			])
-			.selectAll(["users", "pat"])
+	private async findByTokenHash(hash: string): Promise<TokenAndUserSelectQueryResult | undefined> {
+		return this.findTokenBaseQuery()
+			.select((eb) =>
+				jsonObjectFrom(eb.selectFrom("personal_access_tokens").where("hash", "=", hash).selectAll())
+					.$notNull()
+					.as("token"),
+			)
 			.executeTakeFirst();
 	}
 
-	private async findById(id: string) {
-		return await this.findTokenBaseQuery()
-			.where("pat.id", "=", id)
-			.innerJoin("users", "pat.user_id", "users.id")
-			.select([
-				"pat.id as tokenId",
-				"users.id as userId",
-				"pat.created_at as tokenCreatedAt",
-				"users.created_at as userCreatedAt",
-			])
-			.selectAll(["users", "pat"])
+	async findById(id: number): Promise<TokenAndUserSelectQueryResult | undefined> {
+		return this.findTokenBaseQuery()
+			.select((eb) =>
+				jsonObjectFrom(eb.selectFrom("personal_access_tokens").where("id", "=", id).selectAll())
+					.$notNull()
+					.as("token"),
+			)
 			.executeTakeFirst();
 	}
 
 	private findTokenBaseQuery() {
-		return db.selectFrom("personal_access_tokens as pat");
-	}
-	private extractUserAndToken(kyselyJoinedQueryResult: any): [DBUser | undefined, AccessToken | undefined] {
-		// this is because we get a snake_case variables from Kysely
-		const obj: any = objectToCamel(kyselyJoinedQueryResult);
-		let user: DBUser | undefined;
-		let token: AccessToken | undefined;
-		if (obj.userId) {
-			user = new DBUser(obj);
-		}
-		if (obj.userId && obj.hash) {
-			token = {
-				userId: obj.userId,
-				createdAt: obj.tokenCreatedAt,
-				expiresAt: obj.expiresAt,
-				hash: obj.token,
-				fingerprint: obj.fingerprint,
-				lastUsedAt: obj.lastUsedAt,
-			};
-		}
-		return [user, token];
+		return db.selectFrom("personal_access_tokens as pat").select(({ ref }) => addSelectUser(ref("user_id")).as("user"));
 	}
 
 	async storeToken(token: AccessToken): Promise<TokenId> {
-		const storedToken = await db
+		return db
 			.insertInto("personal_access_tokens")
 			.values({
 				created_at: token.createdAt,
@@ -101,12 +91,10 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 				fingerprint: token.fingerprint,
 				user_id: token.userId,
 				expires_at: token.expiresAt,
-				token: token.hash,
+				hash: token.hash,
 			})
-			.returningAll()
-			.executeTakeFirst();
-		if (storedToken) {
-			return storedToken.id;
-		}
+			.returning("id")
+			.executeTakeFirst()
+			.then((storedToken) => storedToken?.id);
 	}
 }
