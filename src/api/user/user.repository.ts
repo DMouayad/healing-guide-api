@@ -1,24 +1,21 @@
 import type { RequireAtLeastOne } from "@/common/types";
 import { db } from "@/db";
-import { addRoleToUser } from "@/db/kyselyRelations";
 import type { IUserRepository, UpdateUserParams } from "@/interfaces/IUserRepository";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
 	async find(id: string): Promise<DBUser | undefined> {
-		const query = db
-			.selectFrom("users")
-			.selectAll("users")
-			.where("id", "=", id)
-			.select(({ ref }) => addRoleToUser(ref("role_id")).as("role"));
-		return DBUser.fromQueryResult(await query.executeTakeFirst());
+		const query = db.selectFrom("users").selectAll("users").where("id", "=", id);
+		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
 	}
 
 	async delete(user: DBUser): Promise<DBUser | undefined> {
-		const queryResult = await db.deleteFrom("users").where("id", "=", user.id).returningAll().executeTakeFirst();
-		if (queryResult) {
-			return DBUser.fromQueryResult({ ...queryResult, role: user.role });
-		}
+		return db
+			.deleteFrom("users")
+			.where("id", "=", user.id)
+			.returningAll()
+			.executeTakeFirst()
+			.then((result) => DBUser.fromQueryResult(result));
 	}
 
 	async update(
@@ -38,9 +35,9 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		if (activated) {
 			query.set("activated", activated);
 		}
-		const queryResult = await query.returningAll().executeTakeFirst();
-		if (queryResult) {
-			return DBUser.fromQueryResult({ ...queryResult, role: user.role });
-		}
+		return query
+			.returningAll()
+			.executeTakeFirst()
+			.then((result) => DBUser.fromQueryResult(result));
 	}
 }
