@@ -7,4 +7,3 @@ export const userRouter: Router = express.Router();
 userRouter.route("/me")
     .get(userActions.get) //
     .delete(userActions.delete) //
-    .post(userActions.update) //
