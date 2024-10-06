@@ -45,6 +45,6 @@ export const APP_ROLES = {
 } as const;
 
 export type ClassProperties<C> = {
-	// biome-ignore lint/complexity/noBannedTypes: it's ok to use Function here, I guess.
+	// biome-ignore lint/complexity/noBannedTypes: it's ok to use the `Function` type here, I guess.
 	[Key in keyof C as C[Key] extends Function ? never : Key]: C[Key];
 };

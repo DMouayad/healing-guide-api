@@ -3,12 +3,10 @@ import { commonZodSchemas } from "@/common/utils/zodSchemas";
 import { z } from "zod";
 
 // Input Validation for 'GET users/:id' endpoint
-const getUserRequestSchema = z.object({
+const requestWithUserIdParamSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
 });
-const deleteUserRequestSchema = z.object({
-	params: z.object({ id: commonZodSchemas.id }),
-});
+
 const updateUserReqBody = z.object({
 	fullName: z.string(),
 	email: z.string().email(),
@@ -25,7 +23,8 @@ export const updateUserRequestSchema = z.object({
 	]),
 });
 export const userRequests = {
-	get: getUserRequestSchema,
-	delete: deleteUserRequestSchema,
+	get: requestWithUserIdParamSchema,
+	delete: requestWithUserIdParamSchema,
 	update: updateUserRequestSchema,
+	changeActivation: requestWithUserIdParamSchema,
 } as const;
