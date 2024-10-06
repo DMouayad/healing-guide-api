@@ -1,30 +1,41 @@
 import { IUser, type IUserProps } from "@/interfaces/IUser";
 import { faker } from "@faker-js/faker";
 import { APP_ROLES } from "../types";
+import { generateRandomString } from "../utils/hashing";
 
-type UserFactoryParams = Partial<IUserProps>;
-type UserFactoryOpts = { hasVerifiedEmail?: boolean; hasVerifiedPhoneNo?: boolean };
+type UserFactoryParams = {
+	userProps?: Partial<IUserProps>;
+	opts?: UserFactoryOpts;
+};
+type UserFactoryOpts = { hasVerifiedEmail?: boolean; hasVerifiedPhoneNo?: boolean; generateRandomPassword?: boolean };
 class FakeUser extends IUser {}
 
-function createUser(props?: UserFactoryParams, opts?: UserFactoryOpts): FakeUser {
+function createUser(params?: UserFactoryParams): FakeUser {
 	return new FakeUser({
 		// @ts-ignore
-		id: props?.id,
+		id: params?.userProps?.id,
 		// @ts-ignore
-		passwordHash: props?.passwordHash,
-		role: props?.role ?? APP_ROLES.guest,
-		fullName: props?.fullName ?? faker.person.fullName(),
-		activated: props?.activated ?? false,
-		email: props?.email ?? faker.internet.email(),
-		emailVerifiedAt: opts?.hasVerifiedEmail ? new Date() : (props?.emailVerifiedAt ?? null),
-		phoneNumberVerifiedAt: opts?.hasVerifiedPhoneNo ? new Date() : (props?.phoneNumberVerifiedAt ?? null),
-		phoneNumber: props?.phoneNumber ?? faker.phone.number(),
+		passwordHash: opts?.generateRandomPassword ? generateRandomString(40) : params?.userProps?.passwordHash,
+		role: params?.userProps?.role ?? APP_ROLES.guest,
+		fullName: params?.userProps?.fullName ?? faker.person.fullName(),
+		activated: params?.userProps?.activated ?? false,
+		email: params?.userProps?.email ?? faker.internet.email(),
+		emailVerifiedAt: params?.opts?.hasVerifiedEmail ? new Date() : (params?.userProps?.emailVerifiedAt ?? null),
+		phoneNumberVerifiedAt: params?.opts?.hasVerifiedPhoneNo
+			? new Date()
+			: (params?.userProps?.phoneNumberVerifiedAt ?? null),
+		phoneNumber: params?.userProps?.phoneNumber ?? faker.phone.number(),
 	});
 }
-function createAdminUser(props?: UserFactoryParams, opts?: UserFactoryOpts) {
-	return createUser({ ...props, role: APP_ROLES.admin }, opts);
+function createAdminUser(params?: UserFactoryParams) {
+	return createUser({ userProps: { ...params?.userProps, role: APP_ROLES.admin }, opts: params?.opts });
+}
+function createMany(count: number, params?: UserFactoryParams) {
+	const users: FakeUser[] = Array(count).fill(createUser(params));
+	return users;
 }
 export const userFactory = {
 	create: createUser,
 	createAdmin: createAdminUser,
+	createMany: createMany,
 } as const;

@@ -1,8 +1,7 @@
-import { randomBytes } from "node:crypto";
 import type { CreateAccessTokenParams, NewAccessToken } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { sha256 } from "@/common/utils/hashing";
+import { generateRandomString, sha256 } from "@/common/utils/hashing";
 
 function getExpiresAt(expirationInMinutes?: number) {
 	const expiresIn = expirationInMinutes ?? env.PERSONAL_ACCESS_TOKEN_EXPIRATION;
@@ -11,12 +10,9 @@ function getExpiresAt(expirationInMinutes?: number) {
 	expiresAt.setTime(createdAt.getTime() + expiresIn * 60000);
 	return expiresAt;
 }
-function generateTokenString() {
-	return randomBytes(50).toString("base64");
-}
 
 export async function createAccessToken(params: CreateAccessTokenParams): Promise<NewAccessToken | undefined> {
-	const plainTextToken = generateTokenString();
+	const plainTextToken = generateRandomString(50);
 	const token = {
 		userId: params.tokenableId,
 		hash: sha256(plainTextToken),

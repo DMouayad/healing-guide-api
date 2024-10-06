@@ -4,15 +4,15 @@ import { sha256 } from "@/common/utils/hashing";
 import type { Kysely } from "kysely";
 
 export async function seed(db: Kysely<any>): Promise<void> {
-	const user = userFactory.createAdmin(
-		{
+	const user = userFactory.createAdmin({
+		userProps: {
 			email: env.ADMIN_EMAIL,
 			phoneNumber: env.ADMIN_PHONE,
 			passwordHash: sha256(env.ADMIN_PASSWORD),
 			activated: true,
 		},
-		{ hasVerifiedEmail: true, hasVerifiedPhoneNo: true },
-	);
+		opts: { hasVerifiedEmail: true, hasVerifiedPhoneNo: true },
+	});
 
 	await db
 		.insertInto("users")
