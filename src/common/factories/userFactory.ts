@@ -5,9 +5,10 @@ import { generateRandomString } from "../utils/hashing";
 
 type UserFactoryParams = {
 	userProps?: Partial<IUserProps>;
-	opts?: UserFactoryOpts;
+	hasVerifiedEmail?: boolean;
+	hasVerifiedPhoneNo?: boolean;
+	generateRandomPassword?: boolean;
 };
-type UserFactoryOpts = { hasVerifiedEmail?: boolean; hasVerifiedPhoneNo?: boolean; generateRandomPassword?: boolean };
 class FakeUser extends IUser {}
 
 function createUser(params?: UserFactoryParams): FakeUser {
@@ -15,23 +16,23 @@ function createUser(params?: UserFactoryParams): FakeUser {
 		// @ts-ignore
 		id: params?.userProps?.id,
 		// @ts-ignore
-		passwordHash: opts?.generateRandomPassword ? generateRandomString(40) : params?.userProps?.passwordHash,
+		passwordHash: params?.generateRandomPassword ? generateRandomString(40) : params?.userProps?.passwordHash,
 		role: params?.userProps?.role ?? APP_ROLES.guest,
 		fullName: params?.userProps?.fullName ?? faker.person.fullName(),
 		activated: params?.userProps?.activated ?? false,
 		email: params?.userProps?.email ?? faker.internet.email(),
-		emailVerifiedAt: params?.opts?.hasVerifiedEmail ? new Date() : (params?.userProps?.emailVerifiedAt ?? null),
-		phoneNumberVerifiedAt: params?.opts?.hasVerifiedPhoneNo
-			? new Date()
-			: (params?.userProps?.phoneNumberVerifiedAt ?? null),
+		emailVerifiedAt: params?.hasVerifiedEmail ? new Date() : (params?.userProps?.emailVerifiedAt ?? null),
+		phoneNumberVerifiedAt: params?.hasVerifiedPhoneNo ? new Date() : (params?.userProps?.phoneNumberVerifiedAt ?? null),
 		phoneNumber: params?.userProps?.phoneNumber ?? faker.phone.number(),
 	});
 }
 function createAdminUser(params?: UserFactoryParams) {
-	return createUser({ userProps: { ...params?.userProps, role: APP_ROLES.admin }, opts: params?.opts });
+	return createUser({ ...params, userProps: { ...params?.userProps, role: APP_ROLES.admin } });
 }
 function createMany(count: number, params?: UserFactoryParams) {
-	const users: FakeUser[] = Array(count).fill(createUser(params));
+	const users: FakeUser[] = Array(count)
+		.fill(null)
+		.map((_) => createUser(params));
 	return users;
 }
 export const userFactory = {

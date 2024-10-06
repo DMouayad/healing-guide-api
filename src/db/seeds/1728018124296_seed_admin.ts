@@ -1,3 +1,4 @@
+import { prepareUserToInsertWithKysely } from "@/api/user/user.model";
 import { userFactory } from "@/common/factories/userFactory";
 import { env } from "@/common/utils/envConfig";
 import { sha256 } from "@/common/utils/hashing";
@@ -11,20 +12,9 @@ export async function seed(db: Kysely<any>): Promise<void> {
 			passwordHash: sha256(env.ADMIN_PASSWORD),
 			activated: true,
 		},
-		opts: { hasVerifiedEmail: true, hasVerifiedPhoneNo: true },
+		hasVerifiedEmail: true,
+		hasVerifiedPhoneNo: true,
 	});
 
-	await db
-		.insertInto("users")
-		.values({
-			role_id: user.role.roleId,
-			full_name: user.fullName,
-			email: user.email,
-			phone_number: user.phoneNumber,
-			activated: user.activated,
-			email_verified_at: user.emailVerifiedAt,
-			phone_number_verified_at: user.phoneNumberVerifiedAt,
-			password_hash: user.passwordHash,
-		})
-		.execute();
+	await db.insertInto("users").values(prepareUserToInsertWithKysely(user)).execute();
 }
