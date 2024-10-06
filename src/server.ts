@@ -26,10 +26,8 @@ app.use(helmet());
 app.use(rateLimiter);
 app.use(requestLogger);
 
-// for every PUT, POST or PATCH request will check if:
-// - Request has the correct headers for the content type
-// - Req body is not empty
-app.use(hasValidContentType, hasRequestBody);
+// for every PUT, POST or PATCH request will check if Request has the correct content-type headers
+app.use(hasValidContentType);
 // End of Middlewares
 
 // Server Health Check endpoints
