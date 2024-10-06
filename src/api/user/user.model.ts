@@ -1,4 +1,4 @@
-import { APP_ROLES, type Role } from "@/common/types";
+import { APP_ROLES } from "@/common/types";
 import { logger } from "@/common/utils/logger";
 
 import { IUser } from "@/interfaces/IUser";
