@@ -1,6 +1,11 @@
 import type { IUser } from "@/interfaces/IUser";
 import type { AccessToken } from "./models/accessToken";
+import type AppError from "./models/appError";
 
+export type ApiResponse = {
+	data?: object;
+	appError?: AppError;
+};
 export type ExtractedBearerToken = {
 	tokenId?: number;
 	tokenStr: string;
