@@ -1,9 +1,43 @@
-import type { RequireAtLeastOne } from "@/common/types";
+import { APP_ROLES, type RequireAtLeastOne, type Role } from "@/common/types";
 import { db } from "@/db";
-import type { IUserRepository, UpdateUserParams } from "@/interfaces/IUserRepository";
+import type { IUserRepository, UserPropsToUpdate } from "@/interfaces/IUserRepository";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
+	async updateById(
+		id: number,
+		props: RequireAtLeastOne<UserPropsToUpdate>,
+	): Promise<DBUser | undefined> {
+		const query = db
+			.updateTable("users")
+			.$if(props.fullName !== undefined, (qb) => qb.set("full_name", props.fullName!))
+			.$if(props.email !== undefined, (qb) => qb.set("email", props.email!))
+			.$if(props.phoneNumber !== undefined, (qb) => qb.set("phone_number", props.phoneNumber!))
+			.$if(props.activated !== undefined, (qb) => qb.set("activated", props.activated!))
+			.where("id", "=", id);
+
+		return query
+			.returningAll()
+			.executeTakeFirst()
+			.then((result) => DBUser.fromQueryResult(result));
+	}
+	async getWithRoles(roles: Role[]): Promise<DBUser[]> {
+		const roleIds = Object.values(APP_ROLES)
+			.filter((v) => roles.includes(v))
+			.map((role) => Number.parseInt(role.roleId));
+		const users = await db
+			.selectFrom("users")
+			.selectAll()
+			.where("role_id", "in", roleIds)
+			.execute();
+		return users.flatMap((queryUser) => {
+			const dbUser = DBUser.fromQueryResult(queryUser);
+			if (dbUser) {
+				return dbUser;
+			}
+			return [];
+		});
+	}
 	async find(id: number): Promise<DBUser | undefined> {
 		const query = db.selectFrom("users").selectAll("users").where("id", "=", id);
 		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
@@ -20,24 +54,8 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 
 	async update(
 		user: DBUser,
-		{ fullName, email, phoneNumber, activated }: RequireAtLeastOne<UpdateUserParams>,
+		props: RequireAtLeastOne<UserPropsToUpdate>,
 	): Promise<DBUser | undefined> {
-		const query = db.updateTable("users").where("users.id", "=", user.id);
-		if (fullName) {
-			query.set("full_name", fullName);
-		}
-		if (email) {
-			query.set("email", email);
-		}
-		if (phoneNumber) {
-			query.set("phone_number", phoneNumber);
-		}
-		if (activated) {
-			query.set("activated", activated);
-		}
-		return query
-			.returningAll()
-			.executeTakeFirst()
-			.then((result) => DBUser.fromQueryResult(result));
+		return await this.updateById(user.id, props);
 	}
 }

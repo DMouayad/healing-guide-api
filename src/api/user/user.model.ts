@@ -1,4 +1,4 @@
-import { APP_ROLES, type Role } from "@/common/types";
+import { APP_ROLES } from "@/common/types";
 import { logger } from "@/common/utils/logger";
 
 import { IUser } from "@/interfaces/IUser";
@@ -29,3 +29,16 @@ export type KyselyQueryUser = {
 	phone_number: string;
 	phone_number_verified_at: Date | null;
 };
+
+export function prepareUserToInsertWithKysely(user: IUser) {
+	return {
+		role_id: Number.parseInt(user.role.roleId),
+		full_name: user.fullName,
+		email: user.email,
+		phone_number: user.phoneNumber,
+		activated: user.activated,
+		email_verified_at: user.emailVerifiedAt,
+		phone_number_verified_at: user.phoneNumberVerifiedAt,
+		password_hash: user.passwordHash,
+	};
+}

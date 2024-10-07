@@ -22,7 +22,7 @@ export const unexpectedRequestHandler: RequestHandler = (req, res) => {
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	const shouldLogError = env.isDevelopment || (env.isProduction && shouldLogErrorInProduction(err));
-	err.stack = refineStackTrace(err.stack);
+	err.stack = isAppErr(err) ? refineStackTrace(err.stack) : err.stack;
 	if (shouldLogError) {
 		logger.error(err);
 	}
