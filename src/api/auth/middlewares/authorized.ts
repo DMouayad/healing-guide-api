@@ -7,7 +7,7 @@ export function authorized(role: Role) {
 	return (req: Request, res: Response, next: NextFunction) => {
 		const user: IUser | undefined = res.locals.auth?.user;
 		if (!user) {
-			throw AppError.UNAUTHORIZED();
+			throw AppError.UNAUTHENTICATED();
 		}
 		if (user.isAuthorizedAs(role)) {
 			next();
@@ -19,7 +19,7 @@ export function authorizedAsAny(roles: Role[]) {
 	return (req: Request, res: Response, next: NextFunction) => {
 		const user: IUser | undefined = res.locals.auth?.user;
 		if (!user) {
-			throw AppError.UNAUTHORIZED();
+			throw AppError.UNAUTHENTICATED();
 		}
 		if (user.isAuthorizedAsAny(roles)) {
 			next();

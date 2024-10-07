@@ -6,7 +6,7 @@ import type { NextFunction, Request, Response } from "express";
 export async function verified(_req: Request, res: Response, next: NextFunction) {
 	const user: IUser | undefined = res.locals.auth?.user;
 	if (!user) {
-		throw AppError.UNAUTHORIZED();
+		throw AppError.UNAUTHENTICATED();
 	}
 	if (checkUserVerification(user)) {
 		next();
@@ -22,7 +22,8 @@ function checkUserVerification(user: IUser): boolean {
 		case APP_ROLES.admin:
 			{
 				const userVerified =
-					verifiedAtDateIsValid(user.emailVerifiedAt) && verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
+					verifiedAtDateIsValid(user.emailVerifiedAt) &&
+					verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
 				if (!userVerified) {
 					throw AppError.UNVERIFIED_EMAIL_AND_PHONE();
 				}
@@ -32,7 +33,8 @@ function checkUserVerification(user: IUser): boolean {
 		case APP_ROLES.physician:
 			{
 				const userVerified =
-					verifiedAtDateIsValid(user.emailVerifiedAt) || verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
+					verifiedAtDateIsValid(user.emailVerifiedAt) ||
+					verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
 				if (!userVerified) {
 					throw AppError.UNVERIFIED_EMAIL_OR_PHONE();
 				}

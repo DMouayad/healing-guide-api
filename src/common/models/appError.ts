@@ -29,8 +29,8 @@ class AppError extends Error implements IProvidesApiResponse {
 	static BAD_REQUEST(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.BAD_REQUEST, StatusCodes.BAD_REQUEST, params);
 	}
-	static UNAUTHORIZED(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, params);
+	static UNAUTHENTICATED(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.UNAUTHENTICATED, StatusCodes.UNAUTHORIZED, params);
 	}
 	static FORBIDDEN(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.FORBIDDEN, StatusCodes.FORBIDDEN, params);
