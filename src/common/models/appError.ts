@@ -1,11 +1,14 @@
+import type { IProvidesApiResponse } from "@/interfaces/IProvidesApiResponse";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
+import type { ApiResponse } from "../types";
 import { APP_ERR_CODES, type AppErrCode } from "./errorCodes";
 
 type ParamsOverride = {
 	message?: string;
 	description?: string;
 };
-class AppError extends Error {
+
+class AppError extends Error implements IProvidesApiResponse {
 	constructor(
 		override readonly message: string,
 		readonly status: number,
@@ -13,6 +16,11 @@ class AppError extends Error {
 		readonly description?: string,
 	) {
 		super();
+	}
+	toApiResponse(): ApiResponse {
+		return {
+			appError: this,
+		};
 	}
 
 	static SERVER_ERROR(params?: ParamsOverride): AppError {
@@ -37,7 +45,11 @@ class AppError extends Error {
 		return constructErr(APP_ERR_CODES.VALIDATION, StatusCodes.BAD_REQUEST, params);
 	}
 	static UNSUPPORTED_MEDIA_TYPE(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.INVALID_CONTENT_TYPE, StatusCodes.UNSUPPORTED_MEDIA_TYPE, params);
+		return constructErr(
+			APP_ERR_CODES.INVALID_CONTENT_TYPE,
+			StatusCodes.UNSUPPORTED_MEDIA_TYPE,
+			params,
+		);
 	}
 	static INVALID_ACCESS_TOKEN(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.INVALID_PAT, StatusCodes.UNAUTHORIZED, params);
@@ -56,7 +68,12 @@ class AppError extends Error {
 	}
 }
 function constructErr(errCode: AppErrCode, status: number, params?: ParamsOverride): AppError {
-	return new AppError(params?.message ?? getReasonPhrase(status), status, errCode, params?.description);
+	return new AppError(
+		params?.message ?? getReasonPhrase(status),
+		status,
+		errCode,
+		params?.description,
+	);
 }
 
 export default AppError;
