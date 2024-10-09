@@ -91,4 +91,17 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 			.executeTakeFirst()
 			.then((storedToken) => storedToken?.id);
 	}
+	async deleteToken(token: AccessToken): Promise<boolean> {
+		return db
+			.deleteFrom("personal_access_tokens")
+			.where("id", "=", token.id)
+			.execute()
+			.then((result) => {
+				if (result.length !== 1) {
+					logger.warn("Delete failed");
+					return false;
+				}
+				return true;
+			});
+	}
 }
