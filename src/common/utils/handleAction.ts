@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import type { ActionResult } from "../models/actionResult";
 import AppError from "../models/appError";
+import { logger } from "./logger";
 
 type handleActionParams<T> = {
 	res: Response;
@@ -14,6 +15,8 @@ export async function handleAction<T>(params: handleActionParams<T>): Promise<vo
 		if (params.onResultUndefinedThrow) {
 			throw params.onResultUndefinedThrow();
 		}
+		// if `undefined` result not handled
+		logger.warn(`Unexpected 'undefined' result`);
 		const err = AppError.SERVER_ERROR();
 		params.res.status(err.status).json(err.toApiResponse());
 	} else {
