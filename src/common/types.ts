@@ -21,8 +21,8 @@ export type NewAccessToken = {
 	plainTextToken: string;
 };
 export type AuthState = {
-	personalAccessToken: AccessToken | undefined;
-	user: IUser | undefined;
+	personalAccessToken: AccessToken;
+	user: IUser;
 };
 
 export type RequireAtLeastOne<T> = {
