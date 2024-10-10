@@ -1,7 +1,7 @@
 import type { Response } from "express";
 import type { ActionResult } from "../models/actionResult";
 import AppError from "../models/appError";
-import { logErrIfNeeded, logger } from "./logger";
+import { logger } from "./logger";
 import { toAppError } from "./toAppError";
 
 type handleActionParams<T> = {
@@ -28,7 +28,7 @@ export async function handleAction<T>(params: handleActionParams<T>): Promise<vo
 	} catch (err) {
 		if (params.onCatchError) {
 			const appErr = toAppError(err);
-			logErrIfNeeded(appErr);
+			logger.error(appErr);
 			response = params.onCatchError(appErr);
 		} else {
 			throw err;
