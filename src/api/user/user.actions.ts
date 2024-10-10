@@ -38,7 +38,7 @@ export async function getNonAdminUsersAction(req: Request, res: Response) {
 }
 
 export function updateUserActivationStatus(isActivated: boolean) {
-	return (req: Request, res: Response) => {
+	return async (req: Request, res: Response) => {
 		return userRequests.changeActivation.parseAsync({ params: req.params }).then(async (data) => {
 			await handleAction({
 				res,

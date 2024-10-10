@@ -7,7 +7,7 @@ import { objectToCamel } from "ts-case-convert";
 export class DBUser extends IUser {
 	public static fromQueryResult(kyselyUser?: KyselyQueryUser): DBUser | undefined {
 		if (kyselyUser) {
-			const role = Object.values(APP_ROLES).find((r) => r.roleId === kyselyUser.role_id.toString());
+			const role = Object.values(APP_ROLES).find((r) => r.roleId === kyselyUser.role_id);
 			if (role) {
 				return new DBUser({ ...objectToCamel(kyselyUser), role });
 			}
@@ -32,7 +32,7 @@ export type KyselyQueryUser = {
 
 export function prepareUserToInsertWithKysely(user: IUser) {
 	return {
-		role_id: Number.parseInt(user.role.roleId),
+		role_id: user.role.roleId,
 		full_name: user.fullName,
 		email: user.email,
 		phone_number: user.phoneNumber,

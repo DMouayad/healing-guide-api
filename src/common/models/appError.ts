@@ -11,7 +11,7 @@ type ParamsOverride = {
 class AppError extends Error implements IProvidesApiResponse {
 	constructor(
 		override readonly message: string,
-		readonly status: number,
+		readonly statusCode: number,
 		readonly errCode: AppErrCode,
 		readonly description?: string,
 	) {

@@ -15,5 +15,5 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 
 	appError.stack = undefined; // set to undefined so it won't end up out in the public
 	// construct a response based on the error
-	res.status(appError.status).json(appError.toApiResponse());
+	res.status(appError.statusCode).json(appError.toApiResponse());
 };

@@ -1,4 +1,6 @@
-import type { ClassProperties, Role } from "@/common/types";
+import { ASSIGNABLE_ROLES } from "@/common/constants";
+import { APP_ROLES, type ClassProperties, type RequireAtLeastOne, type Role } from "@/common/types";
+import { logger } from "@/common/utils/logger";
 import { IHasAuthorization } from "./IHasAuthorization";
 
 export type IUserProps = ClassProperties<IUser>;
@@ -26,5 +28,35 @@ export abstract class IUser extends IHasAuthorization {
 		this.id = props.id;
 		this.role = props.role;
 		this.fullName = props.fullName;
+	}
+}
+export type UpdateUserDTO = RequireAtLeastOne<{
+	readonly fullName: string;
+	readonly email: string;
+	readonly phoneNumber: string;
+	readonly activated: boolean;
+}>;
+export class CreateUserDTO {
+	readonly role: Role;
+	readonly fullName: string;
+	readonly email: string;
+	readonly phoneNumber: string;
+	readonly activated: boolean;
+	readonly password: string;
+
+	constructor(props: ClassProperties<CreateUserDTO>) {
+		this.fullName = props.fullName;
+		this.email = props.email;
+		this.phoneNumber = props.phoneNumber;
+		this.password = props.password;
+		this.activated = props.activated;
+
+		const isAssignableRole = ASSIGNABLE_ROLES.find((el) => el === props.role);
+		if (isAssignableRole) {
+			this.role = props.role;
+		} else {
+			logger.warn(`An attempt was made to assign the role "${props.role.slug}"`);
+			this.role = APP_ROLES.guest;
+		}
 	}
 }

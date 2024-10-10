@@ -9,12 +9,12 @@ import { migrateDBLatest, testDBConnection } from "./db/utils";
 initServer()
 	.catch((err) => {
 		logger.fatal(`Server initialization failed | ${err}`);
-		process.exit(1);
+		process.exitCode = 1;
 	})
 	.then(() => testDBConnection())
 	.catch((err) => {
 		logger.fatal(`DB connection failed | ${err}`);
-		process.exit(1);
+		process.exitCode = 1;
 	})
 	.then(() => migrateDBLatest())
 	.then(() => {
