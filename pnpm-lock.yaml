@@ -56,6 +56,9 @@ importers:
       pino:
         specifier: ^9.4.0
         version: 9.4.0
+      signed:
+        specifier: ^2.1.0
+        version: 2.1.0
       swagger-ui-express:
         specifier: ^5.0.1
         version: 5.0.1(express@5.0.0)
@@ -1952,6 +1955,9 @@ packages:
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  signed@2.1.0:
+    resolution: {integrity: sha512-QEw2xsFVbR+4xy+7OeUpMCHlJdR+UDikzJuDrrHXtTgcVvXDWDgbcbvgZV13aVkHVyosuuZPAUQtxgTthb0vRA==}
 
   slice-ansi@5.0.0:
     resolution: {integrity: sha512-FC+lgizVPfie0kkhqUScwRu1O/lF6NOgJmlCgK+/LYxDCTk8sGelYaHDhFcDN+Sn3Cv+3VSa4Byeo+IMCzpMgQ==}
@@ -3976,6 +3982,10 @@ snapshots:
   signal-exit@3.0.7: {}
 
   signal-exit@4.1.0: {}
+
+  signed@2.1.0:
+    dependencies:
+      '@types/express': 4.17.21
 
   slice-ansi@5.0.0:
     dependencies:
