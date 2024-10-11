@@ -7,7 +7,7 @@ import { toAppError } from "./toAppError";
 type handleActionParams<T> = {
 	res: Response;
 	resultPromise: Promise<T | undefined>;
-	onResult: (result: T) => ActionResult;
+	onResult: (result: T) => Promise<ActionResult> | ActionResult;
 	onResultUndefinedThrow?: () => AppError;
 	onCatchError?: (err: AppError) => ActionResult | AppError;
 };
@@ -23,7 +23,7 @@ export async function handleAction<T>(params: handleActionParams<T>): Promise<vo
 			logger.warn(`Unexpected 'undefined' result`);
 			response = AppError.SERVER_ERROR();
 		} else {
-			response = params.onResult(result);
+			response = await params.onResult(result);
 		}
 	} catch (err) {
 		if (params.onCatchError) {

@@ -1,10 +1,23 @@
+import { PG_ERR_CODE } from "@/common/constants";
+import AppError from "@/common/models/appError";
 import { APP_ROLES, type Role } from "@/common/types";
+import { getUserPasswordHash } from "@/common/utils/hashing";
 import { db } from "@/db";
 import type { CreateUserDTO, UpdateUserDTO } from "@/interfaces/IUser";
 import type { IUserRepository } from "@/interfaces/IUserRepository";
+import { DatabaseError as PgDatabaseError } from "pg";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
+	async findByEmailOrPhoneNumber(emailOrPhoneNo: string): Promise<DBUser | undefined> {
+		const query = db
+			.selectFrom("users")
+			.selectAll("users")
+			.where((eb) =>
+				eb.or([eb("email", "=", emailOrPhoneNo), eb("phone_number", "=", emailOrPhoneNo)]),
+			);
+		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
+	}
 	async create(dto: CreateUserDTO): Promise<DBUser | undefined> {
 		const hash = await getUserPasswordHash(dto);
 		const insertStmt = db

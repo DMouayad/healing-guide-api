@@ -11,4 +11,5 @@ export interface IAuthTokensRepository<
 	findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[Token, User]>;
 	storeToken(token: AccessToken): Promise<TokenId>;
 	deleteToken(token: AccessToken): Promise<boolean>;
+	deleteUserTokens(userId: number): Promise<void>;
 }

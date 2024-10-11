@@ -23,6 +23,17 @@ type TokenAndUserSelectQueryResult = {
 	};
 };
 export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken, DBUser> {
+	async deleteUserTokens(userId: number): Promise<void> {
+		return db
+			.deleteFrom("personal_access_tokens")
+			.where("user_id", "=", userId)
+			.execute()
+			.then((result) => {
+				if (result.length === 0) {
+					logger.warn("");
+				}
+			});
+	}
 	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, DBUser]> {
 		let matchingTokenAndUser: TokenAndUserSelectQueryResult | undefined;
 		const tokenHash = sha256(bearerToken.tokenStr);
@@ -58,7 +69,9 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 		return [matchingToken, user];
 	}
 
-	private async findByTokenHash(hash: string): Promise<TokenAndUserSelectQueryResult | undefined> {
+	private async findByTokenHash(
+		hash: string,
+	): Promise<TokenAndUserSelectQueryResult | undefined> {
 		return this.findTokenBaseQuery()
 			.where("pat.hash", "=", hash)
 			.executeTakeFirst()
