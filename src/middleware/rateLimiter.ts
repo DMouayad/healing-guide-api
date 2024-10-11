@@ -9,7 +9,7 @@ const rateLimiter = rateLimit({
 	message: "Too many requests, please try again later.",
 	standardHeaders: true,
 	validate: true,
-	windowMs: 15 * 60 * env.COMMON_RATE_LIMIT_WINDOW_MS,
+	windowMs: env.COMMON_RATE_LIMIT_WINDOW_MINUTES * 60 * 1000,
 	keyGenerator: (req: Request) => req.ip as string,
 });
 
