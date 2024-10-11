@@ -7,7 +7,7 @@ import type { AccessToken } from "../../../common/models/accessToken";
 export async function authenticated(req: Request, _res: Response, next: NextFunction) {
 	const bearerToken = extractBearerToken(req);
 	if (!bearerToken) {
-		throw AppError.UNAUTHORIZED({ description: "Bearer Token required" });
+		throw AppError.UNAUTHENTICATED({ description: "Bearer Token required" });
 	}
 	const [token, user] = await getAppCtx().authTokensRepository.findTokenAndUser(bearerToken);
 	if (isExpired(token)) {

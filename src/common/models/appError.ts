@@ -11,7 +11,7 @@ type ParamsOverride = {
 class AppError extends Error implements IProvidesApiResponse {
 	constructor(
 		override readonly message: string,
-		readonly status: number,
+		readonly statusCode: number,
 		readonly errCode: AppErrCode,
 		readonly description?: string,
 	) {
@@ -29,14 +29,20 @@ class AppError extends Error implements IProvidesApiResponse {
 	static BAD_REQUEST(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.BAD_REQUEST, StatusCodes.BAD_REQUEST, params);
 	}
-	static UNAUTHORIZED(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.UNAUTHORIZED, StatusCodes.UNAUTHORIZED, params);
+	static UNAUTHENTICATED(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.UNAUTHENTICATED, StatusCodes.UNAUTHORIZED, params);
 	}
 	static FORBIDDEN(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.FORBIDDEN, StatusCodes.FORBIDDEN, params);
 	}
 	static ROUTE_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
+	}
+	static ACCOUNT_NOT_FOUND(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.ACCOUNT_NOT_FOUND, StatusCodes.UNAUTHORIZED, params);
+	}
+	static ACCOUNT_ALREADY_EXISTS(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS, StatusCodes.CONFLICT, params);
 	}
 	static ENTITY_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ENTITY_NOT_FOUND, StatusCodes.BAD_REQUEST, params);

@@ -1,12 +1,12 @@
 import AppError from "@/common/models/appError";
-import { APP_ROLES } from "@/common/types";
+import { APP_ROLES, type AuthState } from "@/common/types";
 import type { IUser } from "@/interfaces/IUser";
 import type { NextFunction, Request, Response } from "express";
 
 export async function verified(_req: Request, res: Response, next: NextFunction) {
-	const user: IUser | undefined = res.locals.auth?.user;
+	const user = (res.locals.auth as AuthState | undefined)?.user;
 	if (!user) {
-		throw AppError.UNAUTHORIZED();
+		throw AppError.UNAUTHENTICATED();
 	}
 	if (checkUserVerification(user)) {
 		next();
@@ -22,7 +22,8 @@ function checkUserVerification(user: IUser): boolean {
 		case APP_ROLES.admin:
 			{
 				const userVerified =
-					verifiedAtDateIsValid(user.emailVerifiedAt) && verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
+					verifiedAtDateIsValid(user.emailVerifiedAt) &&
+					verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
 				if (!userVerified) {
 					throw AppError.UNVERIFIED_EMAIL_AND_PHONE();
 				}
@@ -32,7 +33,8 @@ function checkUserVerification(user: IUser): boolean {
 		case APP_ROLES.physician:
 			{
 				const userVerified =
-					verifiedAtDateIsValid(user.emailVerifiedAt) || verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
+					verifiedAtDateIsValid(user.emailVerifiedAt) ||
+					verifiedAtDateIsValid(user.phoneNumberVerifiedAt);
 				if (!userVerified) {
 					throw AppError.UNVERIFIED_EMAIL_OR_PHONE();
 				}

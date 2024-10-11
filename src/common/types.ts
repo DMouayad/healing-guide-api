@@ -21,8 +21,8 @@ export type NewAccessToken = {
 	plainTextToken: string;
 };
 export type AuthState = {
-	personalAccessToken: AccessToken | undefined;
-	user: IUser | undefined;
+	personalAccessToken: AccessToken;
+	user: IUser;
 };
 
 export type RequireAtLeastOne<T> = {
@@ -42,11 +42,11 @@ export type ObjectValues<T> = T[keyof T];
 export type Role = ObjectValues<typeof APP_ROLES>;
 
 export const APP_ROLES = {
-	guest: { roleId: "1", slug: "guest" },
-	admin: { roleId: "2", slug: "admin" },
-	patient: { roleId: "3", slug: "patient" },
-	facilityManager: { roleId: "4", slug: "facilityManager" },
-	physician: { roleId: "5", slug: "physician" },
+	guest: { roleId: 1, slug: "guest" },
+	admin: { roleId: 2, slug: "admin" },
+	patient: { roleId: 3, slug: "patient" },
+	facilityManager: { roleId: 4, slug: "facilityManager" },
+	physician: { roleId: 5, slug: "physician" },
 } as const;
 
 export type ClassProperties<C> = {

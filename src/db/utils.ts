@@ -1,7 +1,13 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
 import { logger } from "@/common/utils/logger";
-import { FileMigrationProvider, type MigrationResultSet, Migrator, NO_MIGRATIONS, sql } from "kysely";
+import {
+	FileMigrationProvider,
+	type MigrationResultSet,
+	Migrator,
+	NO_MIGRATIONS,
+	sql,
+} from "kysely";
 import { db } from ".";
 
 export async function testDBConnection() {
@@ -24,13 +30,15 @@ function handleMigrationResult(resultSet: MigrationResultSet) {
 	if (results?.length === 0) {
 		logger.info("Migration skipped: no new migrations found");
 	}
-	results?.forEach((it) => {
-		if (it.status === "Success") {
-			logger.info(`SUCCESS: migration-${it.direction} "${it.migrationName}"`);
-		} else if (it.status === "Error") {
-			logger.error(`FAILURE: migration-${it.direction} "${it.migrationName}"`);
+	if (results) {
+		for (const it of results) {
+			if (it.status === "Success") {
+				logger.info(`SUCCESS: migration-${it.direction} "${it.migrationName}"`);
+			} else if (it.status === "Error") {
+				logger.error(`FAILURE: migration-${it.direction} "${it.migrationName}"`);
+			}
 		}
-	});
+	}
 
 	if (error) {
 		logger.error("failed to migrate");

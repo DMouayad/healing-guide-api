@@ -7,4 +7,7 @@ export const commonZodSchemas = {
 		.transform(Number)
 		.refine((num) => num > 0, "ID must be a positive number"),
 	// ... other common validations
+	password: z
+		.string()
+		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
 };

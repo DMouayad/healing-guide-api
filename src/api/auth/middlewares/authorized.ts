@@ -1,13 +1,12 @@
 import AppError from "@/common/models/appError";
-import type { Role } from "@/common/types";
-import type { IUser } from "@/interfaces/IUser";
+import type { AuthState, Role } from "@/common/types";
 import type { NextFunction, Request, Response } from "express";
 
 export function authorized(role: Role) {
 	return (req: Request, res: Response, next: NextFunction) => {
-		const user: IUser | undefined = res.locals.auth?.user;
+		const user = (res.locals.auth as AuthState | undefined)?.user;
 		if (!user) {
-			throw AppError.UNAUTHORIZED();
+			throw AppError.UNAUTHENTICATED();
 		}
 		if (user.isAuthorizedAs(role)) {
 			next();
@@ -17,9 +16,9 @@ export function authorized(role: Role) {
 }
 export function authorizedAsAny(roles: Role[]) {
 	return (req: Request, res: Response, next: NextFunction) => {
-		const user: IUser | undefined = res.locals.auth?.user;
+		const user = (res.locals.auth as AuthState | undefined)?.user;
 		if (!user) {
-			throw AppError.UNAUTHORIZED();
+			throw AppError.UNAUTHENTICATED();
 		}
 		if (user.isAuthorizedAsAny(roles)) {
 			next();

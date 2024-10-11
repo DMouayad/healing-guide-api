@@ -1,13 +1,51 @@
-import { APP_ROLES, type RequireAtLeastOne, type Role } from "@/common/types";
+import { PG_ERR_CODE } from "@/common/constants";
+import AppError from "@/common/models/appError";
+import { APP_ROLES, type Role } from "@/common/types";
+import { getUserPasswordHash } from "@/common/utils/hashing";
 import { db } from "@/db";
-import type { IUserRepository, UserPropsToUpdate } from "@/interfaces/IUserRepository";
+import type { CreateUserDTO, UpdateUserDTO } from "@/interfaces/IUser";
+import type { IUserRepository } from "@/interfaces/IUserRepository";
+import { DatabaseError as PgDatabaseError } from "pg";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
-	async updateById(
-		id: number,
-		props: RequireAtLeastOne<UserPropsToUpdate>,
-	): Promise<DBUser | undefined> {
+	async findByEmailOrPhoneNumber(emailOrPhoneNo: string): Promise<DBUser | undefined> {
+		const query = db
+			.selectFrom("users")
+			.selectAll("users")
+			.where((eb) =>
+				eb.or([eb("email", "=", emailOrPhoneNo), eb("phone_number", "=", emailOrPhoneNo)]),
+			);
+		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
+	}
+	async create(dto: CreateUserDTO): Promise<DBUser | undefined> {
+		const hash = await getUserPasswordHash(dto);
+		const insertStmt = db
+			.insertInto("users")
+			.values({
+				full_name: dto.fullName,
+				email: dto.email,
+				phone_number: dto.phoneNumber,
+				password_hash: hash,
+				role_id: dto.role.roleId,
+			})
+			.returningAll();
+
+		return insertStmt
+			.executeTakeFirst()
+			.then((result) => DBUser.fromQueryResult(result))
+			.catch((err) => {
+				if (err instanceof PgDatabaseError) {
+					switch (err.code) {
+						case PG_ERR_CODE.DUPLICATE_VALUE:
+							throw AppError.ACCOUNT_ALREADY_EXISTS();
+					}
+				}
+				throw err;
+			});
+	}
+	//
+	async updateById(id: number, props: UpdateUserDTO): Promise<DBUser | undefined> {
 		const query = db
 			.updateTable("users")
 			.$if(props.fullName !== undefined, (qb) => qb.set("full_name", props.fullName!))
@@ -24,7 +62,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 	async getWithRoles(roles: Role[]): Promise<DBUser[]> {
 		const roleIds = Object.values(APP_ROLES)
 			.filter((v) => roles.includes(v))
-			.map((role) => Number.parseInt(role.roleId));
+			.map((role) => role.roleId);
 		const users = await db
 			.selectFrom("users")
 			.selectAll()
@@ -52,10 +90,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 			.then((result) => DBUser.fromQueryResult(result));
 	}
 
-	async update(
-		user: DBUser,
-		props: RequireAtLeastOne<UserPropsToUpdate>,
-	): Promise<DBUser | undefined> {
+	async update(user: DBUser, props: UpdateUserDTO): Promise<DBUser | undefined> {
 		return await this.updateById(user.id, props);
 	}
 }
