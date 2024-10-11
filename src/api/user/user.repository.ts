@@ -6,13 +6,14 @@ import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
 	async create(dto: CreateUserDTO): Promise<DBUser | undefined> {
+		const hash = await getUserPasswordHash(dto);
 		const insertStmt = db
 			.insertInto("users")
 			.values({
 				full_name: dto.fullName,
 				email: dto.email,
 				phone_number: dto.phoneNumber,
-				password_hash: sha256(dto.password),
+				password_hash: hash,
 				role_id: dto.role.roleId,
 			})
 			.returningAll();
