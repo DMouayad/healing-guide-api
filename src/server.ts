@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { type Express } from "express";
+import express, { Router, type Express } from "express";
 import helmet from "helmet";
 
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
@@ -7,14 +7,13 @@ import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { env } from "@/common/utils/envConfig";
 
 import rateLimiter from "@/middleware/rateLimiter";
-import { apiV1Router } from "./api/routes";
+import { authRouter } from "./api/auth/authRouter";
+import { userRouter } from "./api/user/user.router";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
-import { hasRequestBody } from "./middleware/hasRequestBody";
 import { hasValidContentType } from "./middleware/hasValidContentType";
 import { requestLogger } from "./middleware/requestLogger";
 
 const app: Express = express();
-
 // Set the application to trust the reverse proxy
 app.set("trust proxy", true);
 
@@ -32,8 +31,11 @@ app.use(hasValidContentType);
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
-// Restful API Routes - version 1
-app.use("/api/v1", apiV1Router);
+// Restful API Routes - latest version
+const apiRouter: Router = Router();
+app.use(`/api/${env.API_VERSION}`, apiRouter);
+apiRouter.use("/users", userRouter);
+apiRouter.use("/auth", authRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
