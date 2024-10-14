@@ -9,3 +9,7 @@ export const ASSIGNABLE_ROLES = [
 export const PG_ERR_CODE = {
 	DUPLICATE_VALUE: "23505",
 } as const;
+
+export const NOTIFICATIONS = {
+	emailVerification: "EMAIL_VERIFICATION_NOTICE",
+} as const;
