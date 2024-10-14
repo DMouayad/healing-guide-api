@@ -45,10 +45,28 @@ class AppError extends Error implements IProvidesApiResponse {
 		return constructErr(APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS, StatusCodes.CONFLICT, params);
 	}
 	static ENTITY_NOT_FOUND(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.ENTITY_NOT_FOUND, StatusCodes.BAD_REQUEST, params);
+		return constructErr(
+			APP_ERR_CODES.ENTITY_NOT_FOUND,
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			params,
+		);
 	}
 	static VALIDATION(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.VALIDATION, StatusCodes.BAD_REQUEST, params);
+	}
+	static EMAIL_ALREADY_VERIFIED(params?: ParamsOverride): AppError {
+		return constructErr(
+			APP_ERR_CODES.EMAIL_ALREADY_VERIFIED,
+			StatusCodes.UNPROCESSABLE_ENTITY,
+			params,
+		);
+	}
+	static PHONE_NUMBER_ALREADY_VERIFIED(params?: ParamsOverride): AppError {
+		return constructErr(
+			APP_ERR_CODES.PHONE_NUMBER_ALREADY_VERIFIED,
+			StatusCodes.UNPROCESSABLE_ENTITY,
+			params,
+		);
 	}
 	static UNSUPPORTED_MEDIA_TYPE(params?: ParamsOverride): AppError {
 		return constructErr(

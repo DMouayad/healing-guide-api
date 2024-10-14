@@ -1,5 +1,10 @@
 import { ASSIGNABLE_ROLES } from "@/common/constants";
-import { APP_ROLES, type ClassProperties, type RequireAtLeastOne, type Role } from "@/common/types";
+import {
+	APP_ROLES,
+	type ClassProperties,
+	type RequireAtLeastOne,
+	type Role,
+} from "@/common/types";
 import { logger } from "@/common/utils/logger";
 import { IHasAuthorization } from "./IHasAuthorization";
 
@@ -35,6 +40,8 @@ export type UpdateUserDTO = RequireAtLeastOne<{
 	readonly email: string;
 	readonly phoneNumber: string;
 	readonly activated: boolean;
+	readonly phoneNumberVerifiedAt: Date;
+	readonly emailVerifiedAt: Date;
 }>;
 export class CreateUserDTO {
 	readonly role: Role;
