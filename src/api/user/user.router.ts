@@ -13,8 +13,10 @@ import {
 } from "./user.actions";
 
 export const userRouter: Router = express.Router();
+
+userRouter.delete("/me", authenticated, deleteUserAction);
+
 userRouter.use(authenticated, activated);
-userRouter.delete("/me", deleteUserAction);
 /* Admin Routes */
 userRouter.get("/", authorized(APP_ROLES.admin), getNonAdminUsersAction);
 userRouter.post(
