@@ -13,9 +13,13 @@ import { UserVerifiedEvent } from "./user.events";
 import { userRequests } from "./user.requests";
 
 export async function deleteUserAction(req: Request, res: Response) {
+	const currentUser: IUser | undefined = res.locals.auth?.user;
+	if (!currentUser) {
+		throw AppError.UNAUTHENTICATED();
+	}
 	await handleAction({
 		res,
-		resultPromise: getAppCtx().userRepository.delete(res.locals.auth.user),
+		resultPromise: getAppCtx().userRepository.delete(currentUser),
 		onResult: (_) => ActionResult.success(),
 		onResultUndefinedThrow: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
 	});
