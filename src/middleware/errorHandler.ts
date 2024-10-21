@@ -12,8 +12,6 @@ export const unexpectedRequestHandler: RequestHandler = (req, res) => {
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	const appError = toAppError(err);
 	logErrIfNeeded(appError);
-
-	appError.stack = undefined; // set to undefined so it won't end up out in the public
-	// construct a response based on the error
+	// send a json response containing the error
 	res.status(appError.statusCode).json(appError.toApiResponse());
 };

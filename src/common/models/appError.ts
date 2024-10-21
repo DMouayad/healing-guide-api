@@ -18,9 +18,12 @@ class AppError extends Error implements IProvidesApiResponse {
 		super();
 	}
 	toApiResponse(): ApiResponse {
-		return {
-			appError: this,
+		const responseErr = {
+			message: this.statusCode === 500 ? "Internal Server Error" : this.message,
+			description: this.description,
+			errCode: this.errCode,
 		};
+		return { appError: responseErr };
 	}
 
 	static SERVER_ERROR(params?: ParamsOverride): AppError {

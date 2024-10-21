@@ -1,7 +1,7 @@
 import type { IUser } from "@/interfaces/IUser";
 import type { NOTIFICATIONS } from "./constants";
 import type { AccessToken } from "./models/accessToken";
-import type AppError from "./models/appError";
+import type { AppErrCode } from "./models/errorCodes";
 
 // =================== Utils types ======================
 export type ObjectValues<T> = T[keyof T];
@@ -24,7 +24,7 @@ export type RenameKeys<NewKeys, OriginalType> = Required<{
 // ================= End of Utils types ===================
 export type ApiResponse = {
 	data?: object;
-	appError?: AppError;
+	appError?: { message: string; errCode: AppErrCode; description?: string };
 };
 export type ExtractedBearerToken = {
 	tokenId?: number;
