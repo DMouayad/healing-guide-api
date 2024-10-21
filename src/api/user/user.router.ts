@@ -1,9 +1,8 @@
-import { APP_ROLES } from "@/common/types";
 import { signedURL } from "@/middleware/signedURL";
 import express, { type Router } from "express";
 import { activated } from "../auth/middlewares/activated";
 import { authenticated } from "../auth/middlewares/authenticated";
-import { authorized } from "../auth/middlewares/authorized";
+import { isAdmin } from "../auth/middlewares/isAdmin";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
@@ -18,17 +17,9 @@ userRouter.delete("/me", authenticated, deleteUserAction);
 
 userRouter.use(authenticated, activated);
 /* Admin Routes */
-userRouter.get("/", authorized(APP_ROLES.admin), getNonAdminUsersAction);
-userRouter.post(
-	"/:id/activate",
-	authorized(APP_ROLES.admin),
-	updateUserActivationStatus(true),
-);
-userRouter.post(
-	"/:id/deactivate",
-	authorized(APP_ROLES.admin),
-	updateUserActivationStatus(false),
-);
+userRouter.get("/", isAdmin, getNonAdminUsersAction);
+userRouter.post("/:id/activate", isAdmin, updateUserActivationStatus(true));
+userRouter.post("/:id/deactivate", isAdmin, updateUserActivationStatus(false));
 
 /** End of Admin Routes */
 // ======================== Email Verification ==================================
