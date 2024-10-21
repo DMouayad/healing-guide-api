@@ -15,7 +15,6 @@ export const userRouter: Router = express.Router();
 
 userRouter.delete("/me", authenticated, deleteUserAction);
 
-userRouter.use(authenticated, activated);
 /* Admin Routes */
 userRouter.get("/", isAdmin, getNonAdminUsersAction);
 userRouter.post("/:id/activate", isAdmin, updateUserActivationStatus(true));
