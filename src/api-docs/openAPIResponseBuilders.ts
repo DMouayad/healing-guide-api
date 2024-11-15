@@ -1,15 +1,23 @@
 import { StatusCodes } from "http-status-codes";
-import type { z } from "zod";
+import { z } from "zod";
 
-import { ActionResultSchema } from "@/common/models/actionResult";
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+	z.object({
+		responseObject: dataSchema.optional(),
+		statusCode: z.number(),
+	});
 
-export function createApiResponse(schema: z.ZodTypeAny, description: string, statusCode = StatusCodes.OK) {
+export function createApiResponse(
+	schema: z.ZodTypeAny,
+	description: string,
+	statusCode = StatusCodes.OK,
+) {
 	return {
 		[statusCode]: {
 			description,
 			content: {
 				"application/json": {
-					schema: ActionResultSchema(schema),
+					schema: ApiResponseSchema(schema),
 				},
 			},
 		},

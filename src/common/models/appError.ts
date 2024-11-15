@@ -1,6 +1,4 @@
-import type { IProvidesApiResponse } from "@/interfaces/IProvidesApiResponse";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
-import type { ApiResponse } from "../types";
 import { APP_ERR_CODES, type AppErrCode } from "./errorCodes";
 
 type ParamsOverride = {
@@ -8,7 +6,7 @@ type ParamsOverride = {
 	description?: string;
 };
 
-class AppError extends Error implements IProvidesApiResponse {
+class AppError extends Error {
 	constructor(
 		override readonly message: string,
 		readonly statusCode: number,
@@ -16,14 +14,6 @@ class AppError extends Error implements IProvidesApiResponse {
 		readonly description?: string,
 	) {
 		super();
-	}
-	toApiResponse(): ApiResponse {
-		const responseErr = {
-			message: this.statusCode === 500 ? "Internal Server Error" : this.message,
-			description: this.description,
-			errCode: this.errCode,
-		};
-		return { appError: responseErr };
 	}
 
 	static SERVER_ERROR(params?: ParamsOverride): AppError {
@@ -48,11 +38,7 @@ class AppError extends Error implements IProvidesApiResponse {
 		return constructErr(APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS, StatusCodes.CONFLICT, params);
 	}
 	static ENTITY_NOT_FOUND(params?: ParamsOverride): AppError {
-		return constructErr(
-			APP_ERR_CODES.ENTITY_NOT_FOUND,
-			StatusCodes.INTERNAL_SERVER_ERROR,
-			params,
-		);
+		return constructErr(APP_ERR_CODES.ENTITY_NOT_FOUND, StatusCodes.NOT_FOUND, params);
 	}
 	static VALIDATION(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.VALIDATION, StatusCodes.BAD_REQUEST, params);
@@ -86,6 +72,12 @@ class AppError extends Error implements IProvidesApiResponse {
 	}
 	static UNVERIFIED_EMAIL_AND_PHONE(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.UNVERIFIED_EMAIL_AND_PHONE, StatusCodes.FORBIDDEN);
+	}
+	static WRONG_LOGIN_CREDS(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.WRONG_LOGIN_CREDS, StatusCodes.UNAUTHORIZED);
+	}
+	static SIGNUP_FAILED(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.SIGNUP_FAILED, StatusCodes.UNAUTHORIZED);
 	}
 	static EMPTY_REQUEST_BODY(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.EMPTY_REQUEST_BODY, StatusCodes.BAD_REQUEST, {

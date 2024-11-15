@@ -1,4 +1,5 @@
-import { ActionResult } from "@/common/models/actionResult";
+// import ActionResult from "@/common/models/actionResult";
+import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import type { CreateAccessTokenParams, NewAccessToken } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
@@ -10,36 +11,46 @@ import bcrypt from "bcryptjs";
 
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
-	existingUser: IUser,
-) {
+	existingUser?: IUser,
+): Promise<IUser> {
 	if (
-		creds.emailOrPhoneNo === existingUser.email ||
-		creds.emailOrPhoneNo === existingUser.phoneNumber
+		creds.emailOrPhoneNo === existingUser?.email ||
+		creds.emailOrPhoneNo === existingUser?.phoneNumber
 	) {
-		return bcrypt.compare(creds.password, existingUser.passwordHash);
+		const matched = await bcrypt.compare(creds.password, existingUser.passwordHash);
+		return matched ? existingUser : Promise.reject(AppError.WRONG_LOGIN_CREDS());
 	}
-	return false;
+	return Promise.reject(AppError.ACCOUNT_NOT_FOUND());
 }
-export function getAuthenticatedUserApiResponse(user: IUser, plainTextToken?: string) {
+export function getAuthenticatedUserApiResponse(
+	user: IUser,
+	plainTextToken?: string,
+): ApiResponse {
 	if (plainTextToken) {
-		return ActionResult.success({
-			responseObject: {
+		return ApiResponse.success({
+			data: {
 				user: UserResource.create(user),
 				token: plainTextToken,
 			},
 		});
 	}
-	return AppError.UNAUTHENTICATED();
+	return ApiResponse.error(AppError.UNAUTHENTICATED());
 }
-export async function issuePersonalAccessToken({
-	user,
-	fingerprint,
-	expirationInMinutes,
-}: { user: IUser; fingerprint: string; expirationInMinutes?: number }) {
+export async function issuePersonalAccessToken(
+	user: IUser,
+	fingerprint: string,
+	expirationInMinutes?: number,
+) {
 	// delete previous token(s) of user - if any
 	return getAppCtx()
 		.authTokensRepository.deleteUserTokens(user.id)
-		.then((_) => createToken({ tokenableId: user.id, name: fingerprint, expirationInMinutes }));
+		.then((_) =>
+			createToken({
+				tokenableId: user.id,
+				name: fingerprint,
+				expirationInMinutes,
+			}),
+		);
 }
 
 async function createToken(

@@ -22,10 +22,7 @@ export type RenameKeys<NewKeys, OriginalType> = Required<{
 		: K]: K extends keyof OriginalType ? OriginalType[K] : never;
 }>;
 // ================= End of Utils types ===================
-export type ApiResponse = {
-	data?: object;
-	appError?: { message: string; errCode: AppErrCode; description?: string };
-};
+
 export type ExtractedBearerToken = {
 	tokenId?: number;
 	tokenStr: string;

@@ -1,10 +1,11 @@
-import { ActionResult } from "@/common/models/actionResult";
+import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
+import { myEventEmitter } from "@/common/models/myEventEmitter";
 import { APP_ROLES, type AuthState } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { handleAction } from "@/common/utils/handleAction";
 import { CreateUserDTO } from "@/interfaces/IUser";
 import type { Request, Response } from "express";
+import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
 	checkCredentials,
@@ -15,37 +16,36 @@ import {
 export async function signupAction(req: Request, res: Response) {
 	const data = await authRequests.signup.body.parseAsync(req.body);
 	const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.create(
-			new CreateUserDTO({
-				...data,
-				activated: userAccountActivatedByDefault,
-			}),
-		),
-		onResult: (newUser) =>
-			issuePersonalAccessToken({ user: newUser, fingerprint: req.ip! }).then((token) =>
-				getAuthenticatedUserApiResponse(newUser, token?.plainTextToken),
-			),
+	const dto = new CreateUserDTO({
+		...data,
+		activated: userAccountActivatedByDefault,
 	});
+
+	return getAppCtx()
+		.userRepository.create(dto)
+		.then((newUser) => {
+			if (!newUser) {
+				return Promise.reject(AppError.SIGNUP_FAILED);
+			}
+			myEventEmitter.emit(UserRegisteredEvent.name, newUser);
+			return issuePersonalAccessToken(newUser, req.ip!).then((token) =>
+				getAuthenticatedUserApiResponse(newUser, token?.plainTextToken),
+			);
+		})
+		.then((apiResponse) => apiResponse.send(res));
 }
 
 export async function loginAction(req: Request, res: Response) {
 	const data = await authRequests.login.body.parseAsync(req.body);
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo),
-		onResult: (user) =>
-			checkCredentials(data, user).then((isValid) => {
-				if (isValid) {
-					return issuePersonalAccessToken({ user: user, fingerprint: req.ip! }).then((token) =>
-						getAuthenticatedUserApiResponse(user, token?.plainTextToken),
-					);
-				}
-				return AppError.UNAUTHENTICATED();
-			}),
-		onResultUndefinedThrow: () => AppError.ACCOUNT_NOT_FOUND(),
-	});
+	return getAppCtx()
+		.userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo)
+		.then((user) => checkCredentials(data, user))
+		.then((authUser) =>
+			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash).then((token) =>
+				getAuthenticatedUserApiResponse(authUser, token?.plainTextToken),
+			),
+		)
+		.then((apiResponse) => apiResponse.send(res));
 }
 
 export async function logoutAction(req: Request, res: Response) {
@@ -53,16 +53,14 @@ export async function logoutAction(req: Request, res: Response) {
 	if (!authState) {
 		throw AppError.UNAUTHENTICATED();
 	}
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().authTokensRepository.deleteToken(authState.personalAccessToken),
-		onResult: (wasDeleted) => {
+	return getAppCtx()
+		.authTokensRepository.deleteToken(authState.personalAccessToken)
+		.then((wasDeleted) => {
 			if (wasDeleted) {
 				res.locals.auth = undefined;
-				return ActionResult.success();
+				return ApiResponse.success();
 			}
-			const err = AppError.SERVER_ERROR({ description: "delete failed" });
-			return ActionResult.failure({ error: err });
-		},
-	});
+			return ApiResponse.error(AppError.SERVER_ERROR({ description: "delete failed" }));
+		})
+		.then((apiResponse) => apiResponse.send(res));
 }

@@ -1,3 +1,4 @@
+import ApiResponse from "@/common/models/apiResponse";
 import { toAppError } from "@/common/utils/toAppError";
 import { logErrIfNeeded, logger } from "@utils/logger";
 import type { ErrorRequestHandler, RequestHandler } from "express";
@@ -13,5 +14,5 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	const appError = toAppError(err);
 	logErrIfNeeded(appError);
 	// send a json response containing the error
-	res.status(appError.statusCode).json(appError.toApiResponse());
+	ApiResponse.error(appError).send(res);
 };

@@ -1,10 +1,9 @@
 import { NOTIFICATIONS } from "@/common/constants";
-import { ActionResult } from "@/common/models/actionResult";
+import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
 import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { handleAction } from "@/common/utils/handleAction";
 import { notifyByMail } from "@/common/utils/notifications";
 import type { IUser } from "@/interfaces/IUser";
 import { UserResource } from "@/resources/userResource";
@@ -17,52 +16,42 @@ export async function deleteUserAction(req: Request, res: Response) {
 	if (!currentUser) {
 		throw AppError.UNAUTHENTICATED();
 	}
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.delete(currentUser),
-		onResult: (_) => ActionResult.success(),
-		onResultUndefinedThrow: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
-	});
+	return getAppCtx()
+		.userRepository.delete(currentUser)
+		.then(checkUser)
+		.then((_) => ApiResponse.success().send(res));
 }
 
 async function getUser(req: Request, res: Response) {
 	const data = await userRequests.get.parseAsync({ params: req.params });
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.find(data.params.id),
-		onResult: (user) => ActionResult.success({ responseObject: UserResource.create(user) }),
-		onResultUndefinedThrow: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
-	});
+	return getAppCtx()
+		.userRepository.find(data.params.id)
+		.then(checkUser)
+		.then((user) => ApiResponse.success({ data: UserResource.create(user) }).send(res));
 }
-export async function getNonAdminUsersAction(req: Request, res: Response) {
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.getWithRoles([
+export function getNonAdminUsersAction(req: Request, res: Response) {
+	return getAppCtx()
+		.userRepository.getWithRoles([
 			APP_ROLES.facilityManager,
 			APP_ROLES.patient,
 			APP_ROLES.physician,
-		]),
-		onResult: (users) =>
-			ActionResult.success({ responseObject: users.map(UserResource.create) }),
-	});
+		])
+		.then((users) => ApiResponse.success({ data: users.map(UserResource.create) }))
+		.then((apiResponse) => apiResponse.send(res));
 }
 
 export function updateUserActivationStatus(isActivated: boolean) {
 	return async (req: Request, res: Response) => {
-		return userRequests.changeActivation
-			.parseAsync({ params: req.params })
-			.then(async (data) => {
-				await handleAction({
-					res,
-					resultPromise: getAppCtx().userRepository.updateById(data.params.id, {
-						activated: isActivated,
-					}),
-					onResult: (user) =>
-						ActionResult.success({ responseObject: UserResource.create(user) }),
-					onResultUndefinedThrow: () =>
-						AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
-				});
-			});
+		const data = await userRequests.changeActivation.parseAsync({ params: req.params });
+		return getAppCtx()
+			.userRepository.updateById(data.params.id, { activated: isActivated })
+			.then(checkUser)
+			.then((user) => {
+				return user.activated
+					? ApiResponse.success()
+					: ApiResponse.error(AppError.SERVER_ERROR());
+			})
+			.then((apiResponse) => apiResponse.send(res));
 	};
 }
 export async function updateUser(req: Request, res: Response) {
@@ -70,12 +59,11 @@ export async function updateUser(req: Request, res: Response) {
 		params: req.params,
 		body: req.body,
 	});
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.update(res.locals.auth.user, data.body),
-		onResult: (user) => ActionResult.success({ responseObject: UserResource.create(user) }),
-		onResultUndefinedThrow: () => AppError.ENTITY_NOT_FOUND({ message: "User not found!" }),
-	});
+	return getAppCtx()
+		.userRepository.update(res.locals.auth.user, data.body)
+		.then(checkUser)
+		.then((user) => ApiResponse.success({ data: UserResource.create(user) }))
+		.then((apiResponse) => apiResponse.send(res));
 }
 
 export async function verifyEmailAction(req: Request, res: Response) {
@@ -86,16 +74,12 @@ export async function verifyEmailAction(req: Request, res: Response) {
 	if (user.emailVerifiedAt) {
 		throw AppError.EMAIL_ALREADY_VERIFIED();
 	}
-	await handleAction({
-		res,
-		resultPromise: getAppCtx().userRepository.update(user, {
-			emailVerifiedAt: new Date(),
-		}),
-		onResult: (result) => {
+	return getAppCtx()
+		.userRepository.update(user, { emailVerifiedAt: new Date() })
+		.then((result) => {
 			myEventEmitter.emit(UserVerifiedEvent.name, new UserVerifiedEvent(user));
-			return ActionResult.success();
-		},
-	});
+		})
+		.then((_) => ApiResponse.success().send(res));
 }
 
 export async function resendEmailVerificationAction(req: Request, res: Response) {
@@ -103,9 +87,10 @@ export async function resendEmailVerificationAction(req: Request, res: Response)
 	if (!user) {
 		throw AppError.UNAUTHENTICATED();
 	}
-	await handleAction({
-		res,
-		resultPromise: notifyByMail(user, NOTIFICATIONS.emailVerification),
-		onResult: (msgId) => ActionResult.success(),
-	});
+	notifyByMail(user, NOTIFICATIONS.emailVerification).then((_) =>
+		ApiResponse.success().send(res),
+	);
+}
+function checkUser(user: IUser | undefined) {
+	return user ? Promise.resolve(user) : Promise.reject(AppError.ENTITY_NOT_FOUND());
 }
