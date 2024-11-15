@@ -1,7 +1,7 @@
 import { PG_ERR_CODE } from "@/common/constants";
 import AppError from "@/common/models/appError";
 import { APP_ROLES, type Role } from "@/common/types";
-import { getUserPasswordHash } from "@/common/utils/hashing";
+import { bcryptHash } from "@/common/utils/hashing";
 import { db } from "@/db";
 import type { CreateUserDTO, UpdateUserDTO } from "@/interfaces/IUser";
 import type { IUserRepository } from "@/interfaces/IUserRepository";
@@ -19,7 +19,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
 	}
 	async create(dto: CreateUserDTO): Promise<DBUser | undefined> {
-		const hash = await getUserPasswordHash(dto);
+		const hash = await bcryptHash(dto.password);
 		const insertStmt = db
 			.insertInto("users")
 			.values({
