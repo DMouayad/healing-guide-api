@@ -9,8 +9,12 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("hash", "varchar(64)", (col) => col.unique().notNull())
 		.addColumn("last_used_at", "timestamp")
 		.addColumn("expires_at", "timestamp", (col) => col.notNull())
-		.addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
-		.addForeignKeyConstraint("user_id_foreign", ["user_id"], "users", ["id"])
+		.addColumn("created_at", "timestamp", (col) =>
+			col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
+		)
+		.addForeignKeyConstraint("user_id_foreign", ["user_id"], "users", ["id"], (cb) =>
+			cb.onDelete("cascade"),
+		)
 		.execute();
 }
 
