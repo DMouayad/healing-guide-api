@@ -2,7 +2,7 @@ import { seed as rolesSeed } from "./seeds/1728017019540_seed_roles";
 import { seed as adminUserSeed } from "./seeds/1728018124296_seed_admin";
 
 import { prepareUserToInsertWithKysely } from "@/api/user/user.model";
-import { userFactory } from "@/common/factories/userFactory";
+import * as userFactory from "@/common/factories/userFactory";
 import { APP_ROLES, type Role } from "@/common/types";
 import { logger } from "@/common/utils/logger";
 import { db } from ".";
@@ -21,16 +21,12 @@ export async function seedAppRoles(): Promise<void> {
 			logger.error(`SEED FAILED(roles): ${error}`);
 		});
 }
-export async function seedRandomUsers({
-	count,
-	role,
-}: { count: number; role?: Role }): Promise<void> {
-	const users = userFactory
-		.createMany(count, {
-			userProps: { role: role ?? APP_ROLES.guest },
-			generateRandomPassword: true,
-		})
-		.map((item) => prepareUserToInsertWithKysely(item));
-
-	await db.insertInto("users").values(users).execute();
+export async function seedRandomUsers(
+	count: number,
+	role: Role = APP_ROLES.guest,
+): Promise<void> {
+	await userFactory
+		.createMany(count, { userProps: { role: role } })
+		.then((users) => users.map(prepareUserToInsertWithKysely))
+		.then((users) => db.insertInto("users").values(users).execute());
 }
