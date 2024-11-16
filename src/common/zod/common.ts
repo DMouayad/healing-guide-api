@@ -11,3 +11,6 @@ export const commonZodSchemas = {
 		.string()
 		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
 };
+export function z_enumFromArray(array: string[]) {
+	return z.enum([array[0], ...array.slice(1)]);
+}

@@ -1,5 +1,5 @@
 import { validatePhoneNo } from "@/common/utils/validators";
-import { commonZodSchemas } from "@/common/utils/zodSchemas";
+import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
 
 // Input Validation for 'GET users/:id' endpoint
