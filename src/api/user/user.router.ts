@@ -15,9 +15,9 @@ export const userRouter: Router = express.Router();
 userRouter.delete("/me", authenticated, deleteUserAction);
 
 /**======================== Admin Protected Routes ================================== */
-userRouter.get("/", isAdmin, getNonAdminUsersAction);
-userRouter.post("/:id/activate", isAdmin, updateUserActivationStatus(true));
-userRouter.post("/:id/deactivate", isAdmin, updateUserActivationStatus(false));
+userRouter.get("/", authenticated, isAdmin, getNonAdminUsersAction);
+userRouter.post("/:id/activate", authenticated, isAdmin, updateUserActivationStatus(true));
+userRouter.post("/:id/deactivate", authenticated, isAdmin, updateUserActivationStatus(false));
 /**======================== END OF Admin Protected Routes ================================== */
 
 /**======================== Email Verification ================================== */
