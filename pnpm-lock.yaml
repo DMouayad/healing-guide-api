@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@asteasolutions/zod-to-openapi':
-        specifier: ^7.1.1
-        version: 7.1.1(zod@3.23.8)
+        specifier: ^7.2.0
+        version: 7.2.0(zod@3.23.8)
       '@faker-js/faker':
         specifier: ^9.0.3
         version: 9.0.3
@@ -132,8 +132,8 @@ importers:
 
 packages:
 
-  '@asteasolutions/zod-to-openapi@7.1.1':
-    resolution: {integrity: sha512-lF0d1gAc0lYLO9/BAGivwTwE2Sh9h6CHuDcbk5KnGBfIuAsAkDC+Fdat4dkQY3CS/zUWKHRmFEma0B7X132Ymw==}
+  '@asteasolutions/zod-to-openapi@7.2.0':
+    resolution: {integrity: sha512-Va+Fq1QzKkSgmiYINSp3cASFhMsbdRH/kmCk2feijhC+yNjGoC056CRqihrVFhR8MY8HOZHdlYm2Ns2lmszCiw==}
     peerDependencies:
       zod: ^3.20.2
 
@@ -2307,7 +2307,7 @@ packages:
 
 snapshots:
 
-  '@asteasolutions/zod-to-openapi@7.1.1(zod@3.23.8)':
+  '@asteasolutions/zod-to-openapi@7.2.0(zod@3.23.8)':
     dependencies:
       openapi3-ts: 4.4.0
       zod: 3.23.8
