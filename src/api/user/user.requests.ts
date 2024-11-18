@@ -22,15 +22,11 @@ export const updateUserRequestSchema = z.object({
 		updateUserReqBody.partial({ activated: true, fullName: true, email: true }),
 	]),
 });
-const verifyEmailRequestSchema = z.object({
-	params: z.object({
-		id: commonZodSchemas.id,
-	}),
-});
+
 export const userRequests = {
 	get: requestWithUserIdParamSchema,
 	delete: requestWithUserIdParamSchema,
 	update: updateUserRequestSchema,
 	changeActivation: requestWithUserIdParamSchema,
-	verifyEmail: verifyEmailRequestSchema,
+	verifyEmail: requestWithUserIdParamSchema,
 } as const;

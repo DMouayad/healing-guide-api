@@ -1,11 +1,11 @@
 import { prepareUserToInsertWithKysely } from "@/api/user/user.model";
-import { userFactory } from "@/common/factories/userFactory";
+import { createAdminUser } from "@/common/factories/userFactory";
 import { env } from "@/common/utils/envConfig";
 import { sha256 } from "@/common/utils/hashing";
 import type { Kysely } from "kysely";
 
 export async function seed(db: Kysely<any>): Promise<void> {
-	const user = userFactory.createAdmin({
+	const user = await createAdminUser({
 		userProps: {
 			email: env.ADMIN_EMAIL,
 			phoneNumber: env.ADMIN_PHONE,
