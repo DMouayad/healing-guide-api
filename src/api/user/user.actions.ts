@@ -40,19 +40,17 @@ export function getNonAdminUsersAction(req: Request, res: Response) {
 		.then((apiResponse) => apiResponse.send(res));
 }
 
-export function updateUserActivationStatus(isActivated: boolean) {
-	return async (req: Request, res: Response) => {
-		const data = await userRequests.changeActivation.parseAsync({ params: req.params });
-		return getAppCtx()
-			.userRepository.updateById(data.params.id, { activated: isActivated })
-			.then(checkUser)
-			.then((user) => {
-				return user.activated
-					? ApiResponse.success()
-					: ApiResponse.error(AppError.SERVER_ERROR());
-			})
-			.then((apiResponse) => apiResponse.send(res));
-	};
+export async function updateUserActivationStatus(req: Request, res: Response) {
+	const data = await userRequests.updateActivation.parseAsync({ params: req.params });
+	return getAppCtx()
+		.userRepository.updateById(data.params.id, data.body)
+		.then(checkUser)
+		.then((user) => {
+			return user.activated
+				? ApiResponse.success()
+				: ApiResponse.error(AppError.SERVER_ERROR());
+		})
+		.then((apiResponse) => apiResponse.send(res));
 }
 export async function updateUser(req: Request, res: Response) {
 	const data = await userRequests.update.parseAsync({

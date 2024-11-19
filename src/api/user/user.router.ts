@@ -15,8 +15,7 @@ export const userRouter: Router = express.Router();
 export const userRoutes = {
 	index: "/",
 	currentUser: "/me",
-	activateUser: (id = ":id") => `/${id}/activate`,
-	deactivateUser: (id = ":id") => `/${id}/deactivate`,
+	updateActivationStatus: (id = ":id") => `/${id}/activation-status`,
 	verifyEmail: (id = ":id") => `/${id}/email-verification`,
 	resendEmailVerificationNotice: "me/email-verification/resend",
 } as const;
@@ -25,17 +24,11 @@ userRouter.delete(userRoutes.currentUser, authenticated, deleteUserAction);
 
 /**======================== Admin Protected Routes ================================== */
 userRouter.get(userRoutes.index, authenticated, isAdmin, getNonAdminUsersAction);
-userRouter.post(
-	userRoutes.activateUser(),
+userRouter.patch(
+	userRoutes.updateActivationStatus(),
 	authenticated,
 	isAdmin,
-	updateUserActivationStatus(true),
-);
-userRouter.post(
-	userRoutes.deactivateUser(),
-	authenticated,
-	isAdmin,
-	updateUserActivationStatus(false),
+	updateUserActivationStatus,
 );
 /**======================== END OF Admin Protected Routes ================================== */
 
