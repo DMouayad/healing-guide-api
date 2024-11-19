@@ -17,13 +17,21 @@ class AppError extends Error {
 	}
 
 	static SERVER_ERROR(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.SERVER, StatusCodes.INTERNAL_SERVER_ERROR, params);
+		return constructErr(
+			APP_ERR_CODES.SERVER,
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			params,
+		);
 	}
 	static BAD_REQUEST(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.BAD_REQUEST, StatusCodes.BAD_REQUEST, params);
 	}
 	static UNAUTHENTICATED(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.UNAUTHENTICATED, StatusCodes.UNAUTHORIZED, params);
+		return constructErr(
+			APP_ERR_CODES.UNAUTHENTICATED,
+			StatusCodes.UNAUTHORIZED,
+			params,
+		);
 	}
 	static FORBIDDEN(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.FORBIDDEN, StatusCodes.FORBIDDEN, params);
@@ -32,10 +40,18 @@ class AppError extends Error {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
 	}
 	static ACCOUNT_NOT_FOUND(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.ACCOUNT_NOT_FOUND, StatusCodes.UNAUTHORIZED, params);
+		return constructErr(
+			APP_ERR_CODES.ACCOUNT_NOT_FOUND,
+			StatusCodes.UNAUTHORIZED,
+			params,
+		);
 	}
 	static ACCOUNT_ALREADY_EXISTS(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS, StatusCodes.CONFLICT, params);
+		return constructErr(
+			APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS,
+			StatusCodes.CONFLICT,
+			params,
+		);
 	}
 	static ENTITY_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ENTITY_NOT_FOUND, StatusCodes.NOT_FOUND, params);
@@ -71,7 +87,10 @@ class AppError extends Error {
 		return constructErr(APP_ERR_CODES.UNVERIFIED_EMAIL_OR_PHONE, StatusCodes.FORBIDDEN);
 	}
 	static UNVERIFIED_EMAIL_AND_PHONE(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.UNVERIFIED_EMAIL_AND_PHONE, StatusCodes.FORBIDDEN);
+		return constructErr(
+			APP_ERR_CODES.UNVERIFIED_EMAIL_AND_PHONE,
+			StatusCodes.FORBIDDEN,
+		);
 	}
 	static WRONG_LOGIN_CREDS(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.WRONG_LOGIN_CREDS, StatusCodes.UNAUTHORIZED);
@@ -86,7 +105,11 @@ class AppError extends Error {
 		});
 	}
 }
-function constructErr(errCode: AppErrCode, status: number, params?: ParamsOverride): AppError {
+function constructErr(
+	errCode: AppErrCode,
+	status: number,
+	params?: ParamsOverride,
+): AppError {
 	return new AppError(
 		params?.message ?? getReasonPhrase(status),
 		status,

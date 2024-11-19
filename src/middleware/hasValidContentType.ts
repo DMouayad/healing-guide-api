@@ -12,7 +12,11 @@ function isValidContentType(value: string | string[]): boolean {
 	}
 	return value.every((type) => VALID_TYPES.includes(type.toLowerCase()));
 }
-export const hasValidContentType = (req: Request, _res: Response, next: NextFunction) => {
+export const hasValidContentType = (
+	req: Request,
+	_res: Response,
+	next: NextFunction,
+) => {
 	const contentType = req.headers["Content-Type"] || req.headers["content-type"];
 	if (skipRequest(req)) {
 		return next();
@@ -20,5 +24,7 @@ export const hasValidContentType = (req: Request, _res: Response, next: NextFunc
 	if (contentType && isValidContentType(contentType)) {
 		return next();
 	}
-	throw AppError.UNSUPPORTED_MEDIA_TYPE({ description: `Content-type "${contentType}" is not supported` });
+	throw AppError.UNSUPPORTED_MEDIA_TYPE({
+		description: `Content-type "${contentType}" is not supported`,
+	});
 };

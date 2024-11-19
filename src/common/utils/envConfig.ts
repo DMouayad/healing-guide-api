@@ -13,7 +13,9 @@ export const env = cleanEnv(process.env, {
 	CORS_ORIGIN: str({ devDefault: "http://localhost:8080" }),
 	COMMON_RATE_LIMIT_MAX_REQUESTS: num({ devDefault: 100 }),
 	COMMON_RATE_LIMIT_WINDOW_MINUTES: num({ devDefault: 15 }),
-	DATABASE_URL: str({ example: "postgres://username:password@yourdomain.com/database" }),
+	DATABASE_URL: str({
+		example: "postgres://username:password@yourdomain.com/database",
+	}),
 	PERSONAL_ACCESS_TOKEN_EXPIRATION: num({ desc: "Token expiration in minutes" }),
 	APP_URL: str({ devDefault: "http://localhost:8080" }),
 	API_VERSION: str(),

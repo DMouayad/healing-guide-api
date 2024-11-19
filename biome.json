@@ -2,7 +2,7 @@
 	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
 	"formatter": {
 		"indentStyle": "tab",
-		"lineWidth": 95
+		"lineWidth": 88
 	},
 	"files": {
 		"include": ["src/**/*.ts", "src/**/*.js"]
@@ -19,7 +19,7 @@
 				"noConfusingVoidType": "off"
 			},
 			"style": {
-				"noNonNullAssertion": "warn"
+				"noNonNullAssertion": "off"
 			},
 			"complexity": {
 				"noForEach": "warn"

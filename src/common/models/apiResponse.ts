@@ -55,5 +55,9 @@ export class ErrorApiResponse extends ApiResponse {
 		const errCode = error.errCode;
 		this.error = { message, description, errCode };
 	}
-	public readonly error?: { message: string; description?: string; errCode: AppErrCode };
+	public readonly error?: {
+		message: string;
+		description?: string;
+		errCode: AppErrCode;
+	};
 }

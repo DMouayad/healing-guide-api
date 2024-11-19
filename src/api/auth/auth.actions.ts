@@ -41,8 +41,8 @@ export async function loginAction(req: Request, res: Response) {
 		.userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo)
 		.then((user) => checkCredentials(data, user))
 		.then((authUser) =>
-			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash).then((token) =>
-				getAuthenticatedUserApiResponse(authUser, token?.plainTextToken),
+			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash).then(
+				(token) => getAuthenticatedUserApiResponse(authUser, token?.plainTextToken),
 			),
 		)
 		.then((apiResponse) => apiResponse.send(res));

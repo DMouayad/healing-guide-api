@@ -4,7 +4,10 @@ import type { ExtractedBearerToken } from "@/common/types";
 import { sha256 } from "@/common/utils/hashing";
 import { logger } from "@/common/utils/logger";
 import { db } from "@/db";
-import type { IAuthTokensRepository, TokenId } from "@/interfaces/IAuthTokensRepository";
+import type {
+	IAuthTokensRepository,
+	TokenId,
+} from "@/interfaces/IAuthTokensRepository";
 import { sql } from "kysely";
 import { jsonBuildObject, jsonObjectFrom } from "kysely/helpers/postgres";
 import { objectToCamel, objectToSnake } from "ts-case-convert";
@@ -22,7 +25,9 @@ type TokenAndUserSelectQueryResult = {
 		last_used_at: Date | null;
 	};
 };
-export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken, DBUser> {
+export class DBAuthTokensRepository
+	implements IAuthTokensRepository<AccessToken, DBUser>
+{
 	async deleteUserTokens(userId: number): Promise<void> {
 		return db
 			.deleteFrom("personal_access_tokens")
@@ -34,7 +39,9 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 				}
 			});
 	}
-	async findTokenAndUser(bearerToken: ExtractedBearerToken): Promise<[AccessToken, DBUser]> {
+	async findTokenAndUser(
+		bearerToken: ExtractedBearerToken,
+	): Promise<[AccessToken, DBUser]> {
 		let matchingTokenAndUser: TokenAndUserSelectQueryResult | undefined;
 		const tokenHash = sha256(bearerToken.tokenStr);
 
@@ -86,14 +93,18 @@ export class DBAuthTokensRepository implements IAuthTokensRepository<AccessToken
 	}
 
 	private findTokenBaseQuery() {
-		return db.selectFrom("personal_access_tokens as pat").select(({ eb, selectFrom }) => [
-			jsonBuildObject({
-				token: sql<TokenAndUserSelectQueryResult["token"]>`pat.*`,
-				user: jsonObjectFrom(
-					selectFrom("users").selectAll().where("users.id", "=", eb.ref("pat.user_id")),
-				).$notNull(),
-			}).as("obj"),
-		]);
+		return db
+			.selectFrom("personal_access_tokens as pat")
+			.select(({ eb, selectFrom }) => [
+				jsonBuildObject({
+					token: sql<TokenAndUserSelectQueryResult["token"]>`pat.*`,
+					user: jsonObjectFrom(
+						selectFrom("users")
+							.selectAll()
+							.where("users.id", "=", eb.ref("pat.user_id")),
+					).$notNull(),
+				}).as("obj"),
+			]);
 	}
 
 	async storeToken(token: AccessToken): Promise<TokenId> {

@@ -5,7 +5,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.createTable("users")
 		.addColumn("id", "serial", (col) => col.primaryKey())
 		.addColumn("role_id", "int4", (col) => col.notNull())
-		.addForeignKeyConstraint("role_id_foreign", ["role_id"], "roles", ["id"], (cb) => cb.onDelete("set null"))
+		.addForeignKeyConstraint("role_id_foreign", ["role_id"], "roles", ["id"], (cb) =>
+			cb.onDelete("set null"),
+		)
 		.addColumn("full_name", "varchar(255)", (col) => col.notNull())
 		.addColumn("email", "varchar(255)", (col) => col.notNull().unique())
 		.addColumn("phone_number", "varchar(255)", (col) => col.notNull().unique())
@@ -13,7 +15,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("email_verified_at", "timestamp")
 		.addColumn("phone_number_verified_at", "timestamp")
 		.addColumn("activated", "boolean", (col) => col.defaultTo(false).notNull())
-		.addColumn("created_at", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
+		.addColumn("created_at", "timestamp", (col) =>
+			col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
+		)
 		.execute();
 }
 

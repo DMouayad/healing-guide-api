@@ -8,4 +8,7 @@ export async function notifyByMail(
 ): Promise<NotificationId> {
 	return getAppCtx().mailService.send({ to: user.email }, notifyFor);
 }
-export function notifyBySocketMsg(user: IUser, notification: SocketNotification): void {}
+export function notifyBySocketMsg(
+	user: IUser,
+	notification: SocketNotification,
+): void {}

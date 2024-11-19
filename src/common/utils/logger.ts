@@ -15,7 +15,8 @@ const notImportantCodes = [
 ];
 
 export function logErrIfNeeded(err: AppError) {
-	const shouldLogError = env.isDevelopment || (env.isProduction && logErrorInProduction(err));
+	const shouldLogError =
+		env.isDevelopment || (env.isProduction && logErrorInProduction(err));
 	if (shouldLogError) {
 		logger.error(err);
 	}

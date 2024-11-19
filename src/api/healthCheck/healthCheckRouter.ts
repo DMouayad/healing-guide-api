@@ -14,7 +14,10 @@ healthCheckRegistry.registerPath({
 	tags: ["Health Check"],
 	responses: createApiResponses([
 		{ statusCode: StatusCodes.NO_CONTENT, description: "Server is healthy" },
-		{ statusCode: StatusCodes.INTERNAL_SERVER_ERROR, description: "Server is unhealthy!" },
+		{
+			statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+			description: "Server is unhealthy!",
+		},
 	]),
 });
 

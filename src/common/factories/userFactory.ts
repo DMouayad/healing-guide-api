@@ -32,7 +32,10 @@ export async function createUser(params?: UserFactoryParams) {
 	});
 }
 export async function createAdminUser(params?: UserFactoryParams) {
-	return createUser({ ...params, userProps: { ...params?.userProps, role: APP_ROLES.admin } });
+	return createUser({
+		...params,
+		userProps: { ...params?.userProps, role: APP_ROLES.admin },
+	});
 }
 export async function createMany(count: number, params?: UserFactoryParams) {
 	const users = Array(count);

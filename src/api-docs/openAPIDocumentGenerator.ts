@@ -4,7 +4,11 @@ import { healthCheckRegistry } from "@/api/healthCheck/healthCheckRouter";
 import { adminOnlyRegistry, userRegistry } from "./api_v1";
 
 export function generateOpenAPIDocument() {
-	const registry = new OpenAPIRegistry([healthCheckRegistry, userRegistry, adminOnlyRegistry]);
+	const registry = new OpenAPIRegistry([
+		healthCheckRegistry,
+		userRegistry,
+		adminOnlyRegistry,
+	]);
 	const generator = new OpenApiGeneratorV3(registry.definitions);
 
 	return generator.generateDocument({

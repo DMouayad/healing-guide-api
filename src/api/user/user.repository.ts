@@ -14,7 +14,10 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 			.selectFrom("users")
 			.selectAll("users")
 			.where((eb) =>
-				eb.or([eb("email", "=", emailOrPhoneNo), eb("phone_number", "=", emailOrPhoneNo)]),
+				eb.or([
+					eb("email", "=", emailOrPhoneNo),
+					eb("phone_number", "=", emailOrPhoneNo),
+				]),
 			);
 		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
 	}
@@ -51,7 +54,9 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 			.updateTable("users")
 			.$if(props.fullName !== undefined, (qb) => qb.set("full_name", props.fullName!))
 			.$if(props.email !== undefined, (qb) => qb.set("email", props.email!))
-			.$if(props.phoneNumber !== undefined, (qb) => qb.set("phone_number", props.phoneNumber!))
+			.$if(props.phoneNumber !== undefined, (qb) =>
+				qb.set("phone_number", props.phoneNumber!),
+			)
 			.$if(props.activated !== undefined, (qb) => qb.set("activated", props.activated!))
 			.$if(props.emailVerifiedAt !== undefined, (qb) =>
 				qb.set("email_verified_at", props.emailVerifiedAt!),
