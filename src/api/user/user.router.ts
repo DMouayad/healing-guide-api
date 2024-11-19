@@ -12,15 +12,31 @@ import {
 
 export const userRouter: Router = express.Router();
 
-userRouter.delete("/me", authenticated, deleteUserAction);
+export const userRoutes = {
+	index: "/",
+	currentUser: "/me",
+	updateActivationStatus: (id = ":id") => `/${id}/activation-status`,
+	verifyEmail: (id = ":id") => `/${id}/email-verification`,
+	resendEmailVerificationNotice: "me/email-verification/resend",
+} as const;
+
+userRouter.delete(userRoutes.currentUser, authenticated, deleteUserAction);
 
 /**======================== Admin Protected Routes ================================== */
-userRouter.get("/", authenticated, isAdmin, getNonAdminUsersAction);
-userRouter.post("/:id/activate", authenticated, isAdmin, updateUserActivationStatus(true));
-userRouter.post("/:id/deactivate", authenticated, isAdmin, updateUserActivationStatus(false));
+userRouter.get(userRoutes.index, authenticated, isAdmin, getNonAdminUsersAction);
+userRouter.patch(
+	userRoutes.updateActivationStatus(),
+	authenticated,
+	isAdmin,
+	updateUserActivationStatus,
+);
 /**======================== END OF Admin Protected Routes ================================== */
 
 /**======================== Email Verification ================================== */
-userRouter.get("/email/verify/:id", signedURL, verifyEmailAction);
-userRouter.post("/email/verify/resend-notice", authenticated, resendEmailVerificationAction);
+userRouter.post(userRoutes.verifyEmail(), signedURL, verifyEmailAction);
+userRouter.post(
+	userRoutes.resendEmailVerificationNotice,
+	authenticated,
+	resendEmailVerificationAction,
+);
 /**======================== END Of Email Verification ================================== */

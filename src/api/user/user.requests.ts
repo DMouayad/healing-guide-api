@@ -11,22 +11,30 @@ const updateUserReqBody = z.object({
 	fullName: z.string(),
 	email: z.string().email(),
 	phoneNumber: z.string().transform(validatePhoneNo),
-	activated: z.boolean(),
 });
+
 export const updateUserRequestSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
 	body: z.union([
 		updateUserReqBody,
-		updateUserReqBody.partial({ activated: true }),
-		updateUserReqBody.partial({ activated: true, fullName: true }),
-		updateUserReqBody.partial({ activated: true, fullName: true, email: true }),
+		updateUserReqBody.omit({ fullName: true }),
+		updateUserReqBody.omit({ email: true }),
+		updateUserReqBody.omit({ phoneNumber: true }),
+		updateUserReqBody.pick({ fullName: true }),
+		updateUserReqBody.pick({ phoneNumber: true }),
+		updateUserReqBody.pick({ email: true }),
 	]),
 });
-
+const updateUserActivationStatusRequestSchema = z.object({
+	params: z.object({ id: commonZodSchemas.id }),
+	body: z.object({
+		activated: z.boolean(),
+	}),
+});
 export const userRequests = {
 	get: requestWithUserIdParamSchema,
 	delete: requestWithUserIdParamSchema,
 	update: updateUserRequestSchema,
-	changeActivation: requestWithUserIdParamSchema,
+	updateActivation: updateUserActivationStatusRequestSchema,
 	verifyEmail: requestWithUserIdParamSchema,
 } as const;
