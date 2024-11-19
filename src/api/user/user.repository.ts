@@ -34,15 +34,16 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		return insertStmt
 			.executeTakeFirst()
 			.then((result) => DBUser.fromQueryResult(result))
-			.catch((err) => {
-				if (err instanceof PgDatabaseError) {
-					switch (err.code) {
-						case PG_ERR_CODE.DUPLICATE_VALUE:
-							throw AppError.ACCOUNT_ALREADY_EXISTS();
-					}
-				}
-				throw err;
-			});
+			.catch(this.handleDBErrors);
+	}
+	handleDBErrors(err: any) {
+		if (err instanceof PgDatabaseError) {
+			switch (err.code) {
+				case PG_ERR_CODE.DUPLICATE_VALUE:
+					return Promise.reject(AppError.ACCOUNT_ALREADY_EXISTS());
+			}
+		}
+		return Promise.reject(err);
 	}
 	//
 	async updateById(id: number, props: UpdateUserDTO): Promise<DBUser | undefined> {
@@ -64,6 +65,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		return query
 			.returningAll()
 			.executeTakeFirst()
+			.catch(this.handleDBErrors)
 			.then((result) => DBUser.fromQueryResult(result));
 	}
 	async getWithRoles(roles: Role[]): Promise<DBUser[]> {
