@@ -1,7 +1,5 @@
 import type { IUser } from "@/interfaces/IUser";
-import type { NOTIFICATIONS } from "./constants";
 import type { AccessToken } from "./models/accessToken";
-import type { AppErrCode } from "./models/errorCodes";
 
 // =================== Utils types ======================
 export type ObjectValues<T> = T[keyof T];
@@ -41,7 +39,6 @@ export type AuthState = {
 	personalAccessToken: AccessToken;
 	user: IUser;
 };
-export type NotificationId = string;
 
 export type SocketNotification = {
 	id: string;
@@ -49,12 +46,6 @@ export type SocketNotification = {
 	senderId: string;
 	message: string;
 };
-export type MailRecipient = {
-	to: string;
-	cc?: string;
-};
-
-export type NotificationType = ObjectValues<typeof NOTIFICATIONS>;
 
 export type Role = ObjectValues<typeof APP_ROLES>;
 

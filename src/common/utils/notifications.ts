@@ -1,12 +1,15 @@
+import type {
+	MailNotification,
+	NotificationId,
+} from "@/api/mailNotifier/MailNotification";
 import type { IUser } from "@/interfaces/IUser";
-import type { NotificationId, NotificationType, SocketNotification } from "../types";
+import type { SocketNotification } from "../types";
 import { getAppCtx } from "./getAppCtx";
 
-export async function notifyByMail(
-	user: IUser,
-	notifyFor: NotificationType,
+export async function sendByMail(
+	notification: MailNotification,
 ): Promise<NotificationId> {
-	return getAppCtx().mailService.send({ to: user.email }, notifyFor);
+	return getAppCtx().mailNotifier.sendNotification(notification);
 }
 export function notifyBySocketMsg(
 	user: IUser,

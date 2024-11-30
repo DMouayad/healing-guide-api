@@ -1,13 +1,13 @@
-import { NOTIFICATIONS } from "@/common/constants";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
 import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { notifyByMail } from "@/common/utils/notifications";
+import { sendByMail } from "@/common/utils/notifications";
 import type { IUser } from "@/interfaces/IUser";
 import { UserResource } from "@/resources/userResource";
 import type { Request, Response } from "express";
+import { createEmailVerificationNotification } from "../mailNotifier/MailNotification";
 import { UserVerifiedEvent } from "./user.events";
 import { userRequests } from "./user.requests";
 
@@ -85,9 +85,11 @@ export async function resendEmailVerificationAction(req: Request, res: Response)
 	if (!user) {
 		throw AppError.UNAUTHENTICATED();
 	}
-	notifyByMail(user, NOTIFICATIONS.emailVerification).then((_) =>
-		ApiResponse.success().send(res),
-	);
+	const notification = createEmailVerificationNotification({
+		code: user.phoneNumber,
+		userEmail: user.email,
+	});
+	sendByMail(notification).then((_) => ApiResponse.success().send(res));
 }
 function checkUser(user: IUser | undefined) {
 	return user ? Promise.resolve(user) : Promise.reject(AppError.ENTITY_NOT_FOUND());
