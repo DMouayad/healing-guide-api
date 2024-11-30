@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
-app.use(rateLimiter);
+app.use(rateLimiter());
 app.use(requestLogger);
 
 // for every PUT, POST or PATCH request will check if Request has the correct content-type headers
