@@ -12,7 +12,7 @@ export async function authenticated(req: Request, _res: Response, next: NextFunc
 	const [token, user] =
 		await getAppCtx().authTokensRepository.findTokenAndUser(bearerToken);
 	if (isExpired(token)) {
-		throw AppError.INVALID_ACCESS_TOKEN({ description: "Token expired" });
+		throw AppError.INVALID_ACCESS_TOKEN();
 	}
 
 	// attach the user and token to response locals object
@@ -22,7 +22,7 @@ export async function authenticated(req: Request, _res: Response, next: NextFunc
 }
 
 function isExpired(token: AccessToken) {
-	return token.expiresAt < new Date();
+	return token.expiresAt.valueOf() < Date.now();
 }
 function extractBearerToken(req: Request): ExtractedBearerToken | undefined {
 	const headerValue = req.headers.authorization || req.headers.Authorization;

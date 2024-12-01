@@ -10,20 +10,16 @@ import type {
 } from "@/interfaces/IAuthTokensRepository";
 import { sql } from "kysely";
 import { jsonBuildObject, jsonObjectFrom } from "kysely/helpers/postgres";
-import { objectToCamel, objectToSnake } from "ts-case-convert";
+import { objectToSnake } from "ts-case-convert";
 import { DBUser, type KyselyQueryUser } from "../user/user.model";
+import {
+	type KyselyQueryAccessToken,
+	accessTokenFromKyselyQuery,
+} from "./authTokens.models";
 
 type TokenAndUserSelectQueryResult = {
 	user: KyselyQueryUser;
-	token: {
-		id: number;
-		user_id: number;
-		hash: string;
-		created_at: Date;
-		expires_at: Date;
-		fingerprint: string | null;
-		last_used_at: Date | null;
-	};
+	token: KyselyQueryAccessToken;
 };
 export class DBAuthTokensRepository
 	implements IAuthTokensRepository<AccessToken, DBUser>
@@ -56,7 +52,9 @@ export class DBAuthTokensRepository
 			throw AppError.INVALID_ACCESS_TOKEN({ description: "Token not found" });
 		}
 		const user = DBUser.fromQueryResult(matchingTokenAndUser.user);
-		const matchingToken: AccessToken = objectToCamel(matchingTokenAndUser.token);
+		const matchingToken: AccessToken = accessTokenFromKyselyQuery(
+			matchingTokenAndUser.token,
+		);
 		if (
 			!matchingToken ||
 			tokenHash !== matchingToken.hash ||
