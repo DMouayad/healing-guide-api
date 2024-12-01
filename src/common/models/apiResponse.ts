@@ -22,7 +22,7 @@ export default abstract class ApiResponse {
 	}
 
 	static success(params?: { statusCode?: number; data?: object }): SuccessApiResponse {
-		return new SuccessApiResponse(params?.statusCode ?? StatusCodes.OK, params?.data);
+		return new SuccessApiResponse(params?.statusCode, params?.data);
 	}
 
 	static error(error: AppError): ErrorApiResponse {
@@ -40,10 +40,11 @@ export default abstract class ApiResponse {
 
 export class SuccessApiResponse extends ApiResponse {
 	constructor(
-		statusCode: number,
+		statusCode?: number,
 		readonly data?: object,
 	) {
-		super(statusCode);
+		const _statusCode = statusCode ?? (data ? StatusCodes.OK : StatusCodes.NO_CONTENT);
+		super(_statusCode);
 	}
 }
 
