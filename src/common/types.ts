@@ -31,10 +31,7 @@ export type CreateAccessTokenParams = {
 	name: string;
 	expirationInMinutes?: number;
 };
-export type NewAccessToken = {
-	token: AccessToken;
-	plainTextToken: string;
-};
+
 export type AuthState = {
 	personalAccessToken: AccessToken;
 	user: IUser;

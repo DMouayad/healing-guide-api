@@ -9,7 +9,8 @@ import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
 	checkCredentials,
-	getAuthenticatedUserApiResponse,
+	getAccessTokenApiResponse,
+	getSignupApiResponse,
 	issuePersonalAccessToken,
 } from "./utils";
 
@@ -28,11 +29,14 @@ export async function signupAction(req: Request, res: Response) {
 				return Promise.reject(AppError.SIGNUP_FAILED);
 			}
 			myEventEmitter.emit(UserRegisteredEvent.name, newUser);
-			return issuePersonalAccessToken(newUser, req.ip!).then((token) =>
-				getAuthenticatedUserApiResponse(newUser, token?.plainTextToken),
-			);
+			return Promise.resolve(newUser);
 		})
-		.then((apiResponse) => apiResponse.send(res));
+		.then((newUser) =>
+			issuePersonalAccessToken(newUser, req.ip!).then((token) =>
+				getSignupApiResponse(newUser, token),
+			),
+		)
+		.then((response) => response.send(res));
 }
 
 export async function loginAction(req: Request, res: Response) {
@@ -41,10 +45,9 @@ export async function loginAction(req: Request, res: Response) {
 		.userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo)
 		.then((user) => checkCredentials(data, user))
 		.then((authUser) =>
-			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash).then(
-				(token) => getAuthenticatedUserApiResponse(authUser, token?.plainTextToken),
-			),
+			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash),
 		)
+		.then(getAccessTokenApiResponse)
 		.then((apiResponse) => apiResponse.send(res));
 }
 

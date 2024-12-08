@@ -1,13 +1,14 @@
-import { UserResource } from "@/api/user/user.resource";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
-import type { CreateAccessTokenParams, NewAccessToken } from "@/common/types";
+import type { CreateAccessTokenParams } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { generateRandomString, sha256 } from "@/common/utils/hashing";
 import type { IUser } from "@/interfaces/IUser";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import type { NewAccessToken } from "./authTokens.models";
 
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
@@ -22,20 +23,7 @@ export async function checkCredentials(
 	}
 	return Promise.reject(AppError.ACCOUNT_NOT_FOUND());
 }
-export function getAuthenticatedUserApiResponse(
-	user: IUser,
-	plainTextToken?: string,
-): ApiResponse {
-	if (plainTextToken) {
-		return ApiResponse.success({
-			data: {
-				user: UserResource.create(user),
-				token: plainTextToken,
-			},
-		});
-	}
-	return ApiResponse.error(AppError.UNAUTHENTICATED());
-}
+
 export async function issuePersonalAccessToken(
 	user: IUser,
 	fingerprint: string,
@@ -53,9 +41,7 @@ export async function issuePersonalAccessToken(
 		);
 }
 
-async function createToken(
-	params: CreateAccessTokenParams,
-): Promise<NewAccessToken | undefined> {
+async function createToken(params: CreateAccessTokenParams): Promise<NewAccessToken> {
 	const plainTextToken = generateRandomString(50);
 	const token = {
 		userId: params.tokenableId,
@@ -66,15 +52,10 @@ async function createToken(
 	};
 	// @ts-ignore missing property `id`on `token` => will be assigned after saving the token
 	const tokenId = await getAppCtx().authTokensRepository.storeToken(token);
-	if (tokenId) {
-		return {
-			token: {
-				...token,
-				id: tokenId,
-			},
-			plainTextToken: `${tokenId}|${plainTextToken}`,
-		};
+	if (!tokenId) {
+		throw AppError.UNAUTHENTICATED();
 	}
+	return `${tokenId}|${plainTextToken}`;
 }
 
 function getExpiresAt(expirationInMinutes?: number) {
@@ -87,4 +68,15 @@ function getExpiresAt(expirationInMinutes?: number) {
 
 export function userFromResponse(res: Response): IUser | undefined {
 	return res.locals.auth?.user;
+}
+
+export function getAccessTokenApiResponse(token: NewAccessToken) {
+	return ApiResponse.success({ data: { token } });
+}
+
+export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
+	return ApiResponse.success({
+		data: { token, user },
+		statusCode: StatusCodes.CREATED,
+	});
 }

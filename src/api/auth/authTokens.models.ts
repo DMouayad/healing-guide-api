@@ -18,3 +18,5 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 		lastUsedAt: token.last_used_at ? new Date(token.last_used_at) : null,
 	};
 }
+
+export type NewAccessToken = string;
