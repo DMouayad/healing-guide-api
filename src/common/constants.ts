@@ -9,3 +9,11 @@ export const ASSIGNABLE_ROLES = [
 export const PG_ERR_CODE = {
 	DUPLICATE_VALUE: "23505",
 } as const;
+
+export const HEALING_GUIDE_WEBSITE = "https://dmouayad.github.io/healing-guide-website";
+export const IMAGES = {
+	logo: {
+		name: "App_Logo",
+		path: "./src/mail/mailTemplates/images/logo.png",
+	},
+} as const;

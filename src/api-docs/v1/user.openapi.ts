@@ -1,4 +1,7 @@
 import { userRoutes } from "@/api/user/user.router";
+import ApiResponse from "@/common/models/apiResponse";
+import AppError from "@/common/models/appError";
+import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
 import { UserSchema } from "@/common/zod/user.zod";
 import {
 	type OpenAPIRegistry,
@@ -22,16 +25,14 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 	registry.registerPath({
 		method: "post",
 		description: "Used when a user request to verify his email",
-		path: `${usersRoute + userRoutes.verifyEmail("{id}")}`,
+		path: usersRoute + userRoutes.verifyEmail,
 		tags: ["User"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			...requestIdParam,
 			body: {
 				content: {
 					"application/json": {
-						schema: z.object({
-							verificationCode: z.string(),
-						}),
+						schema: z.object({ code: z.string() }),
 					},
 				},
 			},
@@ -41,6 +42,50 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				statusCode: StatusCodes.NO_CONTENT,
 				description: "Success: email was verified successfully",
 			},
+			{
+				statusCode: StatusCodes.CONFLICT,
+				description: "Failure: email already verified",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.EMAIL_ALREADY_VERIFIED()),
+			},
+			{
+				statusCode: StatusCodes.GONE,
+				description: "Failure: verification code has expired",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.EXPIRED_VERIFICATION_CODE()),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		description: "A user request a new verification code to be sent to his email",
+		path: usersRoute + userRoutes.sendEmailVerification,
+		tags: ["User"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: z.object({}),
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: a new code was sent to user inbox",
+			},
+			{
+				statusCode: StatusCodes.CONFLICT,
+				description: "Failure: email already verified",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.EMAIL_ALREADY_VERIFIED()),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
 		]),
 	});
 	/**

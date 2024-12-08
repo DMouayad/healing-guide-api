@@ -1,4 +1,3 @@
-// import ActionResult from "@/common/models/actionResult";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import type { CreateAccessTokenParams, NewAccessToken } from "@/common/types";
@@ -8,6 +7,7 @@ import { generateRandomString, sha256 } from "@/common/utils/hashing";
 import type { IUser } from "@/interfaces/IUser";
 import { UserResource } from "@/resources/userResource";
 import bcrypt from "bcryptjs";
+import type { Response } from "express";
 
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
@@ -76,10 +76,15 @@ async function createToken(
 		};
 	}
 }
+
 function getExpiresAt(expirationInMinutes?: number) {
 	const expiresIn = expirationInMinutes ?? env.PERSONAL_ACCESS_TOKEN_EXPIRATION;
 	const createdAt = new Date();
 	const expiresAt = new Date();
 	expiresAt.setTime(createdAt.getTime() + expiresIn * 60000);
 	return expiresAt;
+}
+
+export function userFromResponse(res: Response): IUser | undefined {
+	return res.locals.auth?.user;
 }

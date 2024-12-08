@@ -1,14 +1,17 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
-import { myEventEmitter } from "@/common/models/myEventEmitter";
 import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { sendByMail } from "@/common/utils/notifications";
 import type { IUser } from "@/interfaces/IUser";
+import { sendMailNotification } from "@/mail/mail.utils";
 import { UserResource } from "@/resources/userResource";
+import { EmailVerificationNotification } from "@mail/MailNotification";
 import type { Request, Response } from "express";
-import { createEmailVerificationNotification } from "../mailNotifier/MailNotification";
-import { UserVerifiedEvent } from "./user.events";
+import { userFromResponse } from "../auth/utils";
+import {
+	generateEmailVerification,
+	validateEmailVerificationCode,
+} from "./emailVerification/utils";
 import { userRequests } from "./user.requests";
 
 export async function deleteUserAction(req: Request, res: Response) {
@@ -22,13 +25,6 @@ export async function deleteUserAction(req: Request, res: Response) {
 		.then((_) => ApiResponse.success().send(res));
 }
 
-async function getUser(req: Request, res: Response) {
-	const data = await userRequests.get.parseAsync({ params: req.params });
-	return getAppCtx()
-		.userRepository.find(data.params.id)
-		.then(checkUser)
-		.then((user) => ApiResponse.success({ data: UserResource.create(user) }).send(res));
-}
 export function getNonAdminUsersAction(req: Request, res: Response) {
 	return getAppCtx()
 		.userRepository.getWithRoles([
@@ -57,40 +53,51 @@ export async function updateUser(req: Request, res: Response) {
 		params: req.params,
 		body: req.body,
 	});
-	return getAppCtx()
-		.userRepository.update(res.locals.auth.user, data.body)
-		.then(checkUser)
-		.then((user) => ApiResponse.success({ data: UserResource.create(user) }))
+	const user = userFromResponse(res);
+
+	return checkUser(user)
+		.then((user) => getAppCtx().userRepository.update(user, data.body))
+		.then((user) => ApiResponse.success({ data: UserResource.create(user!) }))
 		.then((apiResponse) => apiResponse.send(res));
 }
 
 export async function verifyEmailAction(req: Request, res: Response) {
-	const user: IUser | undefined = res.locals.user;
+	const data = await userRequests.verifyEmail.parseAsync({
+		body: req.body,
+	});
+	const providedCode = data.body.code;
+	const user = userFromResponse(res);
+
+	return checkUserNotVerified(user)
+		.then(getAppCtx().emailVerificationRepo.findBy)
+		.then((userEV) => validateEmailVerificationCode(providedCode, userEV))
+		.then((_) =>
+			getAppCtx().userRepository.update(user!, { emailVerifiedAt: new Date() }),
+		)
+		.then((_) => ApiResponse.success().send(res));
+}
+
+export async function sendEmailVerificationAction(req: Request, res: Response) {
+	const user = userFromResponse(res);
+
+	return checkUserNotVerified(user)
+		.then(generateEmailVerification)
+		.then(getAppCtx().emailVerificationRepo.storeEmailVerification)
+		.then(EmailVerificationNotification.fromEmailVerification)
+		.then(sendMailNotification)
+		.then((em) => ApiResponse.success().send(res));
+}
+
+function checkUserNotVerified(user: IUser | undefined) {
 	if (!user) {
 		throw AppError.UNAUTHENTICATED();
 	}
 	if (user.emailVerifiedAt) {
 		throw AppError.EMAIL_ALREADY_VERIFIED();
 	}
-	return getAppCtx()
-		.userRepository.update(user, { emailVerifiedAt: new Date() })
-		.then((result) => {
-			myEventEmitter.emit(UserVerifiedEvent.name, new UserVerifiedEvent(user));
-		})
-		.then((_) => ApiResponse.success().send(res));
+	return Promise.resolve(user);
 }
 
-export async function resendEmailVerificationAction(req: Request, res: Response) {
-	const user: IUser | undefined = res.locals.user;
-	if (!user) {
-		throw AppError.UNAUTHENTICATED();
-	}
-	const notification = createEmailVerificationNotification({
-		code: user.phoneNumber,
-		userEmail: user.email,
-	});
-	sendByMail(notification).then((_) => ApiResponse.success().send(res));
-}
 function checkUser(user: IUser | undefined) {
 	return user ? Promise.resolve(user) : Promise.reject(AppError.ENTITY_NOT_FOUND());
 }

@@ -1,11 +1,11 @@
-import { signedURL } from "@/middleware/signedURL";
+import rateLimiter from "@/middleware/rateLimiter";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
-	resendEmailVerificationAction,
+	sendEmailVerificationAction,
 	updateUserActivationStatus,
 	verifyEmailAction,
 } from "./user.actions";
@@ -16,8 +16,8 @@ export const userRoutes = {
 	index: "/",
 	currentUser: "/me",
 	updateActivationStatus: (id = ":id") => `/${id}/activation-status`,
-	verifyEmail: (id = ":id") => `/${id}/email-verification`,
-	resendEmailVerificationNotice: "me/email-verification/resend",
+	verifyEmail: "/me/email-verification",
+	sendEmailVerification: "/me/email-verification/send",
 } as const;
 
 userRouter.delete(userRoutes.currentUser, authenticated, deleteUserAction);
@@ -33,10 +33,11 @@ userRouter.patch(
 /**======================== END OF Admin Protected Routes ================================== */
 
 /**======================== Email Verification ================================== */
-userRouter.post(userRoutes.verifyEmail(), signedURL, verifyEmailAction);
+userRouter.post(userRoutes.verifyEmail, authenticated, verifyEmailAction);
 userRouter.post(
-	userRoutes.resendEmailVerificationNotice,
+	userRoutes.sendEmailVerification,
+	rateLimiter(3, 15),
 	authenticated,
-	resendEmailVerificationAction,
+	sendEmailVerificationAction,
 );
 /**======================== END Of Email Verification ================================== */
