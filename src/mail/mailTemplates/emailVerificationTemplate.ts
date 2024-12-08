@@ -1,4 +1,4 @@
-import type { EmailVerification } from "@/api/user/emailVerification/EmailVerification";
+import type { EmailVerification } from "@/api/user/verification/types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
 

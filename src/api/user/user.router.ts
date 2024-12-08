@@ -5,10 +5,12 @@ import { isAdmin } from "../auth/middlewares/isAdmin";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
-	sendEmailVerificationAction,
 	updateUserActivationStatus,
-	verifyEmailAction,
 } from "./user.actions";
+import {
+	sendEmailVerificationAction,
+	verifyEmailAction,
+} from "./verification/userVerification.actions";
 
 export const userRouter: Router = express.Router();
 

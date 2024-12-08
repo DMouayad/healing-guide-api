@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
-import type { EmailVerification } from "../EmailVerification";
+import type { EmailVerification } from "../types";
 import type { IEmailVerificationRepository } from "./IEmailVerificationRepository";
 
 export class DBEmailVerificationRepo implements IEmailVerificationRepository {

@@ -1,5 +1,5 @@
 import type { IUser } from "@/interfaces/IUser";
-import type { EmailVerification } from "../EmailVerification";
+import type { EmailVerification } from "../types";
 
 export interface IEmailVerificationRepository {
 	storeEmailVerification(

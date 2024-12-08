@@ -1,6 +1,6 @@
 import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
-import { DBEmailVerificationRepo } from "@/api/user/emailVerification/repos/DBEmailVerificationRepo";
 import { DBUserRepository } from "@/api/user/user.repository";
+import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationRepo";
 import { NodemailerEmailNotifier } from "@mail/services/NodemailerEmailNotifier";
 import type { AppCtx } from "../models/appCtx";
 

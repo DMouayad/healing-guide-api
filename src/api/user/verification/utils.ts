@@ -2,7 +2,7 @@ import AppError from "@/common/models/appError";
 import { env } from "@/common/utils/envConfig";
 import { generateOTP } from "@/common/utils/otpGenerator";
 import type { IUser } from "@/interfaces/IUser";
-import type { EmailVerification } from "./EmailVerification";
+import type { EmailVerification } from "./types";
 
 export async function validateEmailVerificationCode(
 	code: string,

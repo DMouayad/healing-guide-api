@@ -1,4 +1,4 @@
-import type { EmailVerification } from "@/api/user/emailVerification/EmailVerification";
+import type { EmailVerification } from "@/api/user/verification/types";
 import type { ObjectValues } from "@/common/types";
 import type { IUser } from "@/interfaces/IUser";
 
