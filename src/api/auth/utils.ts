@@ -1,3 +1,4 @@
+import { UserResource } from "@/api/user/user.resource";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import type { CreateAccessTokenParams, NewAccessToken } from "@/common/types";
@@ -5,7 +6,6 @@ import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { generateRandomString, sha256 } from "@/common/utils/hashing";
 import type { IUser } from "@/interfaces/IUser";
-import { UserResource } from "@/resources/userResource";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 

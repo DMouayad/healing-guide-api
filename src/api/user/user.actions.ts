@@ -1,10 +1,10 @@
+import { UserResource } from "@/api/user/user.resource";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import type { IUser } from "@/interfaces/IUser";
 import { sendMailNotification } from "@/mail/mail.utils";
-import { UserResource } from "@/resources/userResource";
 import { EmailVerificationNotification } from "@mail/MailNotification";
 import type { Request, Response } from "express";
 import { userFromResponse } from "../auth/utils";
