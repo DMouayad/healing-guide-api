@@ -32,7 +32,7 @@ const updateUserActivationStatusRequestSchema = z.object({
 		activated: z.boolean(),
 	}),
 });
-const verifyUserEmailRequestSchema = z.object({
+const userVerificationRequestSchema = z.object({
 	body: z.object({ code: z.string().length(env.EMAIL_VERIFICATION_CODE_LENGTH) }),
 });
 export const userRequests = {
@@ -40,5 +40,6 @@ export const userRequests = {
 	delete: requestWithUserIdParamSchema,
 	update: updateUserRequestSchema,
 	updateActivation: updateUserActivationStatusRequestSchema,
-	verifyEmail: verifyUserEmailRequestSchema,
+	verifyEmail: userVerificationRequestSchema,
+	verifyPhone: userVerificationRequestSchema,
 } as const;

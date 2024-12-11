@@ -5,7 +5,7 @@ import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import type { IUser } from "@/interfaces/IUser";
 import type { Request, Response } from "express";
-import { userFromResponse } from "../auth/utils";
+import { getUserFromResponse } from "../auth/utils";
 import { userRequests } from "./user.requests";
 
 export async function deleteUserAction(req: Request, res: Response) {
@@ -47,7 +47,7 @@ export async function updateUser(req: Request, res: Response) {
 		params: req.params,
 		body: req.body,
 	});
-	const user = userFromResponse(res);
+	const user = getUserFromResponse(res);
 
 	return checkUser(user)
 		.then((user) => getAppCtx().userRepository.update(user, data.body))

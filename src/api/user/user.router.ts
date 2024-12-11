@@ -9,7 +9,9 @@ import {
 } from "./user.actions";
 import {
 	sendEmailVerificationAction,
+	sendPhoneVerificationAction,
 	verifyEmailAction,
+	verifyPhoneAction,
 } from "./verification/userVerification.actions";
 
 export const userRouter: Router = express.Router();
@@ -20,6 +22,8 @@ export const userRoutes = {
 	updateActivationStatus: (id = ":id") => `/${id}/activation-status`,
 	verifyEmail: "/me/email-verification",
 	sendEmailVerification: "/me/email-verification/send",
+	verifyPhone: "/me/phone-verification",
+	sendPhoneVerification: "/me/phone-verification/send",
 } as const;
 
 userRouter.delete(userRoutes.currentUser, authenticated, deleteUserAction);
@@ -43,3 +47,12 @@ userRouter.post(
 	sendEmailVerificationAction,
 );
 /**======================== END Of Email Verification ================================== */
+/**======================== Phone Verification ================================== */
+userRouter.post(userRoutes.verifyPhone, authenticated, verifyPhoneAction);
+userRouter.post(
+	userRoutes.sendPhoneVerification,
+	rateLimiter(3, 15),
+	authenticated,
+	sendPhoneVerificationAction,
+);
+/**======================== END Of Phone Verification ================================== */

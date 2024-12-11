@@ -66,7 +66,7 @@ function getExpiresAt(expirationInMinutes?: number) {
 	return expiresAt;
 }
 
-export function userFromResponse(res: Response): IUser | undefined {
+export function getUserFromResponse(res: Response): IUser | undefined {
 	return res.locals.auth?.user;
 }
 

@@ -73,6 +73,13 @@ class AppError extends Error {
 			params,
 		);
 	}
+	static PHONE_ALREADY_VERIFIED(params?: ParamsOverride): AppError {
+		return constructErr(
+			APP_ERR_CODES.PHONE_ALREADY_VERIFIED,
+			StatusCodes.UNPROCESSABLE_ENTITY,
+			params,
+		);
+	}
 	static PHONE_NUMBER_ALREADY_VERIFIED(params?: ParamsOverride): AppError {
 		return constructErr(
 			APP_ERR_CODES.PHONE_NUMBER_ALREADY_VERIFIED,

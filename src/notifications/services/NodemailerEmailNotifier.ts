@@ -6,11 +6,11 @@ import { IMAGES } from "@/common/constants";
 import {
 	EmailVerificationNotification,
 	type MailNotification,
-} from "@mail/MailNotification";
+} from "@/notifications/MailNotification";
 import {
 	LOGO_IMG_CID,
 	emailVerificationTemplate,
-} from "@mail/mailTemplates/emailVerificationTemplate";
+} from "@/notifications/mailTemplates/emailVerificationTemplate";
 import type Mail from "nodemailer/lib/mailer";
 
 export class NodemailerEmailNotifier implements IMailNotifier {

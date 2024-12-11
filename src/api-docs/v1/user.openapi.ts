@@ -54,8 +54,13 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				schema: ZodAppErrorSchema,
 				example: ApiResponse.error(AppError.EXPIRED_VERIFICATION_CODE()),
 			},
+			{
+				statusCode: StatusCodes.FORBIDDEN,
+				description: "Failure: verification code is not correct",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.FORBIDDEN()),
+			},
 			unauthenticatedResponse,
-			unauthorizedResponse,
 		]),
 	});
 	registry.registerPath({
@@ -83,6 +88,81 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				description: "Failure: email already verified",
 				schema: ZodAppErrorSchema,
 				example: ApiResponse.error(AppError.EMAIL_ALREADY_VERIFIED()),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	/**
+	 * Phone Verification
+	 */
+	registry.registerPath({
+		method: "post",
+		description: "Used when a user request to verify his phone number",
+		path: usersRoute + userRoutes.verifyPhone,
+		tags: ["User"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: z.object({ code: z.string() }),
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: phone number was verified successfully",
+			},
+			{
+				statusCode: StatusCodes.CONFLICT,
+				description: "Failure: phone number already verified",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.PHONE_ALREADY_VERIFIED()),
+			},
+			{
+				statusCode: StatusCodes.GONE,
+				description: "Failure: verification code has expired",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.EXPIRED_VERIFICATION_CODE()),
+			},
+
+			{
+				statusCode: StatusCodes.FORBIDDEN,
+				description: "Failure: verification code is not correct",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.FORBIDDEN()),
+			},
+			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		description: "A user request a new verification code to be sent to his phone",
+		path: usersRoute + userRoutes.sendPhoneVerification,
+		tags: ["User"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: z.object({}),
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: a new code was sent to user inbox",
+			},
+			{
+				statusCode: StatusCodes.CONFLICT,
+				description: "Failure: phone already verified",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.PHONE_ALREADY_VERIFIED()),
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,

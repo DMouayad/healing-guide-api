@@ -1,4 +1,4 @@
-import type { EmailVerification } from "@/api/user/verification/types";
+import type { VerificationCode } from "@/api/user/verification/types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
 
@@ -8,7 +8,7 @@ function getTimeToExpireInHours(expiresAt: Date): number {
 	d.setHours(0, env.EMAIL_VERIFICATION_CODE_EXPIRATION, 0, 0);
 	return d.getHours();
 }
-export function emailVerificationTemplate(ev: EmailVerification) {
+export function emailVerificationTemplate(ev: VerificationCode) {
 	return `
     <!DOCTYPE html>
 <html>

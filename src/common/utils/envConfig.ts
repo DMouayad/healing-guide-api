@@ -11,6 +11,7 @@ export const env = cleanEnv(process.env, {
 	ZOHO_EMAIL: str(),
 	ZOHO_PASSWORD: str(),
 	EMAIL_VERIFICATION_CODE_LENGTH: num(),
+	PHONE_VERIFICATION_CODE_LENGTH: num(),
 	HOST: host({ devDefault: "localhost" }),
 	PORT: port({ devDefault: 8080 }),
 	CORS_ORIGIN: str({ devDefault: "http://localhost:8080" }),
@@ -22,6 +23,9 @@ export const env = cleanEnv(process.env, {
 	PERSONAL_ACCESS_TOKEN_EXPIRATION: num({ desc: "Token expiration in minutes" }),
 	EMAIL_VERIFICATION_CODE_EXPIRATION: num({
 		desc: "Email verification code expiration in minutes",
+	}),
+	PHONE_VERIFICATION_CODE_EXPIRATION: num({
+		desc: "Phone number verification code expiration in minutes",
 	}),
 	APP_URL: str({ devDefault: "http://localhost:8080" }),
 	API_VERSION: str(),
