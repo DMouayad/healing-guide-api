@@ -12,10 +12,7 @@ import { sql } from "kysely";
 import { jsonBuildObject, jsonObjectFrom } from "kysely/helpers/postgres";
 import { objectToSnake } from "ts-case-convert";
 import { DBUser, type KyselyQueryUser } from "../user/user.model";
-import {
-	type KyselyQueryAccessToken,
-	accessTokenFromKyselyQuery,
-} from "./authTokens.models";
+import { type KyselyQueryAccessToken, accessTokenFromKyselyQuery } from "./auth.types";
 
 type TokenAndUserSelectQueryResult = {
 	user: KyselyQueryUser;
