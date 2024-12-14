@@ -1,14 +1,14 @@
 import type { VerificationCode } from "@/api/user/verification/types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
+import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
-export const LOGO_IMG_CID = "template_logo_img";
-function getTimeToExpireInHours(expiresAt: Date): number {
+function getTimeToExpireInHours(): number {
 	const d = new Date();
 	d.setHours(0, env.EMAIL_VERIFICATION_CODE_EXPIRATION, 0, 0);
 	return d.getHours();
 }
-export function emailVerificationTemplate(ev: VerificationCode) {
+export function emailVerificationMailTemplate(ev: VerificationCode) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -188,7 +188,7 @@ export function emailVerificationTemplate(ev: VerificationCode) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${ev.user.fullName}, use the following code to verify your email. This code will be valid for ${getTimeToExpireInHours(ev.expiresAt)} hours, til <i>${ev.expiresAt.toUTCString()}</i>.</p>
+              <p style="margin: 0;">Hi ${ev.user.fullName}, use the following code to verify your email. This code will expire after ${getTimeToExpireInHours()} hours.</p>
             </td>
           </tr>
           <!-- end copy -->
