@@ -92,7 +92,7 @@ export class DBAuthTokensRepository
 			.selectFrom("personal_access_tokens as pat")
 			.select(({ eb, selectFrom }) => [
 				jsonBuildObject({
-					token: sql<TokenAndUserSelectQueryResult["token"]>`pat.*`,
+					token: sql<KyselyQueryAccessToken>`pat.*`,
 					user: jsonObjectFrom(
 						selectFrom("users")
 							.selectAll()

@@ -1,3 +1,4 @@
+import { isNotADate, tryParseDate } from "@/common/helpers";
 import { APP_ROLES } from "@/common/types";
 import { logger } from "@/common/utils/logger";
 
@@ -11,7 +12,19 @@ export class DBUser extends IUser {
 				(r) => r.roleId === kyselyUser.role_id,
 			);
 			if (role) {
-				return new DBUser({ ...objectToCamel(kyselyUser), role });
+				const userProps = { ...objectToCamel(kyselyUser), role };
+				if (isNotADate(userProps.createdAt)) {
+					userProps.createdAt = tryParseDate(userProps.createdAt)!;
+				}
+				if (isNotADate(userProps.emailVerifiedAt)) {
+					userProps.emailVerifiedAt = tryParseDate(userProps.emailVerifiedAt);
+				}
+				if (isNotADate(userProps.phoneNumberVerifiedAt)) {
+					userProps.phoneNumberVerifiedAt = tryParseDate(
+						userProps.phoneNumberVerifiedAt,
+					);
+				}
+				return new DBUser(userProps);
 			}
 			// if role not found
 			logger.warn("User does not have a valid role");

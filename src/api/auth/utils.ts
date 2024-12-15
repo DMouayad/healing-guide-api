@@ -8,7 +8,7 @@ import type { IUser } from "@/interfaces/IUser";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import type { NewAccessToken } from "./authTokens.models";
+import type { NewAccessToken } from "./auth.types";
 
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
