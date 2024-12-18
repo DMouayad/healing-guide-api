@@ -1,4 +1,4 @@
-export function isNotADate(obj: any) {
+export function isNotDate(obj: any) {
 	return !(obj instanceof Date);
 }
 

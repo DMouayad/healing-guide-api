@@ -10,8 +10,9 @@ export const env = cleanEnv(process.env, {
 	}),
 	ZOHO_EMAIL: str(),
 	ZOHO_PASSWORD: str(),
-	EMAIL_VERIFICATION_CODE_LENGTH: num(),
-	PHONE_VERIFICATION_CODE_LENGTH: num(),
+	EMAIL_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
+	PHONE_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
+	IDENTITY_CONFIRMATION_CODE_LENGTH: num({ devDefault: 7 }),
 	HOST: host({ devDefault: "localhost" }),
 	PORT: port({ devDefault: 8080 }),
 	CORS_ORIGIN: str({ devDefault: "http://localhost:8080" }),
@@ -26,6 +27,13 @@ export const env = cleanEnv(process.env, {
 	}),
 	PHONE_VERIFICATION_CODE_EXPIRATION: num({
 		desc: "Phone number verification code expiration in minutes",
+	}),
+	IDENTITY_CONFIRMATION_CODE_EXPIRATION: num({
+		desc: "Identity confirmation code expiration in minutes",
+	}),
+	IDENTITY_CONFIRMATION_TIME_WINDOW: num({
+		desc: "The time window in which the user considered identified",
+		devDefault: 60,
 	}),
 	APP_URL: str({ devDefault: "http://localhost:8080" }),
 	API_VERSION: str(),

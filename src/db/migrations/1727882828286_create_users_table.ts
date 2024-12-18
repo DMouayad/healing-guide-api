@@ -14,6 +14,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("password_hash", "varchar", (col) => col.notNull().unique())
 		.addColumn("email_verified_at", "timestamp")
 		.addColumn("phone_number_verified_at", "timestamp")
+		.addColumn("identity_confirmed_at", "timestamp")
 		.addColumn("activated", "boolean", (col) => col.defaultTo(false).notNull())
 		.addColumn("created_at", "timestamp", (col) =>
 			col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -22,5 +23,5 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-	await db.schema.dropTable("users").ifExists().execute();
+	await db.schema.dropTable("users").cascade().ifExists().execute();
 }

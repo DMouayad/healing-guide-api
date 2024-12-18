@@ -1,3 +1,4 @@
+import { env } from "@/common/utils/envConfig";
 import { validatePhoneNo, validateRole } from "@/common/utils/validators";
 import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
@@ -19,4 +20,7 @@ const loginRequestSchema = z.object({
 export const authRequests = {
 	signup: { body: signupRequestSchema },
 	login: { body: loginRequestSchema },
+	confirmIdentity: z.object({
+		body: z.object({ code: z.string().length(env.IDENTITY_CONFIRMATION_CODE_LENGTH) }),
+	}),
 } as const;

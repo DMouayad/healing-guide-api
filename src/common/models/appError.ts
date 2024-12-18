@@ -4,6 +4,7 @@ import { APP_ERR_CODES, type AppErrCode } from "./errorCodes";
 type ParamsOverride = {
 	message?: string;
 	description?: string;
+	errCode?: AppErrCode;
 };
 
 class AppError extends Error {
@@ -127,7 +128,7 @@ function constructErr(
 	return new AppError(
 		params?.message ?? getReasonPhrase(status),
 		status,
-		errCode,
+		params?.errCode ?? errCode,
 		params?.description,
 	);
 }

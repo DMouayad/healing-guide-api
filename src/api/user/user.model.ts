@@ -1,4 +1,4 @@
-import { isNotADate, tryParseDate } from "@/common/helpers";
+import { isNotDate, tryParseDate } from "@/common/helpers";
 import { APP_ROLES } from "@/common/types";
 import { logger } from "@/common/utils/logger";
 
@@ -13,16 +13,19 @@ export class DBUser extends IUser {
 			);
 			if (role) {
 				const userProps = { ...objectToCamel(kyselyUser), role };
-				if (isNotADate(userProps.createdAt)) {
+				if (isNotDate(userProps.createdAt)) {
 					userProps.createdAt = tryParseDate(userProps.createdAt)!;
 				}
-				if (isNotADate(userProps.emailVerifiedAt)) {
+				if (isNotDate(userProps.emailVerifiedAt)) {
 					userProps.emailVerifiedAt = tryParseDate(userProps.emailVerifiedAt);
 				}
-				if (isNotADate(userProps.phoneNumberVerifiedAt)) {
+				if (isNotDate(userProps.phoneNumberVerifiedAt)) {
 					userProps.phoneNumberVerifiedAt = tryParseDate(
 						userProps.phoneNumberVerifiedAt,
 					);
+				}
+				if (isNotDate(userProps.identityConfirmedAt)) {
+					userProps.identityConfirmedAt = tryParseDate(userProps.identityConfirmedAt);
 				}
 				return new DBUser(userProps);
 			}
@@ -43,6 +46,7 @@ export type KyselyQueryUser = {
 	password_hash: string;
 	phone_number: string;
 	phone_number_verified_at: Date | null;
+	identity_confirmed_at: Date | null;
 };
 
 export function prepareUserToInsertWithKysely(user: IUser) {

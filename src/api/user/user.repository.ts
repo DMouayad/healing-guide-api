@@ -64,7 +64,9 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 			.$if(props.phoneNumberVerifiedAt !== undefined, (qb) =>
 				qb.set("phone_number_verified_at", props.phoneNumberVerifiedAt!),
 			)
-
+			.$if(props.identityConfirmedAt !== undefined, (qb) =>
+				qb.set("identity_confirmed_at", props.identityConfirmedAt!),
+			)
 			.where("id", "=", id);
 
 		return query

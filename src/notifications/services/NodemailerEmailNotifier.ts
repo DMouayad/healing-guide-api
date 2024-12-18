@@ -5,10 +5,12 @@ import type { IMailNotifier } from "./IMailNotifier";
 import { IMAGES } from "@/common/constants";
 import {
 	EmailVerificationNotification,
+	IdentityConfirmationNotification,
 	type MailNotification,
 } from "@/notifications/MailNotification";
 import { emailVerificationMailTemplate } from "@/notifications/mailTemplates/emailVerificationTemplate";
 import type Mail from "nodemailer/lib/mailer";
+import { identityConfirmationMailTemplate } from "../mailTemplates/identityConfirmationTemplate";
 
 export const LOGO_IMG_CID = "template_logo_img";
 
@@ -31,6 +33,12 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 			],
 		};
 		switch (true) {
+			case notification instanceof IdentityConfirmationNotification:
+				return {
+					...basePayload,
+					subject: "Confirm your identity",
+					html: identityConfirmationMailTemplate(notification),
+				};
 			case notification instanceof EmailVerificationNotification:
 				return {
 					...basePayload,

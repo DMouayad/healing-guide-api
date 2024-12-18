@@ -19,6 +19,7 @@ export abstract class IUser extends IHasAuthorization {
 	phoneNumber: string;
 	emailVerifiedAt: Date | null;
 	phoneNumberVerifiedAt: Date | null;
+	identityConfirmedAt: Date | null;
 	readonly createdAt: Date;
 
 	constructor(props: IUserProps) {
@@ -33,6 +34,7 @@ export abstract class IUser extends IHasAuthorization {
 		this.id = props.id;
 		this.role = props.role;
 		this.fullName = props.fullName;
+		this.identityConfirmedAt = props.identityConfirmedAt;
 	}
 }
 export type UpdateUserDTO = RequireAtLeastOne<{
@@ -42,6 +44,7 @@ export type UpdateUserDTO = RequireAtLeastOne<{
 	readonly activated: boolean;
 	readonly phoneNumberVerifiedAt: Date;
 	readonly emailVerifiedAt: Date;
+	readonly identityConfirmedAt: Date;
 }>;
 export class CreateUserDTO {
 	readonly role: Role;

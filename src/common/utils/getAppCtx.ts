@@ -1,4 +1,5 @@
 import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
+import { DBIdentityConfirmationRepository } from "@/api/auth/repos/IdentityConfirmationRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationRepo";
 import { FakePhoneVerificationRepo } from "@/api/user/verification/repos/FakePhoneVerificationRepo";
@@ -13,6 +14,7 @@ const productionAppCtx: AppCtx = {
 	smsNotifier: new FakeSmsNotifier(),
 	emailVerificationRepo: new DBEmailVerificationRepo(),
 	phoneVerificationRepo: new FakePhoneVerificationRepo(),
+	identityConfirmationRepo: new DBIdentityConfirmationRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

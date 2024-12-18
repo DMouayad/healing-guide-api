@@ -1,3 +1,4 @@
+import type { IIdentityConfirmationRepository } from "@/api/auth/repos/IdentityConfirmationRepository";
 import type { IEmailVerificationRepository } from "@/api/user/verification/repos/IEmailVerificationRepository";
 import type { IPhoneVerificationRepository } from "@/api/user/verification/repos/IPhoneVerificationRepository";
 import type { IAuthTokensRepository } from "@/interfaces/IAuthTokensRepository";
@@ -12,4 +13,5 @@ export type AppCtx = {
 	readonly smsNotifier: ISmsNotifier;
 	readonly emailVerificationRepo: IEmailVerificationRepository;
 	readonly phoneVerificationRepo: IPhoneVerificationRepository;
+	readonly identityConfirmationRepo: IIdentityConfirmationRepository;
 };
