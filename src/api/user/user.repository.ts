@@ -31,6 +31,7 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 				phone_number: dto.phoneNumber,
 				password_hash: hash,
 				role_id: dto.role.roleId,
+				activated: dto.activated,
 			})
 			.returningAll();
 
