@@ -107,7 +107,7 @@ class AppError extends Error {
 		return constructErr(APP_ERR_CODES.WRONG_LOGIN_CREDS, StatusCodes.UNAUTHORIZED);
 	}
 	static SIGNUP_FAILED(params?: ParamsOverride): AppError {
-		return constructErr(APP_ERR_CODES.SIGNUP_FAILED, StatusCodes.UNAUTHORIZED);
+		return constructErr(APP_ERR_CODES.SIGNUP_FAILED, StatusCodes.INTERNAL_SERVER_ERROR);
 	}
 	static EMPTY_REQUEST_BODY(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.EMPTY_REQUEST_BODY, StatusCodes.BAD_REQUEST, {
