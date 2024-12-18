@@ -1,7 +1,20 @@
 import { getRandomValues } from "node:crypto";
+import type { IUser } from "@/interfaces/IUser";
 import AppError from "../models/appError";
-import { dateIsPast } from "./dateHelpers";
+import type { UserTOTP } from "../types";
+import { dateIsPast, getExpiresAt } from "./dateHelpers";
 
+export function generateUserTOTP(
+	user: IUser,
+	length: number,
+	expirationInMinutes: number,
+): UserTOTP {
+	return {
+		user,
+		code: generateOTP(length),
+		expiresAt: getExpiresAt(expirationInMinutes),
+	};
+}
 export function generateOTP(length: number) {
 	let array = new Uint8Array(length);
 	array = getRandomValues(array);

@@ -1,10 +1,10 @@
+import type { UserTOTP } from "@/common/types";
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
-import type { IdentityConfirmationCode } from "../auth.types";
 
 export interface IIdentityConfirmationRepository {
-	findBy(user: IUser): Promise<IdentityConfirmationCode | undefined>;
-	store(code: IdentityConfirmationCode): Promise<IdentityConfirmationCode>;
+	findBy(user: IUser): Promise<UserTOTP | undefined>;
+	store(code: UserTOTP): Promise<UserTOTP>;
 	deleteAllForUser(user: IUser): Promise<void>;
 }
 export class DBIdentityConfirmationRepository
@@ -17,9 +17,7 @@ export class DBIdentityConfirmationRepository
 			.execute()
 			.then();
 	}
-	async store(
-		identityConfirmation: IdentityConfirmationCode,
-	): Promise<IdentityConfirmationCode> {
+	async store(identityConfirmation: UserTOTP): Promise<UserTOTP> {
 		return db
 			.insertInto("identity_confirmation_codes")
 			.columns(["code", "user_id", "expires_at"])
@@ -38,7 +36,7 @@ export class DBIdentityConfirmationRepository
 				};
 			});
 	}
-	async findBy(user: IUser): Promise<IdentityConfirmationCode | undefined> {
+	async findBy(user: IUser): Promise<UserTOTP | undefined> {
 		const res = await db
 			.selectFrom("identity_confirmation_codes")
 			.select(["code", "expires_at"])

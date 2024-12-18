@@ -1,5 +1,5 @@
-import type { VerificationCode } from "@/api/user/verification/types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
+import type { UserTOTP } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
@@ -8,7 +8,7 @@ function getTimeToExpireInHours(): number {
 	d.setHours(0, env.EMAIL_VERIFICATION_CODE_EXPIRATION, 0, 0);
 	return d.getHours();
 }
-export function emailVerificationMailTemplate(ev: VerificationCode) {
+export function emailVerificationMailTemplate(userTotp: UserTOTP) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -188,7 +188,7 @@ export function emailVerificationMailTemplate(ev: VerificationCode) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${ev.user.fullName}, use the following code to verify your email. This code will expire after ${getTimeToExpireInHours()} hours.</p>
+              <p style="margin: 0;">Hi ${userTotp.user.fullName}, use the following code to verify your email. This code will expire after ${getTimeToExpireInHours()} hours.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -202,7 +202,7 @@ export function emailVerificationMailTemplate(ev: VerificationCode) {
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${ev.code}</p>
+                          <p>${userTotp.code}</p>
                         </td>
                       </tr>
                     </table>

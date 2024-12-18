@@ -1,6 +1,6 @@
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
-import type { IdentityConfirmationNotification } from "../MailNotification";
+import type { TOTPMailNotification } from "../MailNotification";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
@@ -8,9 +8,7 @@ function getTimeToExpiration(): number {
 	d.setHours(0, env.IDENTITY_CONFIRMATION_CODE_EXPIRATION, 0, 0);
 	return d.getMinutes();
 }
-export function identityConfirmationMailTemplate(
-	notification: IdentityConfirmationNotification,
-) {
+export function identityConfirmationMailTemplate(notification: TOTPMailNotification) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -204,7 +202,7 @@ export function identityConfirmationMailTemplate(
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${notification.identityConfirmation.code}</p>
+                          <p>${notification.userTOTP.code}</p>
                         </td>
                       </tr>
                     </table>

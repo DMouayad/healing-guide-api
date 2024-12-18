@@ -53,3 +53,10 @@ export const APP_ROLES = {
 	facilityManager: { roleId: 4, slug: "facilityManager" },
 	physician: { roleId: 5, slug: "physician" },
 } as const;
+
+/** Time-based OTP issued for a user */
+export type UserTOTP = {
+	user: IUser;
+	expiresAt: Date;
+	code: string;
+};

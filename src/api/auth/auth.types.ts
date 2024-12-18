@@ -1,6 +1,5 @@
 import type { AccessToken } from "@/common/models/accessToken";
 import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
-import type { IUser } from "@/interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
 
 export type KyselyQueryAccessToken = {
@@ -29,8 +28,3 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 }
 
 export type NewAccessToken = string;
-export type IdentityConfirmationCode = {
-	user: IUser;
-	expiresAt: Date;
-	code: string;
-};

@@ -1,5 +1,4 @@
-import type { VerificationCode } from "@/api/user/verification/types";
-import type { ObjectValues } from "@/common/types";
+import type { ObjectValues, UserTOTP } from "@/common/types";
 import type { IUser } from "@/interfaces/IUser";
 
 export const SMS_NOTIFICATIONS = {
@@ -12,12 +11,15 @@ export abstract class SmsNotification {
 		readonly user: IUser,
 		readonly type: SmsNotificationType,
 	) {}
-}
-export class PhoneVerificationNotification extends SmsNotification {
-	constructor(readonly phoneVerification: VerificationCode) {
-		super(phoneVerification.user, SMS_NOTIFICATIONS.phoneVerification);
+	static phoneVerification(userTOTP: UserTOTP) {
+		return new TOTPSmsNotification(userTOTP, SMS_NOTIFICATIONS.phoneVerification);
 	}
-	static fromPhoneVerification(phoneVerification: VerificationCode) {
-		return new PhoneVerificationNotification(phoneVerification);
+}
+export class TOTPSmsNotification extends SmsNotification {
+	constructor(
+		readonly userTOTP: UserTOTP,
+		type: SmsNotificationType,
+	) {
+		super(userTOTP.user, type);
 	}
 }

@@ -25,7 +25,7 @@ export async function seedRandomUsers(
 	count: number,
 	role: Role = APP_ROLES.guest,
 ): Promise<void> {
-	await userFactory
+	userFactory
 		.createMany(count, { userProps: { role: role } })
 		.then((users) => users.map(prepareUserToInsertWithKysely))
 		.then((users) => db.insertInto("users").values(users).execute());

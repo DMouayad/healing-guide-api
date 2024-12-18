@@ -1,11 +1,10 @@
 import AppError from "@/common/models/appError";
 import { APP_ERR_CODES } from "@/common/models/errorCodes";
-import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { generateOTP } from "@/common/utils/otp";
+import { generateUserTOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
-import { IdentityConfirmationNotification } from "@/notifications/MailNotification";
+import { MailNotification } from "@/notifications/MailNotification";
 import { sendMailNotification } from "@/notifications/mail.utils";
 import type { NextFunction, Request, Response } from "express";
 import { getUserFromResponse } from "../utils";
@@ -28,7 +27,7 @@ export async function identityConfirmed(
 
 	if (shouldSendNewCode) {
 		const newConfirmation = await createIdentityConfirmationCode(user);
-		const notification = new IdentityConfirmationNotification(newConfirmation);
+		const notification = MailNotification.identityConfirmation(newConfirmation);
 		sendMailNotification(notification);
 	}
 	throw AppError.FORBIDDEN({ errCode: APP_ERR_CODES.CONFIRM_IDENTITY });
@@ -42,14 +41,12 @@ function lastConfirmedAtIsValid(confirmationDate: Date | null): boolean {
 	return Date.now() < confirmedAtPlusTimeWindow;
 }
 async function createIdentityConfirmationCode(user: IUser) {
-	const code = generateOTP(env.IDENTITY_CONFIRMATION_CODE_LENGTH);
+	const totp = generateUserTOTP(
+		user,
+		env.IDENTITY_CONFIRMATION_CODE_LENGTH,
+		env.IDENTITY_CONFIRMATION_CODE_EXPIRATION,
+	);
 	return getAppCtx()
 		.identityConfirmationRepo.deleteAllForUser(user)
-		.then((_) =>
-			getAppCtx().identityConfirmationRepo.store({
-				user,
-				code,
-				expiresAt: getExpiresAt(env.IDENTITY_CONFIRMATION_CODE_EXPIRATION),
-			}),
-		);
+		.then((_) => getAppCtx().identityConfirmationRepo.store(totp));
 }

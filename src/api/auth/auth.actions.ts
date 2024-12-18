@@ -1,15 +1,14 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
-import { APP_ROLES, type AuthState } from "@/common/types";
-import { env } from "@/common/utils/envConfig";
+import { APP_ROLES, type AuthState, type UserTOTP } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { logger } from "@/common/utils/logger";
+import { validateOTP } from "@/common/utils/otp";
 import { CreateUserDTO, type IUser } from "@/interfaces/IUser";
 import type { Request, Response } from "express";
 import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
-import type { IdentityConfirmationCode } from "./auth.types";
 import {
 	checkCredentials,
 	getAccessTokenApiResponse,
@@ -79,7 +78,7 @@ export async function confirmIdentityAction(req: Request, res: Response) {
 
 	return checkUser(user)
 		.then(getAppCtx().identityConfirmationRepo.findBy)
-		.then((identityConfirmation) => codeIsValid(providedCode, identityConfirmation))
+		.then((identityConfirmation) => validateOTP(providedCode, identityConfirmation))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { identityConfirmedAt: new Date() }),
 		)
@@ -91,23 +90,6 @@ export async function confirmIdentityAction(req: Request, res: Response) {
 			}
 		})
 		.then((_) => ApiResponse.success().send(res));
-}
-function codeIsValid(
-	providedCode: string,
-	identityConfirmation: IdentityConfirmationCode | undefined,
-) {
-	if (!identityConfirmation || identityConfirmation.code !== providedCode) {
-		throw AppError.FORBIDDEN();
-	}
-	const expiresAt = new Date();
-	expiresAt.setTime(
-		identityConfirmation.createdAt.getTime() +
-			env.IDENTITY_CONFIRMATION_CODE_EXPIRATION * 6000,
-	);
-	if (Date.now() > expiresAt.getTime()) {
-		throw AppError.EXPIRED_VERIFICATION_CODE();
-	}
-	return Promise.resolve();
 }
 
 function checkUser(user: IUser | undefined) {

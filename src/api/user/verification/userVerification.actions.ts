@@ -4,12 +4,12 @@ import AppError from "@/common/models/appError";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { validateOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
-import { EmailVerificationNotification } from "@/notifications/MailNotification";
-import { PhoneVerificationNotification } from "@/notifications/SmsNotification";
+import { MailNotification } from "@/notifications/MailNotification";
+import { SmsNotification } from "@/notifications/SmsNotification";
 import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
 import type { Request, Response } from "express";
 import { userRequests } from "../user.requests";
-import { generateEmailVerification, generatePhoneVerification } from "./utils";
+import { generateEmailVerificationTOTP, generatePhoneVerificationTOTP } from "./utils";
 
 export async function verifyEmailAction(req: Request, res: Response) {
 	const data = await userRequests.verifyEmail.parseAsync({
@@ -20,7 +20,7 @@ export async function verifyEmailAction(req: Request, res: Response) {
 
 	return checkUserEmailNotVerified(user)
 		.then(getAppCtx().emailVerificationRepo.findBy)
-		.then((userEV) => validateOTP(providedCode, userEV))
+		.then((otp) => validateOTP(providedCode, otp))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { emailVerifiedAt: new Date() }),
 		)
@@ -31,9 +31,9 @@ export async function sendEmailVerificationAction(req: Request, res: Response) {
 	const user = getUserFromResponse(res);
 
 	return checkUserEmailNotVerified(user)
-		.then(generateEmailVerification)
+		.then(generateEmailVerificationTOTP)
 		.then(getAppCtx().emailVerificationRepo.storeEmailVerification)
-		.then(EmailVerificationNotification.fromEmailVerification)
+		.then(MailNotification.emailVerification)
 		.then(sendMailNotification)
 		.then((em) => ApiResponse.success().send(res));
 }
@@ -57,9 +57,9 @@ export async function sendPhoneVerificationAction(req: Request, res: Response) {
 	const user = getUserFromResponse(res);
 
 	return checkUserPhoneNotVerified(user)
-		.then(generatePhoneVerification)
+		.then(generatePhoneVerificationTOTP)
 		.then(getAppCtx().phoneVerificationRepo.storePhoneVerification)
-		.then(PhoneVerificationNotification.fromPhoneVerification)
+		.then(SmsNotification.phoneVerification)
 		.then(sendSmsNotification)
 		.then((em) => ApiResponse.success().send(res));
 }

@@ -1,27 +1,29 @@
-import type { IdentityConfirmationCode } from "@/api/auth/auth.types";
-import type { VerificationCode } from "@/api/user/verification/types";
-import type { ObjectValues } from "@/common/types";
+import type { ObjectValues, UserTOTP } from "@/common/types";
 import type { IUser } from "@/interfaces/IUser";
 
 export const MAIL_NOTIFICATIONS = {
 	emailVerification: "EMAIL_VERIFICATION_NOTIFICATION",
+	identityConfirmation: "IDENTITY_CONFIRMATION_NOTIFICATION",
 } as const;
 export type MailNotificationType = ObjectValues<typeof MAIL_NOTIFICATIONS>;
 
 export abstract class MailNotification {
-	constructor(readonly user: IUser) {}
-}
-export class EmailVerificationNotification extends MailNotification {
-	constructor(readonly emailVerification: VerificationCode) {
-		super(emailVerification.user);
+	constructor(
+		readonly user: IUser,
+		readonly type: MailNotificationType,
+	) {}
+	static emailVerification(userTOTP: UserTOTP) {
+		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.emailVerification);
 	}
-	static fromEmailVerification(emailVerification: VerificationCode) {
-		return new EmailVerificationNotification(emailVerification);
+	static identityConfirmation(userTOTP: UserTOTP) {
+		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.identityConfirmation);
 	}
 }
-
-export class IdentityConfirmationNotification extends MailNotification {
-	constructor(readonly identityConfirmation: IdentityConfirmationCode) {
-		super(identityConfirmation.user);
+export class TOTPMailNotification extends MailNotification {
+	constructor(
+		readonly userTOTP: UserTOTP,
+		type: MailNotificationType,
+	) {
+		super(userTOTP.user, type);
 	}
 }

@@ -1,10 +1,10 @@
+import type { UserTOTP } from "@/common/types";
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
-import type { VerificationCode } from "../types";
 import type { IEmailVerificationRepository } from "./IEmailVerificationRepository";
 
 export class DBEmailVerificationRepo implements IEmailVerificationRepository {
-	async findBy(user: IUser): Promise<VerificationCode | undefined> {
+	async findBy(user: IUser): Promise<UserTOTP | undefined> {
 		const verification = await db
 			.selectFrom("email_verification_codes")
 			.where("user_id", "=", user.id)
@@ -19,9 +19,7 @@ export class DBEmailVerificationRepo implements IEmailVerificationRepository {
 				}
 			: undefined;
 	}
-	async storeEmailVerification(
-		emailVerification: VerificationCode,
-	): Promise<VerificationCode> {
+	async storeEmailVerification(emailVerification: UserTOTP): Promise<UserTOTP> {
 		await clearUserCodes(emailVerification.user.id);
 		return db
 			.insertInto("email_verification_codes")

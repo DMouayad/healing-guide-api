@@ -4,9 +4,9 @@ import type { IMailNotifier } from "./IMailNotifier";
 
 import { IMAGES } from "@/common/constants";
 import {
-	EmailVerificationNotification,
-	IdentityConfirmationNotification,
+	MAIL_NOTIFICATIONS,
 	type MailNotification,
+	TOTPMailNotification,
 } from "@/notifications/MailNotification";
 import { emailVerificationMailTemplate } from "@/notifications/mailTemplates/emailVerificationTemplate";
 import type Mail from "nodemailer/lib/mailer";
@@ -33,18 +33,20 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 			],
 		};
 		switch (true) {
-			case notification instanceof IdentityConfirmationNotification:
+			case notification instanceof TOTPMailNotification &&
+				notification.type === MAIL_NOTIFICATIONS.identityConfirmation:
 				return {
 					...basePayload,
 					subject: "Confirm your identity",
 					html: identityConfirmationMailTemplate(notification),
 				};
-			case notification instanceof EmailVerificationNotification:
+			case notification instanceof TOTPMailNotification &&
+				notification.type === MAIL_NOTIFICATIONS.emailVerification:
 				return {
 					...basePayload,
 					subject: "Verify your Email",
 					text: "",
-					html: emailVerificationMailTemplate(notification.emailVerification),
+					html: emailVerificationMailTemplate(notification.userTOTP),
 				};
 			default:
 				return {};

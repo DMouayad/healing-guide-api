@@ -1,20 +1,19 @@
-import { getExpiresAt } from "@/common/utils/dateHelpers";
+import type { UserTOTP } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
-import { generateOTP } from "@/common/utils/otp";
+import { generateUserTOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
-import type { VerificationCode } from "./types";
 
-export function generateEmailVerification(user: IUser): VerificationCode {
-	return {
+export function generateEmailVerificationTOTP(user: IUser): UserTOTP {
+	return generateUserTOTP(
 		user,
-		code: generateOTP(env.EMAIL_VERIFICATION_CODE_LENGTH),
-		expiresAt: getExpiresAt(env.EMAIL_VERIFICATION_CODE_EXPIRATION),
-	};
+		env.EMAIL_VERIFICATION_CODE_LENGTH,
+		env.EMAIL_VERIFICATION_CODE_EXPIRATION,
+	);
 }
-export function generatePhoneVerification(user: IUser): VerificationCode {
-	return {
+export function generatePhoneVerificationTOTP(user: IUser): UserTOTP {
+	return generateUserTOTP(
 		user,
-		code: generateOTP(env.PHONE_VERIFICATION_CODE_LENGTH),
-		expiresAt: getExpiresAt(env.PHONE_VERIFICATION_CODE_EXPIRATION),
-	};
+		env.PHONE_VERIFICATION_CODE_LENGTH,
+		env.PHONE_VERIFICATION_CODE_EXPIRATION,
+	);
 }
