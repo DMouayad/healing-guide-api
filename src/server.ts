@@ -12,6 +12,7 @@ import { userRouter } from "./api/user/user.router";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
 import { requestLogger } from "./middleware/requestLogger";
+import { mailTemplatesRouter } from "./notifications/mailTemplates/router";
 
 const app: Express = express();
 // Set the application to trust the reverse proxy
@@ -37,6 +38,7 @@ app.use(`/api/${env.API_VERSION}`, apiRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
 
+app.use("/mail-templates", mailTemplatesRouter);
 // Swagger UI
 app.use(openAPIRouter);
 // Error handlers
