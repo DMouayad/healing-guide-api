@@ -1,9 +1,9 @@
 import type { UserTOTP } from "@/common/types";
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
-import type { IEmailVerificationRepository } from "./IEmailVerificationRepository";
+import type { IEmailVerificationCodesRepository } from "./IEmailVerificationCodesRepository";
 
-export class DBEmailVerificationRepo implements IEmailVerificationRepository {
+export class DBEmailVerificationRepo implements IEmailVerificationCodesRepository {
 	async findBy(user: IUser): Promise<UserTOTP | undefined> {
 		const verification = await db
 			.selectFrom("email_verification_codes")

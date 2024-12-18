@@ -1,8 +1,8 @@
 import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
-import { DBIdentityConfirmationRepository } from "@/api/auth/repos/IdentityConfirmationRepository";
+import { DBIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
-import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationRepo";
-import { FakePhoneVerificationRepo } from "@/api/user/verification/repos/FakePhoneVerificationRepo";
+import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationCodesRepo";
+import { FakePhoneVerificationCodesRepo } from "@/api/user/verification/repos/FakePhoneVerificationCodesRepo";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import type { AppCtx } from "../models/appCtx";
@@ -13,8 +13,8 @@ const productionAppCtx: AppCtx = {
 	mailNotifier: new NodemailerEmailNotifier(),
 	smsNotifier: new FakeSmsNotifier(),
 	emailVerificationRepo: new DBEmailVerificationRepo(),
-	phoneVerificationRepo: new FakePhoneVerificationRepo(),
-	identityConfirmationRepo: new DBIdentityConfirmationRepository(),
+	phoneVerificationRepo: new FakePhoneVerificationCodesRepo(),
+	identityConfirmationRepo: new DBIdentityConfirmationCodesRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

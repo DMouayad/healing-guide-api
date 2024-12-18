@@ -46,7 +46,7 @@ export async function verifyPhoneAction(req: Request, res: Response) {
 
 	return checkUserPhoneNotVerified(user)
 		.then(getAppCtx().phoneVerificationRepo.findBy)
-		.then((userEV) => validateOTP(providedCode, userEV))
+		.then((phoneVerification) => validateOTP(providedCode, phoneVerification))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { phoneNumberVerifiedAt: new Date() }),
 		)

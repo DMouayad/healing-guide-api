@@ -2,13 +2,13 @@ import type { UserTOTP } from "@/common/types";
 import { db } from "@/db";
 import type { IUser } from "@/interfaces/IUser";
 
-export interface IIdentityConfirmationRepository {
+export interface IIdentityConfirmationCodesRepository {
 	findBy(user: IUser): Promise<UserTOTP | undefined>;
 	store(code: UserTOTP): Promise<UserTOTP>;
 	deleteAllForUser(user: IUser): Promise<void>;
 }
-export class DBIdentityConfirmationRepository
-	implements IIdentityConfirmationRepository
+export class DBIdentityConfirmationCodesRepository
+	implements IIdentityConfirmationCodesRepository
 {
 	async deleteAllForUser(user: IUser): Promise<void> {
 		return db

@@ -2,12 +2,14 @@ import type { UserTOTP } from "@/common/types";
 import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
 import type { IUser } from "@/interfaces/IUser";
-import type { IPhoneVerificationRepository } from "./IPhoneVerificationRepository";
+import type { IPhoneVerificationCodesRepository } from "./IPhoneVerificationCodesRepository";
 
-export class FakePhoneVerificationRepo implements IPhoneVerificationRepository {
+export class FakePhoneVerificationCodesRepo
+	implements IPhoneVerificationCodesRepository
+{
 	fakeVerificationCodeNumber = "1234567";
-	async storePhoneVerification(userTOTP: UserTOTP): Promise<UserTOTP> {
-		return userTOTP;
+	async storePhoneVerification(phoneVerification: UserTOTP): Promise<UserTOTP> {
+		return phoneVerification;
 	}
 	async findBy(user: IUser): Promise<UserTOTP | undefined> {
 		return {
