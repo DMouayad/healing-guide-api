@@ -1,24 +1,8 @@
-import AppError from "@/common/models/appError";
+import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
-import { generateOTP } from "@/common/utils/otpGenerator";
+import { generateOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
 import type { VerificationCode } from "./types";
-
-export async function validateVerificationCode(
-	code: string,
-	storedVerification: VerificationCode | undefined,
-): Promise<void> {
-	if (!storedVerification || storedVerification?.code !== code) {
-		throw AppError.FORBIDDEN();
-	}
-	if (hasExpired(storedVerification.expiresAt)) {
-		throw AppError.EXPIRED_VERIFICATION_CODE();
-	}
-}
-
-function hasExpired(expiresAt: Date): boolean {
-	return expiresAt.valueOf() < Date.now();
-}
 
 export function generateEmailVerification(user: IUser): VerificationCode {
 	return {
@@ -33,10 +17,4 @@ export function generatePhoneVerification(user: IUser): VerificationCode {
 		code: generateOTP(env.PHONE_VERIFICATION_CODE_LENGTH),
 		expiresAt: getExpiresAt(env.PHONE_VERIFICATION_CODE_EXPIRATION),
 	};
-}
-function getExpiresAt(expirationInMinutes: number) {
-	const createdAt = new Date();
-	const expiresAt = new Date();
-	expiresAt.setTime(createdAt.getTime() + expirationInMinutes * 60000);
-	return expiresAt;
 }

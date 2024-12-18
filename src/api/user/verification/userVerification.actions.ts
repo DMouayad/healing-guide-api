@@ -2,17 +2,14 @@ import { getUserFromResponse } from "@/api/auth/utils";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { getAppCtx } from "@/common/utils/getAppCtx";
+import { validateOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
 import { EmailVerificationNotification } from "@/notifications/MailNotification";
 import { PhoneVerificationNotification } from "@/notifications/SmsNotification";
 import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
 import type { Request, Response } from "express";
 import { userRequests } from "../user.requests";
-import {
-	generateEmailVerification,
-	generatePhoneVerification,
-	validateVerificationCode,
-} from "./utils";
+import { generateEmailVerification, generatePhoneVerification } from "./utils";
 
 export async function verifyEmailAction(req: Request, res: Response) {
 	const data = await userRequests.verifyEmail.parseAsync({
@@ -23,7 +20,7 @@ export async function verifyEmailAction(req: Request, res: Response) {
 
 	return checkUserEmailNotVerified(user)
 		.then(getAppCtx().emailVerificationRepo.findBy)
-		.then((userEV) => validateVerificationCode(providedCode, userEV))
+		.then((userEV) => validateOTP(providedCode, userEV))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { emailVerifiedAt: new Date() }),
 		)
@@ -49,7 +46,7 @@ export async function verifyPhoneAction(req: Request, res: Response) {
 
 	return checkUserPhoneNotVerified(user)
 		.then(getAppCtx().phoneVerificationRepo.findBy)
-		.then((userEV) => validateVerificationCode(providedCode, userEV))
+		.then((userEV) => validateOTP(providedCode, userEV))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { phoneNumberVerifiedAt: new Date() }),
 		)

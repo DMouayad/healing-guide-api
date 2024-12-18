@@ -52,7 +52,7 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				statusCode: StatusCodes.GONE,
 				description: "Failure: verification code has expired",
 				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.EXPIRED_VERIFICATION_CODE()),
+				example: ApiResponse.error(AppError.EXPIRED_OTP()),
 			},
 			{
 				statusCode: StatusCodes.FORBIDDEN,
@@ -126,7 +126,7 @@ export function registerUserPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				statusCode: StatusCodes.GONE,
 				description: "Failure: verification code has expired",
 				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.EXPIRED_VERIFICATION_CODE()),
+				example: ApiResponse.error(AppError.EXPIRED_OTP()),
 			},
 
 			{

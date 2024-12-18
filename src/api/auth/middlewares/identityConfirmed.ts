@@ -3,7 +3,7 @@ import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { generateOTP } from "@/common/utils/otpGenerator";
+import { generateOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
 import { IdentityConfirmationNotification } from "@/notifications/MailNotification";
 import { sendMailNotification } from "@/notifications/mail.utils";

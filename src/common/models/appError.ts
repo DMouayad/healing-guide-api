@@ -60,12 +60,8 @@ class AppError extends Error {
 	static VALIDATION(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.VALIDATION, StatusCodes.BAD_REQUEST, params);
 	}
-	static EXPIRED_VERIFICATION_CODE(params?: ParamsOverride): AppError {
-		return constructErr(
-			APP_ERR_CODES.EXPIRED_VERIFICATION_CODE,
-			StatusCodes.GONE,
-			params,
-		);
+	static EXPIRED_OTP(params?: ParamsOverride): AppError {
+		return constructErr(APP_ERR_CODES.EXPIRED_OTP, StatusCodes.GONE, params);
 	}
 	static EMAIL_ALREADY_VERIFIED(params?: ParamsOverride): AppError {
 		return constructErr(
