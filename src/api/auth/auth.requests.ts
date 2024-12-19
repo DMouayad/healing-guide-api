@@ -20,7 +20,7 @@ const loginRequestSchema = z.object({
 export const authRequests = {
 	signup: { body: signupRequestSchema },
 	login: { body: loginRequestSchema },
-	confirmIdentity: z.object({
+	confirmIdentity: {
 		body: z.object({ code: z.string().length(env.IDENTITY_CONFIRMATION_CODE_LENGTH) }),
-	}),
+	},
 } as const;

@@ -71,8 +71,8 @@ export async function logoutAction(req: Request, res: Response) {
 }
 
 export async function confirmIdentityAction(req: Request, res: Response) {
-	const data = await authRequests.confirmIdentity.parseAsync(req.body);
-	const providedCode = data.body.code;
+	const data = await authRequests.confirmIdentity.body.parseAsync(req.body);
+	const providedCode = data.code;
 	const user = getUserFromResponse(res);
 
 	return checkUser(user)
