@@ -1,20 +1,28 @@
+import { IAppEvent } from "@/common/types";
 import type { IUser } from "@/interfaces/IUser";
 
-export abstract class IUserEvent {
-	constructor(public readonly user: IUser) {}
-	abstract handler(): void;
+export abstract class IUserEvent extends IAppEvent {
+	constructor(
+		public readonly user: IUser,
+		name: string,
+	) {
+		super(name);
+	}
 }
 export class UserRegisteredEvent extends IUserEvent {
-	override handler(): void {
-		throw new Error("Method not implemented.");
+	override handler(): void {}
+	constructor(user: IUser) {
+		super(user, USER_EVENTS.registered);
 	}
-	static override name = "userEvent.registered";
 }
 export class UserVerifiedEvent extends IUserEvent {
-	override handler(): void {
-		throw new Error("Method not implemented.");
+	override handler(): void {}
+	constructor(user: IUser) {
+		super(user, USER_EVENTS.verified);
 	}
-	static override name = "userEvent.verified";
 }
 
-export const USER_EVENTS = [UserRegisteredEvent.name, UserVerifiedEvent.name] as const;
+export const USER_EVENTS = {
+	registered: "userEvent.registered",
+	verified: "userEvent.verified",
+} as const;

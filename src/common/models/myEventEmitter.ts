@@ -1,11 +1,16 @@
 import EventEmitter from "node:events";
-import { type IUserEvent, USER_EVENTS } from "@/api/user/user.events";
+import { USER_EVENTS } from "@/api/user/user.events";
+import type { IAppEvent } from "../types";
 
-class MyEventEmitter extends EventEmitter {}
+class MyEventEmitter extends EventEmitter {
+	emitAppEvent(event: IAppEvent) {
+		this.emit(event.name, event);
+	}
+}
 export const myEventEmitter = new MyEventEmitter();
 
-for (const event of USER_EVENTS) {
-	myEventEmitter.on(event, (emitted: IUserEvent) => {
+for (const event of Object.values(USER_EVENTS)) {
+	myEventEmitter.on(event, (emitted: IAppEvent) => {
 		emitted.handler();
 	});
 }

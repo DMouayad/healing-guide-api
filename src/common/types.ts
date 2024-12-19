@@ -60,3 +60,8 @@ export type UserTOTP = {
 	expiresAt: Date;
 	code: string;
 };
+
+export abstract class IAppEvent {
+	constructor(readonly name: string) {}
+	abstract handler(): void;
+}

@@ -24,14 +24,13 @@ export async function signupAction(req: Request, res: Response) {
 		...data,
 		activated: userAccountActivatedByDefault,
 	});
-
 	return getAppCtx()
 		.userRepository.create(dto)
 		.then((newUser) => {
 			if (!newUser) {
 				return Promise.reject(AppError.SIGNUP_FAILED);
 			}
-			myEventEmitter.emit(UserRegisteredEvent.name, newUser);
+			myEventEmitter.emitAppEvent(new UserRegisteredEvent(newUser));
 			return Promise.resolve(newUser);
 		})
 		.then((newUser) =>
