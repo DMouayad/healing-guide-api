@@ -47,6 +47,15 @@ export async function loginAction(req: Request, res: Response) {
 	return getAppCtx()
 		.userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo)
 		.then((user) => checkCredentials(data, user))
+		.then(async (authUser) => {
+			const user = await getAppCtx().userRepository.update(authUser, {
+				identityConfirmedAt: new Date(),
+			});
+			if (!user) {
+				logUserUpdateResultIsUndefined();
+			}
+			return user ?? authUser;
+		})
 		.then((authUser) =>
 			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash),
 		)
