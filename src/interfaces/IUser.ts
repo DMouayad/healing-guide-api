@@ -53,6 +53,7 @@ export class CreateUserDTO {
 	readonly phoneNumber: string;
 	readonly activated: boolean;
 	readonly password: string;
+	readonly identityConfirmedAt: Date;
 
 	constructor(props: ClassProperties<CreateUserDTO>) {
 		this.fullName = props.fullName;
@@ -60,6 +61,7 @@ export class CreateUserDTO {
 		this.phoneNumber = props.phoneNumber;
 		this.password = props.password;
 		this.activated = props.activated;
+		this.identityConfirmedAt = new Date();
 
 		const isAssignableRole = ASSIGNABLE_ROLES.find((el) => el === props.role);
 		if (isAssignableRole) {

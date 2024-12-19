@@ -23,6 +23,7 @@ export async function signupAction(req: Request, res: Response) {
 	const dto = new CreateUserDTO({
 		...data,
 		activated: userAccountActivatedByDefault,
+		identityConfirmedAt: new Date(),
 	});
 	return getAppCtx()
 		.userRepository.create(dto)
