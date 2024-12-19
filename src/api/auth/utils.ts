@@ -8,6 +8,7 @@ import type { IUser } from "@/interfaces/IUser";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { UserResource } from "../user/user.resource";
 import type { NewAccessToken } from "./auth.types";
 
 export async function checkCredentials(
@@ -76,7 +77,7 @@ export function getAccessTokenApiResponse(token: NewAccessToken) {
 
 export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
 	return ApiResponse.success({
-		data: { token, user },
+		data: { token, user: UserResource.create(user) },
 		statusCode: StatusCodes.CREATED,
 	});
 }
