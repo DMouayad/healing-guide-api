@@ -1,4 +1,5 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
+import { registerAuthPaths } from "./auth.openapi";
 import { registerUserPaths } from "./user.openapi";
 
 const v1Registry = new OpenAPIRegistry();
@@ -13,6 +14,8 @@ export const v1BearerAuth = v1Registry.registerComponent(
 );
 
 const v1BaseUrl = "/api/v1";
+
+registerAuthPaths(v1Registry, v1BaseUrl);
 registerUserPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
