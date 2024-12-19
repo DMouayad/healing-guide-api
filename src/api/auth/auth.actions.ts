@@ -1,9 +1,9 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
-import { APP_ROLES, type AuthState, type UserTOTP } from "@/common/types";
+import { APP_ROLES, type AuthState } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { logger } from "@/common/utils/logger";
+import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
 import { validateOTP } from "@/common/utils/otp";
 import { CreateUserDTO, type IUser } from "@/interfaces/IUser";
 import type { Request, Response } from "express";
@@ -84,7 +84,7 @@ export async function confirmIdentityAction(req: Request, res: Response) {
 		)
 		.then((user) => {
 			if (!user) {
-				logger.warn("Update user result is `undefined`");
+				logUserUpdateResultIsUndefined();
 			} else {
 				getAppCtx().identityConfirmationRepo.deleteAllForUser(user);
 			}
