@@ -58,7 +58,7 @@ function getSender() {
 }
 function getReceivers(notification: MailNotification) {
 	return env.NODE_ENV === "production"
-		? notification.user.email
+		? notification.getReceiver()
 		: "muayad.perun@outlook.com";
 }
 function getClient() {

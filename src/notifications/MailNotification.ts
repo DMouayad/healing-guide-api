@@ -1,5 +1,4 @@
 import type { ObjectValues, UserTOTP } from "@/common/types";
-import type { IUser } from "@/interfaces/IUser";
 
 export const MAIL_NOTIFICATIONS = {
 	emailVerification: "EMAIL_VERIFICATION_NOTIFICATION",
@@ -8,10 +7,8 @@ export const MAIL_NOTIFICATIONS = {
 export type MailNotificationType = ObjectValues<typeof MAIL_NOTIFICATIONS>;
 
 export abstract class MailNotification {
-	constructor(
-		readonly user: IUser,
-		readonly type: MailNotificationType,
-	) {}
+	constructor(readonly type: MailNotificationType) {}
+	abstract getReceiver(): string;
 	static emailVerification(userTOTP: UserTOTP) {
 		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.emailVerification);
 	}
@@ -19,11 +16,15 @@ export abstract class MailNotification {
 		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.identityConfirmation);
 	}
 }
+
 export class TOTPMailNotification extends MailNotification {
+	override getReceiver(): string {
+		return this.userTOTP.user.email;
+	}
 	constructor(
 		readonly userTOTP: UserTOTP,
 		type: MailNotificationType,
 	) {
-		super(userTOTP.user, type);
+		super(type);
 	}
 }
