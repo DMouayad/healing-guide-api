@@ -38,7 +38,7 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 				return {
 					...basePayload,
 					subject: "Confirm your identity",
-					html: identityConfirmationMailTemplate(notification),
+					html: identityConfirmationMailTemplate(notification.userTOTP),
 				};
 			case notification instanceof TOTPMailNotification &&
 				notification.type === MAIL_NOTIFICATIONS.emailVerification:

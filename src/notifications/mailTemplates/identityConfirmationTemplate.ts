@@ -1,6 +1,6 @@
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
+import type { UserTOTP } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
-import type { TOTPMailNotification } from "../MailNotification";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
@@ -8,7 +8,7 @@ function getTimeToExpiration(): number {
 	d.setHours(0, env.IDENTITY_CONFIRMATION_CODE_EXPIRATION, 0, 0);
 	return d.getMinutes();
 }
-export function identityConfirmationMailTemplate(notification: TOTPMailNotification) {
+export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -188,7 +188,7 @@ export function identityConfirmationMailTemplate(notification: TOTPMailNotificat
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${notification.user.fullName}, use the following code in order to confirm your identity and access\\modify your account settings. This code will be valid for ${getTimeToExpiration()} minutes.</p>
+              <p style="margin: 0;">Hi ${userTOTP.user.fullName}, use the following code in order to confirm your identity and access\\modify your account settings. This code will be valid for ${getTimeToExpiration()} minutes.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -202,7 +202,7 @@ export function identityConfirmationMailTemplate(notification: TOTPMailNotificat
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${notification.userTOTP.code}</p>
+                          <p>${userTOTP.code}</p>
                         </td>
                       </tr>
                     </table>
