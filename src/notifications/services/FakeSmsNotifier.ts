@@ -4,6 +4,6 @@ import type { ISmsNotifier } from "./ISmsNotifier";
 
 export class FakeSmsNotifier implements ISmsNotifier {
 	async sendNotification(notification: SmsNotification): Promise<void> {
-		logger.info(this, `sent a message to ${notification.user.phoneNumber}`);
+		logger.info(this, `sent a message to ${notification.receiverPhone()}`);
 	}
 }
