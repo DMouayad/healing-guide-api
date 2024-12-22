@@ -16,3 +16,6 @@ export const commonZodSchemas = {
 export function z_enumFromArray(array: string[]) {
 	return z.enum([array[0], ...array.slice(1)]);
 }
+export const requestWithIdParamSchema = z.object({
+	params: z.object({ id: commonZodSchemas.id }),
+});
