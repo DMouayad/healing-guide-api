@@ -1,4 +1,5 @@
 import type { AccessToken } from "@/common/models/accessToken";
+import type { ObjectValues } from "@/common/types";
 import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
 import { objectToCamel } from "ts-case-convert";
 
@@ -28,3 +29,18 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 }
 
 export type NewAccessToken = string;
+
+export type SignupCode = {
+	username: string;
+	email: string | undefined | null;
+	phoneNumber: string;
+	code: string;
+	expiresAt: Date;
+};
+
+export type SignupCodeSendingMethod = ObjectValues<typeof SIGNUP_CODE_SENDING_METHODS>;
+
+export const SIGNUP_CODE_SENDING_METHODS = {
+	sms: "SMS",
+	mail: "MAIL",
+} as const;

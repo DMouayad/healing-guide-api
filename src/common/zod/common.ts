@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validatePhoneNo } from "../utils/validators";
 
 export const commonZodSchemas = {
 	id: z
@@ -10,6 +11,7 @@ export const commonZodSchemas = {
 	password: z
 		.string()
 		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
+	phoneNumber: z.string().transform(validatePhoneNo),
 };
 export function z_enumFromArray(array: string[]) {
 	return z.enum([array[0], ...array.slice(1)]);

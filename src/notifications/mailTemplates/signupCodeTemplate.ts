@@ -1,14 +1,15 @@
+import type { SignupCode } from "@/api/auth/auth.types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
-import type { UserTOTP } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
 	const d = new Date();
-	d.setHours(0, env.IDENTITY_CONFIRMATION_CODE_EXPIRATION, 0, 0);
-	return d.getMinutes();
+	d.setHours(0, env.SIGNUP_CODE_EXPIRATION, 0, 0);
+	return d.getHours();
 }
-export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
+const title = "Complete your registration";
+export function signupCodeMailTemplate(signupCode: SignupCode) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -162,7 +163,8 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Confirm Your identity</h1>
+            <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">${title}</h1>
+            <h2 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Hi ${signupCode.username},</h2>
             </td>
           </tr>
         </table>
@@ -188,7 +190,7 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${userTOTP.user.fullName}, use the following code in order to confirm your identity and access\\modify your account settings. This code will be valid for ${getTimeToExpiration()} minutes.</p>
+              <p style="margin: 0;">Use the following code in order to finish your signup process. This code is valid for ${getTimeToExpiration()} hours.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -202,7 +204,7 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${userTOTP.code}</p>
+                          <p>${signupCode.code}</p>
                         </td>
                       </tr>
                     </table>
@@ -216,8 +218,7 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">If you did not request to access your account, we recommend that you change your password immediately or contact us at</p>
-              <p style="margin: 0;"><a href="mailto:healingguide@zohomail.eu" target="_blank">healingguide@zohomail.eu</a></p>
+              <p style="margin: 0;">If you signup with our app, you can safely ignore this email</p>
             </td>
           </tr>
           <!-- end copy -->

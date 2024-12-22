@@ -3,7 +3,6 @@ import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
 
 import { db } from "./db";
-import { seedRandomUsers } from "./db/dbSeeder";
 import { migrateDBLatest, testDBConnection } from "./db/utils";
 
 // start Express app

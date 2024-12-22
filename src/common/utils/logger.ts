@@ -25,3 +25,7 @@ export function logErrIfNeeded(err: AppError) {
 function logErrorInProduction(err: AppError): boolean {
 	return notImportantCodes.includes(err.statusCode);
 }
+
+export function logUserUpdateResultIsUndefined() {
+	logger.warn("Update user result is `undefined`");
+}

@@ -6,11 +6,13 @@ import { IMAGES } from "@/common/constants";
 import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
+	SignupCodeMailNotification,
 	TOTPMailNotification,
 } from "@/notifications/MailNotification";
 import { emailVerificationMailTemplate } from "@/notifications/mailTemplates/emailVerificationTemplate";
 import type Mail from "nodemailer/lib/mailer";
 import { identityConfirmationMailTemplate } from "../mailTemplates/identityConfirmationTemplate";
+import { signupCodeMailTemplate } from "../mailTemplates/signupCodeTemplate";
 
 export const LOGO_IMG_CID = "template_logo_img";
 
@@ -38,7 +40,7 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 				return {
 					...basePayload,
 					subject: "Confirm your identity",
-					html: identityConfirmationMailTemplate(notification),
+					html: identityConfirmationMailTemplate(notification.userTOTP),
 				};
 			case notification instanceof TOTPMailNotification &&
 				notification.type === MAIL_NOTIFICATIONS.emailVerification:
@@ -47,6 +49,13 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 					subject: "Verify your Email",
 					text: "",
 					html: emailVerificationMailTemplate(notification.userTOTP),
+				};
+			case notification instanceof SignupCodeMailNotification:
+				return {
+					...basePayload,
+					subject: "Complete signing up",
+					text: "",
+					html: signupCodeMailTemplate(notification.signupCode),
 				};
 			default:
 				return {};
@@ -58,7 +67,7 @@ function getSender() {
 }
 function getReceivers(notification: MailNotification) {
 	return env.NODE_ENV === "production"
-		? notification.user.email
+		? notification.getReceiver()
 		: "muayad.perun@outlook.com";
 }
 function getClient() {

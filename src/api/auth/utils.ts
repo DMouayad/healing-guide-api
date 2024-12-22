@@ -5,11 +5,19 @@ import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { generateRandomString, sha256 } from "@/common/utils/hashing";
 import type { IUser } from "@/interfaces/IUser";
+import { MailNotification } from "@/notifications/MailNotification";
+import { SmsNotification } from "@/notifications/SmsNotification";
+import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { UserResource } from "../user/user.resource";
-import type { NewAccessToken } from "./auth.types";
+import {
+	type NewAccessToken,
+	SIGNUP_CODE_SENDING_METHODS,
+	type SignupCode,
+	type SignupCodeSendingMethod,
+} from "./auth.types";
 
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
@@ -80,4 +88,19 @@ export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
 		data: { token, user: UserResource.create(user) },
 		statusCode: StatusCodes.CREATED,
 	});
+}
+export async function sendSignupCode(
+	code: SignupCode,
+	sendVia: SignupCodeSendingMethod,
+) {
+	switch (sendVia) {
+		case SIGNUP_CODE_SENDING_METHODS.mail: {
+			return sendMailNotification(MailNotification.signupCode(code));
+		}
+		case SIGNUP_CODE_SENDING_METHODS.sms: {
+			return sendSmsNotification(SmsNotification.signupCode(code));
+		}
+		default:
+			break;
+	}
 }
