@@ -6,11 +6,13 @@ import { IMAGES } from "@/common/constants";
 import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
+	SignupCodeMailNotification,
 	TOTPMailNotification,
 } from "@/notifications/MailNotification";
 import { emailVerificationMailTemplate } from "@/notifications/mailTemplates/emailVerificationTemplate";
 import type Mail from "nodemailer/lib/mailer";
 import { identityConfirmationMailTemplate } from "../mailTemplates/identityConfirmationTemplate";
+import { signupCodeMailTemplate } from "../mailTemplates/signupCodeTemplate";
 
 export const LOGO_IMG_CID = "template_logo_img";
 
@@ -47,6 +49,13 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 					subject: "Verify your Email",
 					text: "",
 					html: emailVerificationMailTemplate(notification.userTOTP),
+				};
+			case notification instanceof SignupCodeMailNotification:
+				return {
+					...basePayload,
+					subject: "Complete signing up",
+					text: "",
+					html: signupCodeMailTemplate(notification.signupCode),
 				};
 			default:
 				return {};

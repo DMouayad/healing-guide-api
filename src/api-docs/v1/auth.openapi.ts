@@ -2,6 +2,7 @@ import { authRequests } from "@/api/auth/auth.requests";
 import { authRouter, authRoutes } from "@/api/auth/authRouter";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
+import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
 import { UserSchema } from "@/common/zod/user.zod";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
@@ -37,17 +38,31 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				}),
 			},
 			{
-				statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-				description: "Failure: unknown error has occurred",
-				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.SIGNUP_FAILED()),
-			},
-			{
 				statusCode: StatusCodes.CONFLICT,
 				description:
 					"Failure: an account already exists with the same email or phone number",
 				schema: ZodAppErrorSchema,
 				example: ApiResponse.error(AppError.ACCOUNT_ALREADY_EXISTS()),
+			},
+			{
+				statusCode: StatusCodes.GONE,
+				description: "Failure: signup code has expired",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.EXPIRED_OTP()),
+			},
+			{
+				statusCode: StatusCodes.FORBIDDEN,
+				description: "Failure: wrong signup code",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.FORBIDDEN()),
+			},
+			{
+				statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+				description: "Failure: signup code is missing for these credentials",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(
+					AppError.SERVER_ERROR({ errCode: APP_ERR_CODES.MISSING_SIGNUP_CODE }),
+				),
 			},
 		]),
 	});
@@ -144,6 +159,35 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				example: ApiResponse.error(AppError.EXPIRED_OTP()),
 			},
 			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		path: authRoute + authRoutes.createSignupCode,
+		description: "Used by app users to request a signup code",
+		tags: ["Auth"],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: authRequests.createSignupCode.body,
+					},
+				},
+			},
+		},
+
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.CREATED,
+				description: "Success: a signup code was created and sent to user",
+			},
+			{
+				statusCode: StatusCodes.CONFLICT,
+				description:
+					"Failure: an account already exists with provided email and\\or phone number",
+				schema: ZodAppErrorSchema,
+				example: ApiResponse.error(AppError.ACCOUNT_ALREADY_EXISTS()),
+			},
 		]),
 	});
 }

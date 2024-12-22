@@ -9,6 +9,18 @@ import { DatabaseError as PgDatabaseError } from "pg";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
+	async verifyCredentialsAreUnique(
+		phoneNumber?: string,
+		email?: string,
+	): Promise<boolean> {
+		const result = await db
+			.selectFrom("users")
+			.$if(email != null, (qb) => qb.where("email", "=", email!))
+			.$if(phoneNumber != null, (qb) => qb.where("phone_number", "=", phoneNumber!))
+			.select(({ fn }) => fn.countAll<number>().as("matching_users"))
+			.executeTakeFirst();
+		return result ? result?.matching_users > 0 : false;
+	}
 	async findByEmailOrPhoneNumber(emailOrPhoneNo: string): Promise<DBUser | undefined> {
 		const query = db
 			.selectFrom("users")

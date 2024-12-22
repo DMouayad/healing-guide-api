@@ -13,6 +13,8 @@ export const env = cleanEnv(process.env, {
 	EMAIL_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
 	PHONE_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
 	IDENTITY_CONFIRMATION_CODE_LENGTH: num({ devDefault: 7 }),
+	SIGNUP_CODE_LENGTH: num({ devDefault: 6 }),
+	SIGNUP_CODE_EXPIRATION: num({ desc: "Signup code expiration in minutes" }),
 	HOST: host({ devDefault: "localhost" }),
 	PORT: port({ devDefault: 8080 }),
 	CORS_ORIGIN: str({ devDefault: "http://localhost:8080" }),

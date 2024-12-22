@@ -1,5 +1,6 @@
 import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
 import { DBIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
+import { DBSignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationCodesRepo";
 import { FakePhoneVerificationCodesRepo } from "@/api/user/verification/repos/FakePhoneVerificationCodesRepo";
@@ -15,6 +16,7 @@ const productionAppCtx: AppCtx = {
 	emailVerificationRepo: new DBEmailVerificationRepo(),
 	phoneVerificationRepo: new FakePhoneVerificationCodesRepo(),
 	identityConfirmationRepo: new DBIdentityConfirmationCodesRepository(),
+	signupCodesRepository: new DBSignupCodesRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {
