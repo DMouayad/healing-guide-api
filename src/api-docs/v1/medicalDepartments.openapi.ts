@@ -3,7 +3,6 @@ import { MedicalDepartmentZodSchema } from "@/api/medicalDepartments/types";
 import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
-import { z } from "zod";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,
@@ -23,7 +22,7 @@ export function registerMedicalDepartmentsPaths(
 		method: "post",
 		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.add,
 		description: "Used to add a new `Medical Department` to the database",
-		tags: ["Admin Only", "Medical Departments"],
+		tags: ["Medical Departments"],
 		request: {
 			body: {
 				content: {
@@ -40,7 +39,7 @@ export function registerMedicalDepartmentsPaths(
 				schema: MedicalDepartmentZodSchema,
 			},
 			unauthenticatedResponse,
-			unauthenticatedResponse,
+			unauthorizedResponse,
 			duplicateResourceResponse(
 				"Failure: a `Medical Department` already exists with the same name",
 			),
@@ -50,7 +49,7 @@ export function registerMedicalDepartmentsPaths(
 		method: "patch",
 		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.edit,
 		description: "Used to edit an existing `Medical Department`",
-		tags: ["Admin Only", "Medical Departments"],
+		tags: ["Medical Departments"],
 		request: {
 			body: {
 				content: {
@@ -68,7 +67,7 @@ export function registerMedicalDepartmentsPaths(
 				schema: MedicalDepartmentZodSchema,
 			},
 			unauthenticatedResponse,
-			unauthenticatedResponse,
+			unauthorizedResponse,
 			duplicateResourceResponse(
 				"Failure: a `Medical Department` already exists with the same name",
 			),
@@ -78,7 +77,7 @@ export function registerMedicalDepartmentsPaths(
 		method: "delete",
 		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.delete,
 		description: "Used by an admin to delete a specific `Medical Department`",
-		tags: ["Admin Only", "Medical Departments"],
+		tags: ["Medical Departments"],
 		request: {
 			params: requestWithIdParamSchema,
 		},
