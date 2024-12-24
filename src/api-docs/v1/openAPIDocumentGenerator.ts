@@ -4,6 +4,7 @@ import { registerAuthPaths } from "./auth.openapi";
 import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
 import { registerMedicalProceduresPaths } from "./medicalProcedures.openapi";
 import { registerMedicalSpecialtiesPaths } from "./medicalSpecialties.openapi";
+import { registerPhysicianFeedbackCategoriesPaths } from "./physicianFeedbackCategories.openapi";
 import { registerUserPaths } from "./user.openapi";
 
 const v1Registry = new OpenAPIRegistry();
@@ -25,6 +26,7 @@ registerUserPaths(v1Registry, v1BaseUrl);
 registerMedicalDepartmentsPaths(v1Registry, v1BaseUrl);
 registerMedicalSpecialtiesPaths(v1Registry, v1BaseUrl);
 registerMedicalProceduresPaths(v1Registry, v1BaseUrl);
+registerPhysicianFeedbackCategoriesPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
 	const generator = new OpenApiGeneratorV3(v1Registry.definitions);
