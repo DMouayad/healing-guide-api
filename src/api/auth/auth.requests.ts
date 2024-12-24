@@ -6,7 +6,6 @@ import { SIGNUP_CODE_SENDING_METHODS } from "./auth.types";
 
 const signupRequestSchema = z
 	.object({
-		fullName: z.string(),
 		email: z.string().email(),
 		phoneNumber: commonZodSchemas.phoneNumber,
 		role: z.string().transform(validateRole),
@@ -21,14 +20,12 @@ const loginRequestSchema = z.object({
 });
 const createSignupCodeRequestSchema = z
 	.object({
-		username: z.string(),
 		email: z.string().email().optional(),
 		phoneNumber: commonZodSchemas.phoneNumber,
 		receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.sms),
 	})
 	.or(
 		z.object({
-			username: z.string(),
 			email: z.string().email(),
 			phoneNumber: commonZodSchemas.phoneNumber,
 			receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.mail),

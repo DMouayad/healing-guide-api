@@ -112,7 +112,6 @@ export async function createSignupCodeAction(req: Request, res: Response) {
 					expiresAt: getExpiresAt(env.SIGNUP_CODE_EXPIRATION),
 					email: data.email,
 					phoneNumber: data.phoneNumber,
-					username: data.username,
 				};
 				return getAppCtx()
 					.signupCodesRepository.store(signupCode)

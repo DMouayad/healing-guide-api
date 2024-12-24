@@ -188,7 +188,7 @@ export function emailVerificationMailTemplate(userTotp: UserTOTP) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${userTotp.user.fullName}, use the following code to verify your email. This code will expire after ${getTimeToExpireInHours()} hours.</p>
+              <p style="margin: 0;">Please use the following code to verify your email:</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -203,14 +203,23 @@ export function emailVerificationMailTemplate(userTotp: UserTOTP) {
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
                           <p>${userTotp.code}</p>
-                        </td>
+                          </td>
+                          
                       </tr>
                     </table>
                   </td>
                 </tr>
               </table>
+            </td>  
+          </tr>
+           <!-- start copy -->
+          <tr>
+            <td align="left" bgcolor="#ffffff" style="padding:  12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                <p style="margin: 0;">This code expires after ${getTimeToExpireInHours()} hours.</p>
             </td>
           </tr>
+          <!-- end copy -->
+          
           <!-- end button -->
 
           <!-- start copy -->

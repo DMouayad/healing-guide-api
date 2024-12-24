@@ -38,7 +38,6 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		const insertStmt = db
 			.insertInto("users")
 			.values({
-				full_name: dto.fullName,
 				email: dto.email,
 				phone_number: dto.phoneNumber,
 				password_hash: hash,
@@ -66,7 +65,6 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 	async updateById(id: number, props: UpdateUserDTO): Promise<DBUser | undefined> {
 		const query = db
 			.updateTable("users")
-			.$if(props.fullName !== undefined, (qb) => qb.set("full_name", props.fullName!))
 			.$if(props.email !== undefined, (qb) => qb.set("email", props.email!))
 			.$if(props.phoneNumber !== undefined, (qb) =>
 				qb.set("phone_number", props.phoneNumber!),

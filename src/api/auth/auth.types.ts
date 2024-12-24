@@ -31,7 +31,6 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 export type NewAccessToken = string;
 
 export type SignupCode = {
-	username: string;
 	email: string | undefined | null;
 	phoneNumber: string;
 	code: string;

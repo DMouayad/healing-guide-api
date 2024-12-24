@@ -13,7 +13,6 @@ export abstract class IUser extends IHasAuthorization {
 	readonly id: number;
 	override readonly role: Role;
 	readonly passwordHash: string;
-	fullName: string;
 	activated: boolean;
 	email: string;
 	phoneNumber: string;
@@ -33,12 +32,10 @@ export abstract class IUser extends IHasAuthorization {
 		this.passwordHash = props.passwordHash;
 		this.id = props.id;
 		this.role = props.role;
-		this.fullName = props.fullName;
 		this.identityConfirmedAt = props.identityConfirmedAt;
 	}
 }
 export type UpdateUserDTO = RequireAtLeastOne<{
-	readonly fullName: string;
 	readonly email: string;
 	readonly phoneNumber: string;
 	readonly activated: boolean;
@@ -48,7 +45,6 @@ export type UpdateUserDTO = RequireAtLeastOne<{
 }>;
 export class CreateUserDTO {
 	readonly role: Role;
-	readonly fullName: string;
 	readonly email: string;
 	readonly phoneNumber: string;
 	readonly activated: boolean;
@@ -56,7 +52,6 @@ export class CreateUserDTO {
 	readonly identityConfirmedAt: Date;
 
 	constructor(props: ClassProperties<CreateUserDTO>) {
-		this.fullName = props.fullName;
 		this.email = props.email;
 		this.phoneNumber = props.phoneNumber;
 		this.password = props.password;

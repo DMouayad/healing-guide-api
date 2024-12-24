@@ -4,7 +4,6 @@ import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common"
 import { z } from "zod";
 
 const updateUserReqBody = z.object({
-	fullName: z.string(),
 	email: z.string().email(),
 	phoneNumber: z.string().transform(validatePhoneNo),
 });
@@ -13,10 +12,8 @@ export const updateUserRequestSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
 	body: z.union([
 		updateUserReqBody,
-		updateUserReqBody.omit({ fullName: true }),
 		updateUserReqBody.omit({ email: true }),
 		updateUserReqBody.omit({ phoneNumber: true }),
-		updateUserReqBody.pick({ fullName: true }),
 		updateUserReqBody.pick({ phoneNumber: true }),
 		updateUserReqBody.pick({ email: true }),
 	]),

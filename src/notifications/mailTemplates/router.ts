@@ -49,7 +49,6 @@ function createFakeSignupCode(): SignupCode {
 		code: "123456",
 		email: faker.internet.email(),
 		phoneNumber: faker.phone.number(),
-		username: faker.person.fullName(),
 		expiresAt: getExpiresAt(60),
 	};
 }

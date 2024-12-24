@@ -188,7 +188,7 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Hi ${userTOTP.user.fullName}, use the following code in order to confirm your identity and access\\modify your account settings. This code will be valid for ${getTimeToExpiration()} minutes.</p>
+              <p style="margin: 0;">Please use the following code to confirm your identity and access\\modify your account settings:</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -212,7 +212,13 @@ export function identityConfirmationMailTemplate(userTOTP: UserTOTP) {
             </td>
           </tr>
           <!-- end button -->
-
+<!-- start copy -->
+          <tr>
+            <td align="left" bgcolor="#ffffff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                <p style="margin: 0;">This code expires after ${getTimeToExpiration()} minutes.</p>
+            </td>
+          </tr>
+          <!-- end copy -->
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">

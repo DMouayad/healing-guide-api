@@ -19,7 +19,6 @@ export async function createUser(params?: UserFactoryParams) {
 		id: params?.userProps?.id,
 		passwordHash: password,
 		role: params?.userProps?.role ?? APP_ROLES.guest,
-		fullName: params?.userProps?.fullName ?? faker.person.fullName(),
 		activated: params?.userProps?.activated ?? false,
 		email: email,
 		emailVerifiedAt: params?.hasVerifiedEmail

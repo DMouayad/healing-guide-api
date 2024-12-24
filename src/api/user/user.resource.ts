@@ -4,7 +4,6 @@ export type UserResourceProps = ClassProperties<UserResource>;
 
 export class UserResource {
 	role: string;
-	fullName: string;
 	activated: boolean;
 	email: string;
 	phoneNumber: string;
@@ -20,7 +19,6 @@ export class UserResource {
 		this.phoneNumberVerifiedAt = props.phoneNumberVerifiedAt;
 		this.createdAt = props.createdAt;
 		this.role = props.role;
-		this.fullName = props.fullName;
 	}
 	public static create(user: IUser): UserResource {
 		return new UserResource({ ...user, role: user.role.slug });

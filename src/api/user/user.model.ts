@@ -42,7 +42,6 @@ export type KyselyQueryUser = {
 	activated: boolean;
 	email: string;
 	email_verified_at: Date | null;
-	full_name: string;
 	password_hash: string;
 	phone_number: string;
 	phone_number_verified_at: Date | null;
@@ -52,7 +51,6 @@ export type KyselyQueryUser = {
 export function prepareUserToInsertWithKysely(user: IUser) {
 	return {
 		role_id: user.role.roleId,
-		full_name: user.fullName,
 		email: user.email,
 		phone_number: user.phoneNumber,
 		activated: user.activated,

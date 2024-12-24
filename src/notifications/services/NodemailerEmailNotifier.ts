@@ -68,7 +68,7 @@ function getSender() {
 function getReceivers(notification: MailNotification) {
 	return env.NODE_ENV === "production"
 		? notification.getReceiver()
-		: "muayad.perun@outlook.com";
+		: "mouayad.alhamwi.ma@gmail.com";
 }
 function getClient() {
 	return nodemailer.createTransport({

@@ -164,7 +164,7 @@ export function signupCodeMailTemplate(signupCode: SignupCode) {
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
             <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">${title}</h1>
-            <h2 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Hi ${signupCode.username},</h2>
+            <h2 style="margin: 0;  font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for joining us</h2>
             </td>
           </tr>
         </table>
@@ -190,7 +190,7 @@ export function signupCodeMailTemplate(signupCode: SignupCode) {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Use the following code in order to finish your signup process. This code is valid for ${getTimeToExpiration()} hours.</p>
+              <p style="margin: 0;">Use the following code in order to finish your signup process:</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -214,11 +214,17 @@ export function signupCodeMailTemplate(signupCode: SignupCode) {
             </td>
           </tr>
           <!-- end button -->
-
+<!-- start copy -->
+          <tr>
+            <td align="left" bgcolor="#ffffff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                <p style="margin: 0;">This code expires after ${getTimeToExpiration()} hours.</p>
+            </td>
+          </tr>
+          <!-- end copy -->
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">If you signup with our app, you can safely ignore this email</p>
+              <p style="margin: 0;">If you did not signup with our app, you can safely ignore this email</p>
             </td>
           </tr>
           <!-- end copy -->
