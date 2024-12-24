@@ -18,7 +18,7 @@ export const medicalDepartmentsRoutes = {
 
 router.get(medicalDepartmentsRoutes.getAll, getAllAction);
 router.get(medicalDepartmentsRoutes.getByID, getByIdAction);
-router.post(medicalDepartmentsRoutes.add, addAction);
+router.post(medicalDepartmentsRoutes.add, isAdmin, addAction);
 router.patch(medicalDepartmentsRoutes.edit, isAdmin, updateAction);
 router.delete(medicalDepartmentsRoutes.getByID, isAdmin, deleteAction);
 
