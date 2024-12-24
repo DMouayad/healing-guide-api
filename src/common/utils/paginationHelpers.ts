@@ -32,8 +32,8 @@ export function createPaginatedJsonResponse(
 		prev_page_url: hasPrevious
 			? getPageURL(from >= params.perPage ? from - params.perPage : 1)
 			: null,
-		from: from.toString(),
-		to: to.toString(),
+		from: from?.toString(),
+		to: to?.toString() ?? null,
 		items,
 	};
 	return res;
