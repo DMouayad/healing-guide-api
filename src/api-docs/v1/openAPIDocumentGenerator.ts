@@ -1,5 +1,7 @@
+import { ZodPaginatedJsonResponse } from "@/common/zod/common";
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { registerAuthPaths } from "./auth.openapi";
+import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
 import { registerUserPaths } from "./user.openapi";
 
 const v1Registry = new OpenAPIRegistry();
@@ -12,11 +14,13 @@ export const v1BearerAuth = v1Registry.registerComponent(
 		bearerFormat: "JWT",
 	},
 );
+v1Registry.register("PaginatedJsonResponse", ZodPaginatedJsonResponse);
 
 const v1BaseUrl = "/api/v1";
 
 registerAuthPaths(v1Registry, v1BaseUrl);
 registerUserPaths(v1Registry, v1BaseUrl);
+registerMedicalDepartmentsPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
 	const generator = new OpenApiGeneratorV3(v1Registry.definitions);

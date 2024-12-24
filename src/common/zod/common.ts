@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { env } from "../utils/envConfig";
 import { validatePhoneNo } from "../utils/validators";
 
 export const commonZodSchemas = {
@@ -12,10 +13,46 @@ export const commonZodSchemas = {
 		.string()
 		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
 	phoneNumber: z.string().transform(validatePhoneNo),
+	queryParams: z.object({
+		perPage: z
+			.string()
+			.optional()
+			.default(env.DEFAULT_PER_PAGE.toString())
+			.transform((el) => {
+				const parsed = Number.parseInt(el);
+				if (Number.isNaN(parsed)) {
+					return env.DEFAULT_PER_PAGE;
+				}
+				return parsed;
+			}),
+		from: z
+			.string()
+			.optional()
+			.default("1")
+			.transform((el) => {
+				const parsed = Number.parseInt(el);
+				if (Number.isNaN(parsed)) {
+					return 1;
+				}
+				return parsed;
+			}),
+	}),
 };
 export function z_enumFromArray(array: string[]) {
 	return z.enum([array[0], ...array.slice(1)]);
 }
 export const requestWithIdParamSchema = z.object({
 	params: z.object({ id: commonZodSchemas.id }),
+});
+export const ZodPaginatedJsonResponse = z.object({
+	total: z.number().optional(),
+	perPage: z.number(),
+	last_page: z.number().nullable(),
+	first_page_url: z.string(),
+	last_page_url: z.string().nullable(),
+	next_page_url: z.string().nullable(),
+	prev_page_url: z.string().nullable(),
+	from: z.string().optional(),
+	to: z.string().optional(),
+	items: z.array(z.object({ id: z.string() })),
 });

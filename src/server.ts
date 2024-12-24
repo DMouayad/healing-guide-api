@@ -8,6 +8,7 @@ import { env } from "@/common/utils/envConfig";
 
 import rateLimiter from "@/middleware/rateLimiter";
 import { authRouter } from "./api/auth/authRouter";
+import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { userRouter } from "./api/user/user.router";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
@@ -37,6 +38,7 @@ const apiRouter: Router = Router();
 app.use(`/api/${env.API_VERSION}`, apiRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
+apiRouter.use("/medical-departments", medicalDepartmentsRouter);
 
 app.use("/mail-templates", mailTemplatesRouter);
 // Swagger UI

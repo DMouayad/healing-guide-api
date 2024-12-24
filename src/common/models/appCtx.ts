@@ -1,5 +1,6 @@
 import type { IIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import type { ISignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
+import type { IMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
 import type { IEmailVerificationCodesRepository } from "@/api/user/verification/repos/IEmailVerificationCodesRepository";
 import type { IPhoneVerificationCodesRepository } from "@/api/user/verification/repos/IPhoneVerificationCodesRepository";
 import type { IAuthTokensRepository } from "@/interfaces/IAuthTokensRepository";
@@ -16,4 +17,5 @@ export type AppCtx = {
 	readonly phoneVerificationRepo: IPhoneVerificationCodesRepository;
 	readonly identityConfirmationRepo: IIdentityConfirmationCodesRepository;
 	readonly signupCodesRepository: ISignupCodesRepository;
+	readonly medicalDepartmentsRepository: IMedicalDepartmentsRepository;
 };

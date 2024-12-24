@@ -1,5 +1,6 @@
 import type { IUser } from "@/interfaces/IUser";
 import type { AccessToken } from "./models/accessToken";
+import type { ZodPaginatedJsonResponse } from "./zod/common";
 
 // =================== Utils types ======================
 export type ObjectValues<T> = T[keyof T];
@@ -65,3 +66,8 @@ export abstract class IAppEvent {
 	constructor(readonly name: string) {}
 	abstract handler(): void;
 }
+export type SimplePaginationParams = {
+	perPage: number;
+	from: number;
+};
+export type PaginatedJsonResponse = typeof ZodPaginatedJsonResponse._output;

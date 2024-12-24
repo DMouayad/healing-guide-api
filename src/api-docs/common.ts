@@ -1,8 +1,9 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
+import { ZodPaginatedJsonResponse } from "@/common/zod/common";
 import { StatusCodes } from "http-status-codes";
-import { z } from "zod";
+import { type ZodTypeAny, z } from "zod";
 
 export const unauthenticatedResponse = {
 	statusCode: StatusCodes.UNAUTHORIZED,
@@ -15,6 +16,26 @@ export const unauthorizedResponse = {
 	description: "Failure: unauthorized user",
 	schema: ZodAppErrorSchema,
 	example: ApiResponse.error(AppError.FORBIDDEN()),
+};
+export const duplicateResourceResponse = (description: string) => {
+	return {
+		statusCode: StatusCodes.CONFLICT,
+		description: description,
+		schema: ZodAppErrorSchema,
+		example: ApiResponse.error(AppError.RESOURCE_ALREADY_EXISTS()),
+	};
+};
+export const paginatedJsonResponse = (
+	description: string,
+	resourceSchema: ZodTypeAny,
+) => {
+	return {
+		statusCode: StatusCodes.OK,
+		description: description,
+		schema: ZodPaginatedJsonResponse.merge(
+			z.object({ items: z.array(resourceSchema) }),
+		),
+	};
 };
 
 export const requestIdParam = {

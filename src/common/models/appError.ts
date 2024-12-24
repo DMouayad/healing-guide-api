@@ -115,6 +115,13 @@ class AppError extends Error {
 			...params,
 		});
 	}
+	static RESOURCE_ALREADY_EXISTS(params?: ParamsOverride): AppError {
+		return constructErr(
+			APP_ERR_CODES.RESOURCE_ALREADY_EXISTS,
+			StatusCodes.CONFLICT,
+			params,
+		);
+	}
 }
 function constructErr(
 	errCode: AppErrCode,

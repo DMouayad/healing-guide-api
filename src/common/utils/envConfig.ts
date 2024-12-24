@@ -42,4 +42,5 @@ export const env = cleanEnv(process.env, {
 	ADMIN_EMAIL: str(),
 	ADMIN_PHONE: str(),
 	ADMIN_PASSWORD: str(),
+	DEFAULT_PER_PAGE: num({ devDefault: 15 }),
 });
