@@ -1,12 +1,9 @@
-import {
-	addMedDepartmentSchema,
-	medicalDepartmentsRoutes,
-	updateMedDepartmentSchema,
-} from "@/api/medicalDepartments/router";
+import { medicalDepartmentsRoutes } from "@/api/medicalDepartments/router";
 import { MedicalDepartmentZodSchema } from "@/api/medicalDepartments/types";
 import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,
@@ -31,7 +28,7 @@ export function registerMedicalDepartmentsPaths(
 			body: {
 				content: {
 					"application/json": {
-						schema: addMedDepartmentSchema.body,
+						schema: commonZodSchemas.requestBodyWithName,
 					},
 				},
 			},
@@ -58,7 +55,7 @@ export function registerMedicalDepartmentsPaths(
 			body: {
 				content: {
 					"application/json": {
-						schema: updateMedDepartmentSchema.body,
+						schema: commonZodSchemas.requestBodyWithName,
 					},
 				},
 			},

@@ -2,12 +2,13 @@ import { z } from "zod";
 import { env } from "../utils/envConfig";
 import { validatePhoneNo } from "../utils/validators";
 
+const IDSchema = z
+	.string()
+	.refine((data) => !Number.isNaN(Number(data)), "ID must be a numeric value")
+	.transform(Number)
+	.refine((num) => num > 0, "ID must be a positive number");
 export const commonZodSchemas = {
-	id: z
-		.string()
-		.refine((data) => !Number.isNaN(Number(data)), "ID must be a numeric value")
-		.transform(Number)
-		.refine((num) => num > 0, "ID must be a positive number"),
+	id: IDSchema,
 	// ... other common validations
 	password: z
 		.string()
@@ -37,13 +38,13 @@ export const commonZodSchemas = {
 				return parsed;
 			}),
 	}),
+	requestBodyWithName: z.object({ name: z.string() }),
+	requestIdParam: IDSchema,
 };
 export function z_enumFromArray(array: string[]) {
 	return z.enum([array[0], ...array.slice(1)]);
 }
-export const requestWithIdParamSchema = z.object({
-	params: z.object({ id: commonZodSchemas.id }),
-});
+export const requestWithIdParamSchema = z.object({ id: commonZodSchemas.id });
 export const ZodPaginatedJsonResponse = z.object({
 	total: z.number().optional(),
 	perPage: z.number(),
