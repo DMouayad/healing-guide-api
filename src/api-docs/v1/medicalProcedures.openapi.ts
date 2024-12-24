@@ -15,7 +15,7 @@ export function registerMedicalProceduresPaths(
 	registry: OpenAPIRegistry,
 	baseUrl: string,
 ) {
-	const medicalProceduresRoute = `${baseUrl}/medical-procedures`;
+	const medicalProceduresRoute = baseUrl + medicalProceduresRoutes.baseRoute;
 	registry.register("MedicalProcedure", MedicalProcedureZodSchema);
 
 	registry.registerPath({
