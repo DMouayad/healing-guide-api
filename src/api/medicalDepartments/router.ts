@@ -20,7 +20,7 @@ router.get(medicalDepartmentsRoutes.getAll, getAllAction);
 router.get(medicalDepartmentsRoutes.getByID, getByIdAction);
 router.post(medicalDepartmentsRoutes.add, isAdmin, addAction);
 router.patch(medicalDepartmentsRoutes.edit, isAdmin, updateAction);
-router.delete(medicalDepartmentsRoutes.getByID, isAdmin, deleteAction);
+router.delete(medicalDepartmentsRoutes.delete, isAdmin, deleteAction);
 
 async function getAllAction(req: Request, res: Response) {
 	const query = await commonZodSchemas.queryParams.parseAsync(req.query);
