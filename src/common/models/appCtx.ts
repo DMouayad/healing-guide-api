@@ -1,5 +1,6 @@
 import type { IIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import type { ISignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
+import type { IMedicalConditionsRepository } from "@/api/medicalConditions/MedicalConditionsRepository";
 import type { IMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
 import type { IMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import type { IMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
@@ -24,4 +25,5 @@ export type AppCtx = {
 	readonly medicalSpecialtiesRepository: IMedicalSpecialtiesRepository;
 	readonly medicalProceduresRepository: IMedicalProceduresRepository;
 	readonly physicianFeedbackCategoriesRepository: IPhysicianFeedbackCategoriesRepository;
+	readonly medicalConditionsRepository: IMedicalConditionsRepository;
 };

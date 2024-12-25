@@ -1,6 +1,7 @@
 import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
 import { DBIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import { DBSignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
+import { DBMedicalConditionsRepository } from "@/api/medicalConditions/MedicalConditionsRepository";
 import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
 import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
@@ -24,6 +25,7 @@ const productionAppCtx: AppCtx = {
 	medicalDepartmentsRepository: new DBMedicalDepartmentsRepository(),
 	medicalSpecialtiesRepository: new DBMedicalSpecialtiesRepository(),
 	medicalProceduresRepository: new DBMedicalProceduresRepository(),
+	medicalConditionsRepository: new DBMedicalConditionsRepository(),
 	physicianFeedbackCategoriesRepository: new DBPhysicianFeedbackCategoriesRepository(),
 } as const;
 

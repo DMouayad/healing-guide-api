@@ -8,6 +8,7 @@ import { env } from "@/common/utils/envConfig";
 
 import rateLimiter from "@/middleware/rateLimiter";
 import { authRouter } from "./api/auth/authRouter";
+import { medicalConditionsRouter } from "./api/medicalConditions/router";
 import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { medicalProceduresRouter } from "./api/medicalProcedures/router";
 import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
@@ -44,6 +45,7 @@ apiRouter.use("/auth", authRouter);
 apiRouter.use("/medical-departments", medicalDepartmentsRouter);
 apiRouter.use("/medical-specialties", medicalSpecialtiesRouter);
 apiRouter.use("/medical-procedures", medicalProceduresRouter);
+apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedback-categories", physicianFeedbackCategoriesRouter);
 
 app.use("/mail-templates", mailTemplatesRouter);
