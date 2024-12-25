@@ -9,7 +9,6 @@ const IDSchema = z
 	.refine((num) => num > 0, "ID must be a positive number");
 export const commonZodSchemas = {
 	id: IDSchema,
-	// ... other common validations
 	password: z
 		.string()
 		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
@@ -26,17 +25,7 @@ export const commonZodSchemas = {
 				}
 				return parsed;
 			}),
-		from: z
-			.string()
-			.optional()
-			.default("1")
-			.transform((el) => {
-				const parsed = Number.parseInt(el);
-				if (Number.isNaN(parsed)) {
-					return 1;
-				}
-				return parsed;
-			}),
+		from: IDSchema.optional().default("1"),
 	}),
 	requestBodyWithName: z.object({ name: z.string() }),
 	requestIdParam: IDSchema,
@@ -53,7 +42,7 @@ export const ZodPaginatedJsonResponse = z.object({
 	last_page_url: z.string().nullable(),
 	next_page_url: z.string().nullable(),
 	prev_page_url: z.string().nullable(),
-	from: z.string().optional(),
-	to: z.string().optional(),
-	items: z.array(z.object({ id: z.string() })),
+	from: commonZodSchemas.id.nullable(),
+	to: commonZodSchemas.id.nullable(),
+	items: z.array(z.object({ id: z.number() })),
 });

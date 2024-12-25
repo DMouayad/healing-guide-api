@@ -1,7 +1,8 @@
 import type { PaginatedJsonResponse } from "../types";
+import { parseIntOrNull } from "./numberHelpers";
 
 export function createPaginatedJsonResponse(
-	items: { id: string }[],
+	items: { id: number }[],
 	params: {
 		resourceURL: string;
 		perPage: number;
@@ -16,11 +17,10 @@ export function createPaginatedJsonResponse(
 	function getPageURL(from: number) {
 		return `${params.resourceURL}?from=${from}&perPage=${params.perPage}`;
 	}
-	const from = params.from;
-	let to: any = items.at(items.length - 1)?.id;
-	if (to) {
-		to = Number.parseInt(to);
-	}
+	const fromId = params.from;
+	const from = parseIntOrNull(fromId);
+	const toId: any = items.at(items.length - 1)?.id;
+	const to = parseIntOrNull(toId);
 
 	const res: PaginatedJsonResponse = {
 		total: params.total,
@@ -29,11 +29,12 @@ export function createPaginatedJsonResponse(
 		first_page_url: getPageURL(1),
 		last_page_url: lastPage ? getPageURL(lastPage * params.perPage) : null,
 		next_page_url: to ? getPageURL(to + 1) : null,
-		prev_page_url: hasPrevious
-			? getPageURL(from >= params.perPage ? from - params.perPage : 1)
-			: null,
-		from: from?.toString(),
-		to: to?.toString() ?? null,
+		prev_page_url:
+			hasPrevious && from
+				? getPageURL(from >= params.perPage ? from - params.perPage : 1)
+				: null,
+		from: from,
+		to: to,
 		items,
 	};
 	return res;
