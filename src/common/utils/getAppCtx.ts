@@ -2,7 +2,7 @@ import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
 import { DBIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import { DBSignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
 import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
-import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalSpecialtiesRepository";
+import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
 import { DBPhysicianFeedbackCategoriesRepository } from "@/api/physicianFeedbackCategories/PhysicianFeedbackCategoriesRepository";
 import { DBUserRepository } from "@/api/user/user.repository";

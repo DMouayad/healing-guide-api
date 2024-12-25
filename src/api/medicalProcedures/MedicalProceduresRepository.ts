@@ -6,15 +6,15 @@ import { DatabaseError as PgDatabaseError } from "pg";
 import type { MedicalProcedure } from "./types";
 
 export interface IMedicalProceduresRepository {
-	getById(id: string): Promise<MedicalProcedure | undefined>;
+	getById(id: number): Promise<MedicalProcedure | undefined>;
 	getAll(params: SimplePaginationParams): Promise<MedicalProcedure[]>;
 	store(name: string): Promise<MedicalProcedure>;
-	update(id: string, props: { name: string }): Promise<MedicalProcedure>;
-	delete(id: string): Promise<void>;
+	update(id: number, props: { name: string }): Promise<MedicalProcedure>;
+	delete(id: number): Promise<void>;
 }
 
 export class DBMedicalProceduresRepository implements IMedicalProceduresRepository {
-	update(id: string, props: { name: string }): Promise<MedicalProcedure> {
+	update(id: number, props: { name: string }): Promise<MedicalProcedure> {
 		return db
 			.updateTable("medical_procedures")
 			.where("id", "=", id)
@@ -23,7 +23,7 @@ export class DBMedicalProceduresRepository implements IMedicalProceduresReposito
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	getById(id: string): Promise<MedicalProcedure | undefined> {
+	getById(id: number): Promise<MedicalProcedure | undefined> {
 		return db
 			.selectFrom("medical_procedures")
 			.selectAll()
@@ -36,7 +36,7 @@ export class DBMedicalProceduresRepository implements IMedicalProceduresReposito
 				.selectFrom("medical_procedures")
 				.orderBy("id", "asc")
 				.limit(params.perPage)
-				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from.toString()!))
+				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from))
 				.selectAll()
 				.execute();
 		});
@@ -49,7 +49,7 @@ export class DBMedicalProceduresRepository implements IMedicalProceduresReposito
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	async delete(id: string): Promise<void> {
+	async delete(id: number): Promise<void> {
 		await db
 			.deleteFrom("medical_procedures")
 			.where("id", "=", id)

@@ -1,11 +1,12 @@
+import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
 
 export type MedicalDepartment = {
-	id: string;
+	id: number;
 	name: string;
 };
 
 export const MedicalDepartmentZodSchema = z.object({
-	id: z.string(),
+	id: commonZodSchemas.id,
 	name: z.string(),
 });

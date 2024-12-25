@@ -40,7 +40,7 @@ async function getByIdAction(req: Request, res: Response) {
 	const params = await requestWithIdParamSchema.parseAsync(req.body);
 
 	return getAppCtx()
-		.medicalDepartmentsRepository.getById(params.id.toString())
+		.medicalDepartmentsRepository.getById(params.id)
 		.then((item) => ApiResponse.success({ data: item }).send(res));
 }
 
@@ -55,13 +55,13 @@ async function addAction(req: Request, res: Response) {
 async function deleteAction(req: Request, res: Response) {
 	const params = await requestWithIdParamSchema.parseAsync(req.body);
 	return getAppCtx()
-		.medicalDepartmentsRepository.delete(params.id.toString())
+		.medicalDepartmentsRepository.delete(params.id)
 		.then((item) => ApiResponse.success().send(res));
 }
 async function updateAction(req: Request, res: Response) {
 	const data = await commonZodSchemas.requestBodyWithName.parseAsync(req.body);
 	const id = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
-		.medicalDepartmentsRepository.update(id.toString(), data)
+		.medicalDepartmentsRepository.update(id, data)
 		.then((item) => ApiResponse.success().send(res));
 }

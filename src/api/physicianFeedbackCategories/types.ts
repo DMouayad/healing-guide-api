@@ -1,13 +1,11 @@
+import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
 
-export type PhysicianFeedbackCategory = {
-	id: string;
-	parentId?: string;
-	name: string;
-};
+export type PhysicianFeedbackCategory =
+	typeof PhysicianFeedbackCategoryZodSchema._output;
 
 export const PhysicianFeedbackCategoryZodSchema = z.object({
-	id: z.string(),
-	parentId: z.string().optional(),
+	id: commonZodSchemas.id,
+	parentId: commonZodSchemas.id.optional(),
 	name: z.string(),
 });

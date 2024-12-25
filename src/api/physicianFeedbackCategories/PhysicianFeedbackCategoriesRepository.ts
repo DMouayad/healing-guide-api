@@ -7,33 +7,33 @@ import { objectToSnake } from "ts-case-convert";
 import type { PhysicianFeedbackCategory } from "./types";
 
 export interface IPhysicianFeedbackCategoriesRepository {
-	getById(id: string): Promise<PhysicianFeedbackCategory | undefined>;
+	getById(id: number): Promise<PhysicianFeedbackCategory | undefined>;
 	getAll(params: SimplePaginationParams): Promise<PhysicianFeedbackCategory[]>;
 	store(params: {
 		name: string;
-		parentId?: string;
+		parentCategoryId?: number;
 	}): Promise<PhysicianFeedbackCategory>;
-	update(id: string, params: { name: string }): Promise<PhysicianFeedbackCategory>;
-	delete(id: string): Promise<void>;
+	update(id: number, params: { name: string }): Promise<PhysicianFeedbackCategory>;
+	delete(id: number): Promise<void>;
 }
 
 export class DBPhysicianFeedbackCategoriesRepository
 	implements IPhysicianFeedbackCategoriesRepository
 {
 	update(
-		id: string,
-		params: { name?: string; parentId?: string },
+		id: number,
+		params: { name?: string; parentCategoryId?: number },
 	): Promise<PhysicianFeedbackCategory> {
 		const q = db.updateTable("physician_feedback_categories").where("id", "=", id);
 		if (params.name) {
 			q.set("name", params.name);
 		}
-		if (params.parentId) {
-			q.set("parent_id", params.parentId);
+		if (params.parentCategoryId) {
+			q.set("parent_category_id", params.parentCategoryId);
 		}
 		return q.returningAll().executeTakeFirstOrThrow().catch(this.handleDBErrors);
 	}
-	getById(id: string): Promise<PhysicianFeedbackCategory | undefined> {
+	getById(id: number): Promise<PhysicianFeedbackCategory | undefined> {
 		return db
 			.selectFrom("physician_feedback_categories")
 			.selectAll()
@@ -46,14 +46,14 @@ export class DBPhysicianFeedbackCategoriesRepository
 				.selectFrom("physician_feedback_categories")
 				.orderBy("id", "asc")
 				.limit(params.perPage)
-				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from.toString()!))
+				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from))
 				.selectAll()
 				.execute();
 		});
 	}
 	store(params: {
 		name: string;
-		parentId?: string;
+		parentCategoryId?: number;
 	}): Promise<PhysicianFeedbackCategory> {
 		return db
 			.insertInto("physician_feedback_categories")
@@ -62,7 +62,7 @@ export class DBPhysicianFeedbackCategoriesRepository
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	async delete(id: string): Promise<void> {
+	async delete(id: number): Promise<void> {
 		await db
 			.deleteFrom("physician_feedback_categories")
 			.where("id", "=", id)

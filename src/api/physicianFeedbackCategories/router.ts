@@ -48,7 +48,7 @@ async function addAction(req: Request, res: Response) {
 async function deleteAction(req: Request, res: Response) {
 	const params = await requestWithIdParamSchema.parseAsync(req.body);
 	return getAppCtx()
-		.physicianFeedbackCategoriesRepository.delete(params.id.toString())
+		.physicianFeedbackCategoriesRepository.delete(params.id)
 		.then((item) => ApiResponse.success().send(res));
 }
 async function updateAction(req: Request, res: Response) {
@@ -57,6 +57,6 @@ async function updateAction(req: Request, res: Response) {
 	);
 	const id = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
-		.physicianFeedbackCategoriesRepository.update(id.toString(), data)
+		.physicianFeedbackCategoriesRepository.update(id, data)
 		.then((item) => ApiResponse.success().send(res));
 }

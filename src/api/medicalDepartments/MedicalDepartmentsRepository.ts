@@ -6,15 +6,15 @@ import { DatabaseError as PgDatabaseError } from "pg";
 import type { MedicalDepartment } from "./types";
 
 export interface IMedicalDepartmentsRepository {
-	getById(id: string): Promise<MedicalDepartment | undefined>;
+	getById(id: number): Promise<MedicalDepartment | undefined>;
 	getAll(params: SimplePaginationParams): Promise<MedicalDepartment[]>;
 	store(name: string): Promise<MedicalDepartment>;
-	update(id: string, props: { name: string }): Promise<MedicalDepartment>;
-	delete(id: string): Promise<void>;
+	update(id: number, props: { name: string }): Promise<MedicalDepartment>;
+	delete(id: number): Promise<void>;
 }
 
 export class DBMedicalDepartmentsRepository implements IMedicalDepartmentsRepository {
-	update(id: string, props: { name: string }): Promise<MedicalDepartment> {
+	update(id: number, props: { name: string }): Promise<MedicalDepartment> {
 		return db
 			.updateTable("medical_departments")
 			.where("id", "=", id)
@@ -23,7 +23,7 @@ export class DBMedicalDepartmentsRepository implements IMedicalDepartmentsReposi
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	getById(id: string): Promise<MedicalDepartment | undefined> {
+	getById(id: number): Promise<MedicalDepartment | undefined> {
 		return db
 			.selectFrom("medical_departments")
 			.selectAll()
@@ -36,7 +36,7 @@ export class DBMedicalDepartmentsRepository implements IMedicalDepartmentsReposi
 				.selectFrom("medical_departments")
 				.orderBy("id", "asc")
 				.limit(params.perPage)
-				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from.toString()!))
+				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from))
 				.selectAll()
 				.execute();
 		});
@@ -49,7 +49,7 @@ export class DBMedicalDepartmentsRepository implements IMedicalDepartmentsReposi
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	async delete(id: string): Promise<void> {
+	async delete(id: number): Promise<void> {
 		await db
 			.deleteFrom("medical_departments")
 			.where("id", "=", id)

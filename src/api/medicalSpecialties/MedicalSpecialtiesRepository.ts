@@ -6,15 +6,15 @@ import { DatabaseError as PgDatabaseError } from "pg";
 import type { MedicalSpecialty } from "./types";
 
 export interface IMedicalSpecialtiesRepository {
-	getById(id: string): Promise<MedicalSpecialty | undefined>;
+	getById(id: number): Promise<MedicalSpecialty | undefined>;
 	getAll(params: SimplePaginationParams): Promise<MedicalSpecialty[]>;
 	store(name: string): Promise<MedicalSpecialty>;
-	update(id: string, props: { name: string }): Promise<MedicalSpecialty>;
-	delete(id: string): Promise<void>;
+	update(id: number, props: { name: string }): Promise<MedicalSpecialty>;
+	delete(id: number): Promise<void>;
 }
 
 export class DBMedicalSpecialtiesRepository implements IMedicalSpecialtiesRepository {
-	update(id: string, props: { name: string }): Promise<MedicalSpecialty> {
+	update(id: number, props: { name: string }): Promise<MedicalSpecialty> {
 		return db
 			.updateTable("medical_specialties")
 			.where("id", "=", id)
@@ -23,7 +23,7 @@ export class DBMedicalSpecialtiesRepository implements IMedicalSpecialtiesReposi
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	getById(id: string): Promise<MedicalSpecialty | undefined> {
+	getById(id: number): Promise<MedicalSpecialty | undefined> {
 		return db
 			.selectFrom("medical_specialties")
 			.selectAll()
@@ -36,7 +36,7 @@ export class DBMedicalSpecialtiesRepository implements IMedicalSpecialtiesReposi
 				.selectFrom("medical_specialties")
 				.orderBy("id", "asc")
 				.limit(params.perPage)
-				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from.toString()!))
+				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from))
 				.selectAll()
 				.execute();
 		});
@@ -49,7 +49,7 @@ export class DBMedicalSpecialtiesRepository implements IMedicalSpecialtiesReposi
 			.executeTakeFirstOrThrow()
 			.catch(this.handleDBErrors);
 	}
-	async delete(id: string): Promise<void> {
+	async delete(id: number): Promise<void> {
 		await db
 			.deleteFrom("medical_specialties")
 			.where("id", "=", id)

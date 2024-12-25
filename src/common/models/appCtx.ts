@@ -1,7 +1,7 @@
 import type { IIdentityConfirmationCodesRepository } from "@/api/auth/repos/IdentityConfirmationCodesRepository";
 import type { ISignupCodesRepository } from "@/api/auth/repos/SignupCodesRepository";
 import type { IMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
-import type { IMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalSpecialtiesRepository";
+import type { IMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import type { IMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
 import type { IPhysicianFeedbackCategoriesRepository } from "@/api/physicianFeedbackCategories/PhysicianFeedbackCategoriesRepository";
 import type { IEmailVerificationCodesRepository } from "@/api/user/verification/repos/IEmailVerificationCodesRepository";
