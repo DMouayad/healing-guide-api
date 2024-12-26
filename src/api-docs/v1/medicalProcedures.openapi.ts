@@ -1,6 +1,6 @@
 import { medicalProceduresRoutes } from "@/api/medicalProcedures/router";
 import { MedicalProcedureZodSchema } from "@/api/medicalProcedures/types";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import {
@@ -58,7 +58,7 @@ export function registerMedicalProceduresPaths(
 					},
 				},
 			},
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -79,7 +79,7 @@ export function registerMedicalProceduresPaths(
 		description: "Used by an admin to delete a specific `Medical Procedure`",
 		tags: ["Medical Procedures"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -97,7 +97,7 @@ export function registerMedicalProceduresPaths(
 		description: "Used to retrieve a `Medical Procedure` by id",
 		tags: ["Medical Procedures"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{

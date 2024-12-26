@@ -1,6 +1,6 @@
 import { medicalSpecialtiesRoutes } from "@/api/medicalSpecialties/router";
 import { MedicalSpecialtyZodSchema } from "@/api/medicalSpecialties/types";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import {
@@ -58,7 +58,7 @@ export function registerMedicalSpecialtiesPaths(
 					},
 				},
 			},
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -79,7 +79,7 @@ export function registerMedicalSpecialtiesPaths(
 		description: "Used by an admin to delete a specific `Medical Specialty`",
 		tags: ["Medical Specialties"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -97,7 +97,7 @@ export function registerMedicalSpecialtiesPaths(
 		description: "Used to retrieve a `Medical Specialty` by id",
 		tags: ["Medical Specialties"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{

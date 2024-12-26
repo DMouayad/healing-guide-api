@@ -28,12 +28,12 @@ export const commonZodSchemas = {
 		from: IDSchema.optional().default("1"),
 	}),
 	requestBodyWithName: z.object({ name: z.string() }),
-	requestIdParam: IDSchema,
+	requestIdParam: z.object({ id: IDSchema }),
+	nullableName: z.object({ name: z.string().nullable() }),
 };
 export function z_enumFromArray(array: string[]) {
 	return z.enum([array[0], ...array.slice(1)]);
 }
-export const requestWithIdParamSchema = z.object({ id: commonZodSchemas.id });
 export const ZodPaginatedJsonResponse = z.object({
 	total: z.number().optional(),
 	perPage: z.number(),

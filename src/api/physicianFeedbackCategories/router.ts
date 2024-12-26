@@ -1,7 +1,7 @@
 import ApiResponse from "@/common/models/apiResponse";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { createPaginatedJsonResponse } from "@/common/utils/paginationHelpers";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import express, { type Request, type Response, type Router } from "express";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 import { PhysicianFeedbackCategoryZodSchema } from "./types";
@@ -46,7 +46,7 @@ async function addAction(req: Request, res: Response) {
 }
 
 async function deleteAction(req: Request, res: Response) {
-	const params = await requestWithIdParamSchema.parseAsync(req.body);
+	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
 		.physicianFeedbackCategoriesRepository.delete(params.id)
 		.then((item) => ApiResponse.success().send(res));
@@ -55,8 +55,8 @@ async function updateAction(req: Request, res: Response) {
 	const data = await PhysicianFeedbackCategoryZodSchema.omit({ id: true }).parseAsync(
 		req.body,
 	);
-	const id = await commonZodSchemas.requestIdParam.parseAsync(req.params);
+	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
-		.physicianFeedbackCategoriesRepository.update(id, data)
+		.physicianFeedbackCategoriesRepository.update(params.id, data)
 		.then((item) => ApiResponse.success().send(res));
 }

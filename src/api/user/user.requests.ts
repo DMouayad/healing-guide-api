@@ -1,6 +1,6 @@
 import { env } from "@/common/utils/envConfig";
 import { validatePhoneNo } from "@/common/utils/validators";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
 
 const updateUserReqBody = z.object({
@@ -28,8 +28,8 @@ const userVerificationRequestSchema = z.object({
 	body: z.object({ code: z.string().length(env.EMAIL_VERIFICATION_CODE_LENGTH) }),
 });
 export const userRequests = {
-	get: requestWithIdParamSchema,
-	delete: requestWithIdParamSchema,
+	get: commonZodSchemas.requestIdParam,
+	delete: commonZodSchemas.requestIdParam,
 	update: updateUserRequestSchema,
 	updateActivation: updateUserActivationStatusRequestSchema,
 	verifyEmail: userVerificationRequestSchema,

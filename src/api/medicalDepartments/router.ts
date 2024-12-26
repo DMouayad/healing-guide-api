@@ -1,7 +1,7 @@
 import ApiResponse from "@/common/models/apiResponse";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { createPaginatedJsonResponse } from "@/common/utils/paginationHelpers";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import express, { type Request, type Response, type Router } from "express";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 
@@ -37,7 +37,7 @@ async function getAllAction(req: Request, res: Response) {
 }
 
 async function getByIdAction(req: Request, res: Response) {
-	const params = await requestWithIdParamSchema.parseAsync(req.body);
+	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 
 	return getAppCtx()
 		.medicalDepartmentsRepository.getById(params.id)
@@ -53,15 +53,15 @@ async function addAction(req: Request, res: Response) {
 }
 
 async function deleteAction(req: Request, res: Response) {
-	const params = await requestWithIdParamSchema.parseAsync(req.body);
+	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
 		.medicalDepartmentsRepository.delete(params.id)
 		.then((item) => ApiResponse.success().send(res));
 }
 async function updateAction(req: Request, res: Response) {
 	const data = await commonZodSchemas.requestBodyWithName.parseAsync(req.body);
-	const id = await commonZodSchemas.requestIdParam.parseAsync(req.params);
+	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
 	return getAppCtx()
-		.medicalDepartmentsRepository.update(id, data)
+		.medicalDepartmentsRepository.update(params.id, data)
 		.then((item) => ApiResponse.success().send(res));
 }

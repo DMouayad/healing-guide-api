@@ -1,6 +1,6 @@
 import { medicalDepartmentsRoutes } from "@/api/medicalDepartments/router";
 import { MedicalDepartmentZodSchema } from "@/api/medicalDepartments/types";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import {
@@ -58,7 +58,7 @@ export function registerMedicalDepartmentsPaths(
 					},
 				},
 			},
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -79,7 +79,7 @@ export function registerMedicalDepartmentsPaths(
 		description: "Used by an admin to delete a specific `Medical Department`",
 		tags: ["Medical Departments"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -97,7 +97,7 @@ export function registerMedicalDepartmentsPaths(
 		description: "Used to retrieve a `Medical Department` by id",
 		tags: ["Medical Departments"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{

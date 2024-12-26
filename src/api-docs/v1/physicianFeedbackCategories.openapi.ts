@@ -1,6 +1,6 @@
 import { physicianFeedbackCategoriesRoutes } from "@/api/physicianFeedbackCategories/router";
 import { PhysicianFeedbackCategoryZodSchema } from "@/api/physicianFeedbackCategories/types";
-import { commonZodSchemas, requestWithIdParamSchema } from "@/common/zod/common";
+import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import {
@@ -59,7 +59,7 @@ export function registerPhysicianFeedbackCategoriesPaths(
 					},
 				},
 			},
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -80,7 +80,7 @@ export function registerPhysicianFeedbackCategoriesPaths(
 		description: "Used by an admin to delete a specific `PhysicianFeedbackCategory`",
 		tags: ["Physician Feedback Category"],
 		request: {
-			params: requestWithIdParamSchema,
+			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
