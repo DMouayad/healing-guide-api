@@ -10,8 +10,8 @@ export const medicalDepartmentsRouter = router;
 export const medicalDepartmentsRoutes = {
 	baseRoute: "/medical-departments",
 	getByID: "/:id",
-	getAll: "/",
-	add: "/",
+	getAll: "",
+	add: "",
 	delete: "/:id",
 	edit: "/:id",
 } as const;

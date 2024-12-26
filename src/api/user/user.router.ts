@@ -18,7 +18,7 @@ import {
 export const userRouter: Router = express.Router();
 
 export const userRoutes = {
-	index: "/",
+	index: "",
 	currentUser: "/me",
 	updateActivationStatus: (id = ":id") => `/${id}/activation-status`,
 	verifyEmail: "/me/email-verification",
