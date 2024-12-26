@@ -9,18 +9,18 @@ const router: Router = express.Router();
 export const medicalConditionsRouter = router;
 export const medicalConditionsRoutes = {
 	baseRoute: "/medical-conditions",
-	getByID: "/:id",
+	getByID: (id = ":id") => `/${id}`,
 	getAll: "",
 	add: "",
-	delete: "/:id",
-	edit: "/:id",
+	delete: (id = ":id") => `/${id}`,
+	edit: (id = ":id") => `/${id}`,
 } as const;
 
 router.get(medicalConditionsRoutes.getAll, getAllAction);
-router.get(medicalConditionsRoutes.getByID, getByIdAction);
+router.get(medicalConditionsRoutes.getByID(), getByIdAction);
 router.post(medicalConditionsRoutes.add, isAdmin, addAction);
-router.patch(medicalConditionsRoutes.edit, isAdmin, updateAction);
-router.delete(medicalConditionsRoutes.delete, isAdmin, deleteAction);
+router.patch(medicalConditionsRoutes.edit(), isAdmin, updateAction);
+router.delete(medicalConditionsRoutes.delete(), isAdmin, deleteAction);
 
 async function getAllAction(req: Request, res: Response) {
 	const query = await commonZodSchemas.queryParams.parseAsync(req.query);

@@ -47,7 +47,7 @@ export function registerMedicalDepartmentsPaths(
 	});
 	registry.registerPath({
 		method: "patch",
-		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.edit,
+		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.edit("{id}"),
 		description: "Used to edit an existing `Medical Department`",
 		tags: ["Medical Departments"],
 		request: {
@@ -75,7 +75,7 @@ export function registerMedicalDepartmentsPaths(
 	});
 	registry.registerPath({
 		method: "delete",
-		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.delete,
+		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `Medical Department`",
 		tags: ["Medical Departments"],
 		request: {
@@ -93,7 +93,7 @@ export function registerMedicalDepartmentsPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.getByID,
+		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.getByID("{id}"),
 		description: "Used to retrieve a `Medical Department` by id",
 		tags: ["Medical Departments"],
 		request: {

@@ -47,7 +47,7 @@ export function registerMedicalProceduresPaths(
 	});
 	registry.registerPath({
 		method: "patch",
-		path: medicalProceduresRoute + medicalProceduresRoutes.edit,
+		path: medicalProceduresRoute + medicalProceduresRoutes.edit("{id}"),
 		description: "Used to edit an existing `Medical Procedure`",
 		tags: ["Medical Procedures"],
 		request: {
@@ -75,7 +75,7 @@ export function registerMedicalProceduresPaths(
 	});
 	registry.registerPath({
 		method: "delete",
-		path: medicalProceduresRoute + medicalProceduresRoutes.delete,
+		path: medicalProceduresRoute + medicalProceduresRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `Medical Procedure`",
 		tags: ["Medical Procedures"],
 		request: {
@@ -93,7 +93,7 @@ export function registerMedicalProceduresPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalProceduresRoute + medicalProceduresRoutes.getByID,
+		path: medicalProceduresRoute + medicalProceduresRoutes.getByID("{id}"),
 		description: "Used to retrieve a `Medical Procedure` by id",
 		tags: ["Medical Procedures"],
 		request: {

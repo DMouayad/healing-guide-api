@@ -12,14 +12,14 @@ export const physicianFeedbackCategoriesRoutes = {
 	baseRoute: "/physician-feedback-categories",
 	getAll: "",
 	add: "",
-	delete: "/:id",
-	edit: "/:id",
+	delete: (id = ":id") => `/${id}`,
+	edit: (id = ":id") => `/${id}`,
 } as const;
 
 router.get(physicianFeedbackCategoriesRoutes.getAll, getAllAction);
 router.post(physicianFeedbackCategoriesRoutes.add, isAdmin, addAction);
-router.patch(physicianFeedbackCategoriesRoutes.edit, isAdmin, updateAction);
-router.delete(physicianFeedbackCategoriesRoutes.delete, isAdmin, deleteAction);
+router.patch(physicianFeedbackCategoriesRoutes.edit(), isAdmin, updateAction);
+router.delete(physicianFeedbackCategoriesRoutes.delete(), isAdmin, deleteAction);
 
 async function getAllAction(req: Request, res: Response) {
 	const query = await commonZodSchemas.queryParams.parseAsync(req.query);

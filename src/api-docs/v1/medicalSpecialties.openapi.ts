@@ -47,7 +47,7 @@ export function registerMedicalSpecialtiesPaths(
 	});
 	registry.registerPath({
 		method: "patch",
-		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.edit,
+		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.edit("{id}"),
 		description: "Used to edit an existing `Medical Specialty`",
 		tags: ["Medical Specialties"],
 		request: {
@@ -75,7 +75,7 @@ export function registerMedicalSpecialtiesPaths(
 	});
 	registry.registerPath({
 		method: "delete",
-		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.delete,
+		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `Medical Specialty`",
 		tags: ["Medical Specialties"],
 		request: {
@@ -93,7 +93,7 @@ export function registerMedicalSpecialtiesPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.getByID,
+		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.getByID("{id}"),
 		description: "Used to retrieve a `Medical Specialty` by id",
 		tags: ["Medical Specialties"],
 		request: {

@@ -47,7 +47,7 @@ export function registerMedicalConditionsPaths(
 	});
 	registry.registerPath({
 		method: "patch",
-		path: medicalConditionsRoute + medicalConditionsRoutes.edit,
+		path: medicalConditionsRoute + medicalConditionsRoutes.edit("{id}"),
 		description: "Used to edit an existing `Medical Condition`",
 		tags: ["Medical Conditions"],
 		request: {
@@ -75,7 +75,7 @@ export function registerMedicalConditionsPaths(
 	});
 	registry.registerPath({
 		method: "delete",
-		path: medicalConditionsRoute + medicalConditionsRoutes.delete,
+		path: medicalConditionsRoute + medicalConditionsRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `Medical Condition`",
 		tags: ["Medical Conditions"],
 		request: {
@@ -93,7 +93,7 @@ export function registerMedicalConditionsPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalConditionsRoute + medicalConditionsRoutes.getByID,
+		path: medicalConditionsRoute + medicalConditionsRoutes.getByID("{id}"),
 		description: "Used to retrieve a `Medical Condition` by id",
 		tags: ["Medical Conditions"],
 		request: {

@@ -48,7 +48,8 @@ export function registerPhysicianFeedbackCategoriesPaths(
 	});
 	registry.registerPath({
 		method: "patch",
-		path: physicianFeedbackCategoriesRoute + physicianFeedbackCategoriesRoutes.edit,
+		path:
+			physicianFeedbackCategoriesRoute + physicianFeedbackCategoriesRoutes.edit("{id}"),
 		description: "Used to edit an existing `PhysicianFeedbackCategory`",
 		tags: ["Physician Feedback Category"],
 		request: {
@@ -76,7 +77,9 @@ export function registerPhysicianFeedbackCategoriesPaths(
 	});
 	registry.registerPath({
 		method: "delete",
-		path: physicianFeedbackCategoriesRoute + physicianFeedbackCategoriesRoutes.delete,
+		path:
+			physicianFeedbackCategoriesRoute +
+			physicianFeedbackCategoriesRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `PhysicianFeedbackCategory`",
 		tags: ["Physician Feedback Category"],
 		request: {
