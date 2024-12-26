@@ -57,6 +57,6 @@ userRouter.post(
 	sendPhoneVerificationAction,
 );
 function getCurrentUserId(_req: Request, res: Response) {
-	return getUserFromResponse(res)!.id.toString();
+	return getUserFromResponse(res).id.toString();
 }
 /**======================== END Of Phone Verification ================================== */

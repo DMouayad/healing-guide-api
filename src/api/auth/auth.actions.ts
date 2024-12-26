@@ -127,8 +127,8 @@ export async function confirmIdentityAction(req: Request, res: Response) {
 	const providedCode = data.code;
 	const user = getUserFromResponse(res);
 
-	return checkUser(user)
-		.then(getAppCtx().identityConfirmationRepo.findBy)
+	return getAppCtx()
+		.identityConfirmationRepo.findBy(user)
 		.then((identityConfirmation) => validateOTP(providedCode, identityConfirmation))
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { identityConfirmedAt: new Date() }),
@@ -141,11 +141,4 @@ export async function confirmIdentityAction(req: Request, res: Response) {
 			}
 		})
 		.then((_) => ApiResponse.success().send(res));
-}
-
-function checkUser(user: IUser | undefined) {
-	if (!user) {
-		throw AppError.UNAUTHENTICATED();
-	}
-	return Promise.resolve(user);
 }

@@ -75,8 +75,21 @@ function getExpiresAt(expirationInMinutes?: number) {
 	return expiresAt;
 }
 
-export function getUserFromResponse(res: Response): IUser | undefined {
-	return res.locals.auth?.user;
+export function getUserFromResponse(res: Response, throwIfUndefined?: true): IUser;
+export function getUserFromResponse(
+	res: Response,
+	throwIfUndefined: false,
+): IUser | undefined;
+
+export function getUserFromResponse(
+	res: Response,
+	throwIfUndefined = true,
+): IUser | undefined {
+	const user = res.locals.auth?.user;
+	if (!user && throwIfUndefined) {
+		throw AppError.UNAUTHENTICATED();
+	}
+	return user;
 }
 
 export function getAccessTokenApiResponse(token: NewAccessToken) {

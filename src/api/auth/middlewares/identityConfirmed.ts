@@ -15,9 +15,6 @@ export async function identityConfirmed(
 	next: NextFunction,
 ) {
 	const user = getUserFromResponse(res);
-	if (!user) {
-		throw AppError.UNAUTHENTICATED();
-	}
 	if (lastConfirmedAtIsValid(user.identityConfirmedAt)) {
 		next();
 	}
