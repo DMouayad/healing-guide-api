@@ -1,5 +1,6 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
+import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
 import { ZodPaginatedJsonResponse } from "@/common/zod/common";
 import { StatusCodes } from "http-status-codes";
@@ -16,6 +17,14 @@ export const unauthorizedResponse = {
 	description: "Failure: unauthorized user",
 	schema: ZodAppErrorSchema,
 	example: ApiResponse.error(AppError.FORBIDDEN()),
+};
+export const identityConfirmationRequiredResponse = {
+	statusCode: StatusCodes.FORBIDDEN,
+	description: "Failure: identity confirmation is required",
+	schema: ZodAppErrorSchema,
+	example: ApiResponse.error(
+		AppError.FORBIDDEN({ errCode: APP_ERR_CODES.CONFIRM_IDENTITY }),
+	),
 };
 export const duplicateResourceResponse = (description: string) => {
 	return {

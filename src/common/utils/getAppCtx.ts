@@ -5,6 +5,7 @@ import { DBMedicalConditionsRepository } from "@/api/medicalConditions/MedicalCo
 import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
 import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
+import { DBPhysicianRepository } from "@/api/physician/physician.repository";
 import { DBPhysicianFeedbackCategoriesRepository } from "@/api/physicianFeedbackCategories/PhysicianFeedbackCategoriesRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationCodesRepo";
@@ -27,6 +28,7 @@ const productionAppCtx: AppCtx = {
 	medicalProceduresRepository: new DBMedicalProceduresRepository(),
 	medicalConditionsRepository: new DBMedicalConditionsRepository(),
 	physicianFeedbackCategoriesRepository: new DBPhysicianFeedbackCategoriesRepository(),
+	physicianRepository: new DBPhysicianRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

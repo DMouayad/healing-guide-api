@@ -4,6 +4,7 @@ import type { IMedicalConditionsRepository } from "@/api/medicalConditions/Medic
 import type { IMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
 import type { IMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import type { IMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
+import type { IPhysicianRepository } from "@/api/physician/physician.repository";
 import type { IPhysicianFeedbackCategoriesRepository } from "@/api/physicianFeedbackCategories/PhysicianFeedbackCategoriesRepository";
 import type { IEmailVerificationCodesRepository } from "@/api/user/verification/repos/IEmailVerificationCodesRepository";
 import type { IPhoneVerificationCodesRepository } from "@/api/user/verification/repos/IPhoneVerificationCodesRepository";
@@ -26,4 +27,5 @@ export type AppCtx = {
 	readonly medicalProceduresRepository: IMedicalProceduresRepository;
 	readonly physicianFeedbackCategoriesRepository: IPhysicianFeedbackCategoriesRepository;
 	readonly medicalConditionsRepository: IMedicalConditionsRepository;
+	readonly physicianRepository: IPhysicianRepository;
 };
