@@ -1,8 +1,6 @@
-import { PG_ERR_CODE } from "@/common/constants";
-import AppError from "@/common/models/appError";
 import type { SimplePaginationParams } from "@/common/types";
 import { db } from "@/db";
-import { DatabaseError as PgDatabaseError } from "pg";
+import { handleDBErrors } from "@/db/utils";
 import { objectToCamel, objectToSnake } from "ts-case-convert";
 import type {
 	CreatePhysicianFeedbackCategoryDTO,
@@ -43,7 +41,7 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 			.values(objectToSnake(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors)
+			.catch(handleDBErrors)
 			.then(objectToCamel);
 	}
 	updateQuestion(
@@ -57,7 +55,7 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 			.$if(dto.categoryId != null, (qb) => qb.set("category_id", dto.categoryId!))
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors)
+			.catch(handleDBErrors)
 			.then(objectToCamel);
 	}
 	async deleteQuestion(id: number): Promise<void> {
@@ -116,7 +114,7 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 		if (dto.parentCategoryId) {
 			q.set("parent_category_id", dto.parentCategoryId);
 		}
-		return q.returningAll().executeTakeFirstOrThrow().catch(this.handleDBErrors);
+		return q.returningAll().executeTakeFirstOrThrow().catch(handleDBErrors);
 	}
 	storeCategory(
 		dto: CreatePhysicianFeedbackCategoryDTO,
@@ -126,21 +124,12 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 			.values(objectToSnake(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors);
+			.catch(handleDBErrors);
 	}
 	async deleteCategory(id: number): Promise<void> {
 		await db
 			.deleteFrom("physician_feedback_categories")
 			.where("id", "=", id)
 			.executeTakeFirstOrThrow();
-	}
-	handleDBErrors(err: any) {
-		if (err instanceof PgDatabaseError) {
-			switch (err.code) {
-				case PG_ERR_CODE.DUPLICATE_VALUE:
-					return Promise.reject(AppError.RESOURCE_ALREADY_EXISTS());
-			}
-		}
-		return Promise.reject(err);
 	}
 }

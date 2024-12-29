@@ -1,8 +1,6 @@
-import { PG_ERR_CODE } from "@/common/constants";
-import AppError from "@/common/models/appError";
 import type { SimplePaginationParams } from "@/common/types";
 import { db } from "@/db";
-import { DatabaseError as PgDatabaseError } from "pg";
+import { handleDBErrors } from "@/db/utils";
 import type { MedicalProcedure } from "./types";
 
 export interface IMedicalProceduresRepository {
@@ -21,7 +19,7 @@ export class DBMedicalProceduresRepository implements IMedicalProceduresReposito
 			.set("name", props.name)
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors);
+			.catch(handleDBErrors);
 	}
 	getById(id: number): Promise<MedicalProcedure | undefined> {
 		return db
@@ -47,21 +45,12 @@ export class DBMedicalProceduresRepository implements IMedicalProceduresReposito
 			.values({ name })
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors);
+			.catch(handleDBErrors);
 	}
 	async delete(id: number): Promise<void> {
 		await db
 			.deleteFrom("medical_procedures")
 			.where("id", "=", id)
 			.executeTakeFirstOrThrow();
-	}
-	handleDBErrors(err: any) {
-		if (err instanceof PgDatabaseError) {
-			switch (err.code) {
-				case PG_ERR_CODE.DUPLICATE_VALUE:
-					return Promise.reject(AppError.RESOURCE_ALREADY_EXISTS());
-			}
-		}
-		return Promise.reject(err);
 	}
 }

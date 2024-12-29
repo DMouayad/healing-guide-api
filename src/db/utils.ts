@@ -1,5 +1,7 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
+import { PG_ERR_CODE } from "@/common/constants";
+import AppError from "@/common/models/appError";
 import { logger } from "@/common/utils/logger";
 import {
 	FileMigrationProvider,
@@ -8,6 +10,7 @@ import {
 	NO_MIGRATIONS,
 	sql,
 } from "kysely";
+import { DatabaseError as PgDatabaseError } from "pg";
 import { db } from ".";
 
 export async function testDBConnection() {
@@ -60,4 +63,14 @@ export async function migrateDBUp() {
 export async function migrateDBLatest() {
 	const migrator = getMigratorInstance();
 	handleMigrationResult(await migrator.migrateToLatest());
+}
+
+export function handleDBErrors(err: any) {
+	if (err instanceof PgDatabaseError) {
+		switch (err.code) {
+			case PG_ERR_CODE.DUPLICATE_VALUE:
+				return Promise.reject(AppError.RESOURCE_ALREADY_EXISTS());
+		}
+	}
+	return Promise.reject(err);
 }

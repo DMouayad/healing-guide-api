@@ -1,9 +1,7 @@
-import { PG_ERR_CODE } from "@/common/constants";
-import AppError from "@/common/models/appError";
 import { db } from "@/db";
+import { handleDBErrors } from "@/db/utils";
 import type { Expression } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/postgres";
-import { DatabaseError as PgDatabaseError } from "pg";
 import { objectToCamel, objectToSnake } from "ts-case-convert";
 import type { ObjectToSnake } from "ts-case-convert/lib/caseConvert";
 import type {
@@ -36,7 +34,7 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 			.values(objectToSnake(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
-			.catch(this.handleDBErrors)
+			.catch(handleDBErrors)
 			.then(objectToCamel)
 			.then((physician) =>
 				this.storePhysicianSpecialties(physician, relations?.specialties),
