@@ -237,7 +237,7 @@ function physician_specialties(physicianId: Expression<number>) {
 					.selectFrom("medical_specialties")
 					.select("medical_specialties.name")
 					.whereRef(
-						"physicians_specialties.physician_id",
+						"physicians_specialties.specialty_id",
 						"=",
 						"medical_specialties.id",
 					)
@@ -257,7 +257,7 @@ function physician_provide_procedures(physicianId: Expression<number>) {
 					.selectFrom("medical_procedures")
 					.select("medical_procedures.name")
 					.whereRef(
-						"physicians_provided_procedures.physician_id",
+						"physicians_provided_procedures.procedure_id",
 						"=",
 						"medical_procedures.id",
 					)
