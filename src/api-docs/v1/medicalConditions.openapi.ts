@@ -10,6 +10,7 @@ import {
 	unauthorizedResponse,
 } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
+import { v1BearerAuth } from "./openAPIDocumentGenerator";
 
 export function registerMedicalConditionsPaths(
 	registry: OpenAPIRegistry,
@@ -23,6 +24,7 @@ export function registerMedicalConditionsPaths(
 		path: medicalConditionsRoute + medicalConditionsRoutes.add,
 		description: "Used to add a new `Medical Condition` to the database",
 		tags: ["Medical Conditions"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			body: {
 				content: {
@@ -50,6 +52,7 @@ export function registerMedicalConditionsPaths(
 		path: medicalConditionsRoute + medicalConditionsRoutes.edit("{id}"),
 		description: "Used to edit an existing `Medical Condition`",
 		tags: ["Medical Conditions"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			body: {
 				content: {
@@ -78,6 +81,7 @@ export function registerMedicalConditionsPaths(
 		path: medicalConditionsRoute + medicalConditionsRoutes.delete("{id}"),
 		description: "Used by an admin to delete a specific `Medical Condition`",
 		tags: ["Medical Conditions"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			params: commonZodSchemas.requestIdParam,
 		},

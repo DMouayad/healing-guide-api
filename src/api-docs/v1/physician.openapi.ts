@@ -15,6 +15,7 @@ import {
 	unauthenticatedResponse,
 } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
+import { v1BearerAuth } from "./openAPIDocumentGenerator";
 
 export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: string) {
 	const physicianRoute = baseUrl + physicianRoutes.baseRoute;
@@ -25,6 +26,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		path: physicianRoute + physicianRoutes.create,
 		description: "Used to add a new `Physician` to the database",
 		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			body: {
 				content: {
@@ -50,6 +52,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		path: physicianRoute + physicianRoutes.update("{id}"),
 		description: "Used to edit an existing `Physician`",
 		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			body: {
 				content: {
