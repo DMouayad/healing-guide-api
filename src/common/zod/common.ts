@@ -44,5 +44,5 @@ export const ZodPaginatedJsonResponse = z.object({
 	prev_page_url: z.string().nullable(),
 	from: commonZodSchemas.id.nullable(),
 	to: commonZodSchemas.id.nullable(),
-	items: z.array(z.object({ id: z.number() })),
+	items: z.array(z.any()),
 });
