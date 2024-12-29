@@ -13,7 +13,7 @@ import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { medicalProceduresRouter } from "./api/medicalProcedures/router";
 import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
 import { physicianRouter } from "./api/physician/physician.router";
-import { physicianFeedbackCategoriesRouter } from "./api/physicianFeedbackCategories/router";
+import { physicianFeedbackRouter } from "./api/physicianFeedback/router";
 import { userRouter } from "./api/user/user.router";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
@@ -47,7 +47,7 @@ apiRouter.use("/medical-departments", medicalDepartmentsRouter);
 apiRouter.use("/medical-specialties", medicalSpecialtiesRouter);
 apiRouter.use("/medical-procedures", medicalProceduresRouter);
 apiRouter.use("/medical-conditions", medicalConditionsRouter);
-apiRouter.use("/physician-feedback-categories", physicianFeedbackCategoriesRouter);
+apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 app.use("/mail-templates", mailTemplatesRouter);
 // Swagger UI

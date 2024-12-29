@@ -6,7 +6,7 @@ import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/Medical
 import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
 import { DBPhysicianRepository } from "@/api/physician/physician.repository";
-import { DBPhysicianFeedbackCategoriesRepository } from "@/api/physicianFeedbackCategories/PhysicianFeedbackCategoriesRepository";
+import { DBPhysicianFeedbackRepository } from "@/api/physicianFeedback/PhysicianFeedbackRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import { DBEmailVerificationRepo } from "@/api/user/verification/repos/DBEmailVerificationCodesRepo";
 import { FakePhoneVerificationCodesRepo } from "@/api/user/verification/repos/FakePhoneVerificationCodesRepo";
@@ -27,7 +27,7 @@ const productionAppCtx: AppCtx = {
 	medicalSpecialtiesRepository: new DBMedicalSpecialtiesRepository(),
 	medicalProceduresRepository: new DBMedicalProceduresRepository(),
 	medicalConditionsRepository: new DBMedicalConditionsRepository(),
-	physicianFeedbackCategoriesRepository: new DBPhysicianFeedbackCategoriesRepository(),
+	physicianFeedbackRepository: new DBPhysicianFeedbackRepository(),
 	physicianRepository: new DBPhysicianRepository(),
 } as const;
 
