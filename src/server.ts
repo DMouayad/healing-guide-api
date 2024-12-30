@@ -8,6 +8,7 @@ import { env } from "@/common/utils/envConfig";
 
 import rateLimiter from "@/middleware/rateLimiter";
 import { authRouter } from "./api/auth/authRouter";
+import { languageRouter } from "./api/languages/language.router";
 import { medicalConditionsRouter } from "./api/medicalConditions/router";
 import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { medicalProceduresRouter } from "./api/medicalProcedures/router";
@@ -49,6 +50,7 @@ apiRouter.use("/medical-procedures", medicalProceduresRouter);
 apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
+apiRouter.use("/languages", languageRouter);
 app.use("/mail-templates", mailTemplatesRouter);
 // Swagger UI
 app.use(openAPIRouter);

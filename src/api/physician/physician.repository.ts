@@ -4,6 +4,10 @@ import type { Expression } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/postgres";
 import { objectToCamel, objectToSnake } from "ts-case-convert";
 import type { ObjectToSnake } from "ts-case-convert/lib/caseConvert";
+import type { Language } from "../languages/language.types";
+import type { MedicalCondition } from "../medicalConditions/types";
+import type { MedicalProcedure } from "../medicalProcedures/types";
+import type { MedicalSpecialty } from "../medicalSpecialties/types";
 import type {
 	CreatePhysicianDTO,
 	Physician,
@@ -26,24 +30,21 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 			specialties: true,
 		});
 	}
-	store(dto: CreatePhysicianDTO): Promise<PhysicianWithRelations> {
-		const relations = dto.relations;
-		dto.relations = undefined;
-		return db
+	async store(dto: CreatePhysicianDTO): Promise<PhysicianWithRelations> {
+		return await db
 			.insertInto("physicians")
-			.values(objectToSnake(dto))
+			.values(prepareToInsert(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
 			.catch(handleDBErrors)
 			.then(objectToCamel)
+			.then((physician) => this.storePhysicianLanguages(physician, dto.languages))
+			.then((physician) => this.storePhysicianSpecialties(physician, dto.specialties))
 			.then((physician) =>
-				this.storePhysicianSpecialties(physician, relations?.specialties),
+				this.storePhysicianTreatConditions(physician, dto.treatConditions),
 			)
 			.then((physician) =>
-				this.storePhysicianTreatConditions(physician, relations?.treatConditions),
-			)
-			.then((physician) =>
-				this.storePhysicianProvideProcedures(physician, relations?.provideProcedures),
+				this.storePhysicianProvideProcedures(physician, dto.provideProcedures),
 			);
 	}
 	update(id: number, dto: UpdatePhysicianDTO): Promise<Physician> {
@@ -67,19 +68,28 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 		await db.deleteFrom("physicians").where("user_id", "=", userId).execute();
 	}
 
-	handleDBErrors(err: any) {
-		if (err instanceof PgDatabaseError) {
-			switch (err.code) {
-				case PG_ERR_CODE.DUPLICATE_VALUE:
-					return Promise.reject(AppError.RESOURCE_ALREADY_EXISTS());
-			}
+	async storePhysicianLanguages(physician: Physician, languages?: Language[]) {
+		if (!languages || languages?.length === 0) {
+			return { ...physician, languages: [] };
 		}
-		return Promise.reject(err);
+		const values = languages.map((lang) => {
+			return { language_id: lang.id, physician_id: physician.id };
+		});
+		return await db
+			.insertInto("physicians_languages")
+			.values(values)
+			.onConflict((oc) => oc.constraint("physicians_languages_PK").doNothing())
+			.returning(["language_id"])
+			.execute()
+			.then((ids) => {
+				const idsList = ids.flatMap((el) => el.language_id);
+				const physicianLangs = languages.filter((item) => idsList.includes(item.id));
+				return { ...physician, languages: physicianLangs };
+			});
 	}
-
-	storePhysicianSpecialties(
+	async storePhysicianSpecialties(
 		physician: Physician,
-		specialties?: { id: number; name: string | null }[],
+		specialties?: MedicalSpecialty[],
 	) {
 		if (!specialties || specialties?.length === 0) {
 			return { ...physician, specialties: [] };
@@ -90,7 +100,7 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				physician_id: physician.id,
 			};
 		});
-		return db
+		return await db
 			.insertInto("physicians_specialties")
 			.values(values)
 			.onConflict((oc) => oc.constraint("physicians_specialties_PK").doNothing())
@@ -104,7 +114,10 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				return { ...physician, specialties: physicianSpecialties };
 			});
 	}
-	storePhysicianTreatConditions(physician: Physician, conditions?: { id: number }[]) {
+	async storePhysicianTreatConditions(
+		physician: Physician,
+		conditions?: MedicalCondition[],
+	) {
 		if (!conditions || conditions?.length === 0) {
 			return { ...physician, treatConditions: [] };
 		}
@@ -114,7 +127,7 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				physician_id: physician.id,
 			};
 		});
-		return db
+		return await db
 			.insertInto("physicians_treat_conditions")
 			.values(values)
 			.returning(["condition_id"])
@@ -126,7 +139,10 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				return { ...physician, treatConditions };
 			});
 	}
-	storePhysicianProvideProcedures(physician: Physician, procedures?: { id: number }[]) {
+	async storePhysicianProvideProcedures(
+		physician: Physician,
+		procedures?: MedicalProcedure[],
+	) {
 		if (!procedures || procedures?.length === 0) {
 			return { ...physician, provideProcedures: [] };
 		}
@@ -136,7 +152,7 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				physician_id: physician.id,
 			};
 		});
-		return db
+		return await db
 			.insertInto("physicians_provided_procedures")
 			.values(values)
 			.returning(["procedure_id"])
@@ -191,7 +207,9 @@ function getPhysician(
 			.then(preparePhysicianObj)
 	);
 }
-function preparePhysicianObj(physician?: ObjectToSnake<PhysicianWithRelations>) {
+function preparePhysicianObj(
+	physician?: ObjectToSnake<PhysicianWithRelations>,
+): PhysicianWithRelations | undefined {
 	if (physician) {
 		const physicianCamelCase = objectToCamel(physician);
 		if (physicianCamelCase.treatConditions == null) {
@@ -203,10 +221,25 @@ function preparePhysicianObj(physician?: ObjectToSnake<PhysicianWithRelations>) 
 		if (physicianCamelCase.specialties == null) {
 			physicianCamelCase.specialties = [];
 		}
+		if (physicianCamelCase.languages == null) {
+			physicianCamelCase.languages = [];
+		}
 		return physicianCamelCase;
 	}
+	return undefined;
 }
-
+function prepareToInsert(dto: CreatePhysicianDTO) {
+	return objectToSnake({
+		biography: dto.biography,
+		fullName: dto.fullName,
+		dateOfBirth: dto.dateOfBirth,
+		isMale: dto.isMale,
+		mobilePhoneNumber: dto.mobilePhoneNumber,
+		phoneNumber: dto.phoneNumber,
+		pictureUrl: dto.pictureUrl,
+		userId: dto.userId,
+	});
+}
 function physician_treat_conditions(physicianId: Expression<number>) {
 	return jsonArrayFrom(
 		db

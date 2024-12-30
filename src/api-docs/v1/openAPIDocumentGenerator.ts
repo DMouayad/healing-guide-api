@@ -1,6 +1,7 @@
 import { ZodPaginatedJsonResponse } from "@/common/zod/common";
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { registerAuthPaths } from "./auth.openapi";
+import { registerLanguagesPaths } from "./languages.openapi";
 import { registerMedicalConditionsPaths } from "./medicalConditions.openapi";
 import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
 import { registerMedicalProceduresPaths } from "./medicalProcedures.openapi";
@@ -31,6 +32,7 @@ registerMedicalProceduresPaths(v1Registry, v1BaseUrl);
 registerMedicalConditionsPaths(v1Registry, v1BaseUrl);
 registerPhysicianPaths(v1Registry, v1BaseUrl);
 registerPhysicianFeedbackPaths(v1Registry, v1BaseUrl);
+registerLanguagesPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
 	const generator = new OpenApiGeneratorV3(v1Registry.definitions);
