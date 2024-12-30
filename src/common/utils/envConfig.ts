@@ -10,6 +10,7 @@ export const env = cleanEnv(process.env, {
 	}),
 	ZOHO_EMAIL: str(),
 	ZOHO_PASSWORD: str(),
+	DEFAULT_OTP_LENGTH: num({ devDefault: 7 }),
 	EMAIL_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
 	PHONE_VERIFICATION_CODE_LENGTH: num({ devDefault: 7 }),
 	IDENTITY_CONFIRMATION_CODE_LENGTH: num({ devDefault: 7 }),

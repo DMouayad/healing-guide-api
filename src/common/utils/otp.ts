@@ -1,8 +1,9 @@
-import { getRandomValues } from "node:crypto";
+import { randomInt } from "node:crypto";
 import type { IUser } from "@/interfaces/IUser";
 import AppError from "../models/appError";
 import type { UserTOTP } from "../types";
 import { dateIsPast, getExpiresAt } from "./dateHelpers";
+import { env } from "./envConfig";
 
 export function generateUserTOTP(
 	user: IUser,
@@ -15,18 +16,41 @@ export function generateUserTOTP(
 		expiresAt: getExpiresAt(expirationInMinutes),
 	};
 }
-export function generateOTP(length: number) {
-	let array = new Uint8Array(length);
-	array = getRandomValues(array);
+export function generateOTP(
+	length: number = env.DEFAULT_OTP_LENGTH,
+	includeLetters = false,
+) {
+	let numDigits = length;
+	let numLetters = 0;
 
-	// Convert the random bytes to a number within the desired range
-	const max = 10 ** length - 1;
-	const min = 10 ** (length - 1);
-	const randomNumber =
-		min + (array.reduce((acc, curr) => acc * 256 + curr) % (max - min + 1));
+	if (includeLetters) {
+		numDigits = Math.floor(length * 0.8); // 80% digits
+		numLetters = length - numDigits; // Remaining 20% letters
+	}
 
-	// Format the number as a 7-digit string, padding with leading zeros if necessary
-	return randomNumber.toString().padStart(length, "0");
+	let otp = "";
+	const digits = "0123456789";
+	const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only uppercase letters
+
+	// Add Digits
+	for (let i = 0; i < numDigits; i++) {
+		otp += digits.charAt(randomInt(0, digits.length));
+	}
+
+	// Add Letters (only if includeLetters is true)
+	if (includeLetters) {
+		for (let i = 0; i < numLetters; i++) {
+			otp += letters.charAt(randomInt(0, letters.length));
+		}
+
+		// Shuffle the string to mix digits and letters
+		otp = otp
+			.split("")
+			.sort(() => randomInt(-1, 2))
+			.join("");
+	}
+
+	return otp;
 }
 
 export async function validateOTP(
