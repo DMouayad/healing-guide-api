@@ -4,7 +4,6 @@ import { handleDBErrors } from "@/db/utils";
 import type { MedicalSpecialty } from "./types";
 
 export interface IMedicalSpecialtiesRepository {
-	getById(id: number): Promise<MedicalSpecialty | undefined>;
 	getAll(params: SimplePaginationParams): Promise<MedicalSpecialty[]>;
 	store(name: string): Promise<MedicalSpecialty>;
 	update(id: number, props: { name: string }): Promise<MedicalSpecialty>;
@@ -20,13 +19,6 @@ export class DBMedicalSpecialtiesRepository implements IMedicalSpecialtiesReposi
 			.returningAll()
 			.executeTakeFirstOrThrow()
 			.catch(handleDBErrors);
-	}
-	getById(id: number): Promise<MedicalSpecialty | undefined> {
-		return db
-			.selectFrom("medical_specialties")
-			.selectAll()
-			.where("id", "=", id)
-			.executeTakeFirst();
 	}
 	async getAll(params: SimplePaginationParams): Promise<MedicalSpecialty[]> {
 		return await db.transaction().execute(async (transaction) => {

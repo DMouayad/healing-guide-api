@@ -9,7 +9,6 @@ const router: Router = express.Router();
 export const medicalSpecialtiesRouter = router;
 export const medicalSpecialtiesRoutes = {
 	baseRoute: "/medical-specialties",
-	getByID: (id = ":id") => `/${id}`,
 	getAll: "",
 	add: "",
 	delete: (id = ":id") => `/${id}`,
@@ -17,7 +16,6 @@ export const medicalSpecialtiesRoutes = {
 } as const;
 
 router.get(medicalSpecialtiesRoutes.getAll, getAllAction);
-router.get(medicalSpecialtiesRoutes.getByID(), getByIdAction);
 router.post(medicalSpecialtiesRoutes.add, isAdmin, addAction);
 router.patch(medicalSpecialtiesRoutes.edit(), isAdmin, updateAction);
 router.delete(medicalSpecialtiesRoutes.delete(), isAdmin, deleteAction);
@@ -36,13 +34,6 @@ async function getAllAction(req: Request, res: Response) {
 		});
 }
 
-async function getByIdAction(req: Request, res: Response) {
-	const params = await commonZodSchemas.requestIdParam.parseAsync(req.params);
-
-	return getAppCtx()
-		.medicalSpecialtiesRepository.getById(params.id)
-		.then((item) => ApiResponse.success({ data: item }).send(res));
-}
 async function addAction(req: Request, res: Response) {
 	const data = await commonZodSchemas.requestBodyWithName.parseAsync(req.body);
 

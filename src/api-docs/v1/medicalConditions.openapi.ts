@@ -97,22 +97,6 @@ export function registerMedicalConditionsPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalConditionsRoute + medicalConditionsRoutes.getByID("{id}"),
-		description: "Used to retrieve a `Medical Condition` by id",
-		tags: ["Medical Conditions"],
-		request: {
-			params: commonZodSchemas.requestIdParam,
-		},
-		responses: createApiResponses([
-			{
-				statusCode: StatusCodes.OK,
-				description: "Success: Returns a `MedicalCondition` if exists",
-				schema: MedicalConditionZodSchema.optional(),
-			},
-		]),
-	});
-	registry.registerPath({
-		method: "get",
 		path: medicalConditionsRoute + medicalConditionsRoutes.getAll,
 		description: "Used to retrieve all stored `Medical Condition`s",
 		tags: ["Medical Conditions"],

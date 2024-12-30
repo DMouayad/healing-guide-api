@@ -97,22 +97,6 @@ export function registerMedicalDepartmentsPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.getByID("{id}"),
-		description: "Used to retrieve a `Medical Department` by id",
-		tags: ["Medical Departments"],
-		request: {
-			params: commonZodSchemas.requestIdParam,
-		},
-		responses: createApiResponses([
-			{
-				statusCode: StatusCodes.OK,
-				description: "Success: Returns a `MedicalDepartment` if exists",
-				schema: MedicalDepartmentZodSchema.optional(),
-			},
-		]),
-	});
-	registry.registerPath({
-		method: "get",
 		path: medicalDepartmentsRoute + medicalDepartmentsRoutes.getAll,
 		description: "Used to retrieve all stored `Medical Department`s",
 		tags: ["Medical Departments"],

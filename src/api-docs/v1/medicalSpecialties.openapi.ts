@@ -97,22 +97,6 @@ export function registerMedicalSpecialtiesPaths(
 
 	registry.registerPath({
 		method: "get",
-		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.getByID("{id}"),
-		description: "Used to retrieve a `Medical Specialty` by id",
-		tags: ["Medical Specialties"],
-		request: {
-			params: commonZodSchemas.requestIdParam,
-		},
-		responses: createApiResponses([
-			{
-				statusCode: StatusCodes.OK,
-				description: "Success: Returns a `MedicalSpecialty` if exists",
-				schema: MedicalSpecialtyZodSchema.optional(),
-			},
-		]),
-	});
-	registry.registerPath({
-		method: "get",
 		path: medicalSpecialtiesRoute + medicalSpecialtiesRoutes.getAll,
 		description: "Used to retrieve all stored `Medical Specialty`s",
 		tags: ["Medical Specialties"],
