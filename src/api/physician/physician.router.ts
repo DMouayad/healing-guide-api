@@ -1,4 +1,5 @@
 import ApiResponse from "@/common/models/apiResponse";
+import AppError from "@/common/models/appError";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { commonZodSchemas } from "@/common/zod/common";
 import express, { type Request, type Response, type Router } from "express";
@@ -23,8 +24,11 @@ router.get(routes.getById(), async (req, res) => {
 	return getAppCtx()
 		.physicianRepository.getWithRelations(params.id)
 		.then((item) =>
-			ApiResponse.success({ data: createNewPhysicianResource(item) }).send(res),
-		);
+			item
+				? ApiResponse.success({ data: createNewPhysicianResource(item) })
+				: ApiResponse.error(AppError.ENTITY_NOT_FOUND()),
+		)
+		.then((response) => response.send(res));
 });
 router.post(routes.create, authenticated, identityConfirmed, createAction);
 router.patch(routes.update(), authenticated, identityConfirmed, updateAction);
