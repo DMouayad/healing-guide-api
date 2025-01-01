@@ -16,7 +16,7 @@ export async function createUser(params?: UserFactoryParams) {
 	const password = params?.userProps?.passwordHash ?? (await bcryptHash(email));
 	return new FakeUser({
 		// @ts-ignore
-		id: params?.userProps?.id,
+		id: params?.userProps?.id ?? faker.string.numeric(),
 		passwordHash: password,
 		role: params?.userProps?.role ?? APP_ROLES.guest,
 		activated: params?.userProps?.activated ?? false,
