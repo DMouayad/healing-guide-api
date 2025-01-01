@@ -24,14 +24,15 @@ const updateUserActivationStatusRequestSchema = z.object({
 		activated: z.boolean(),
 	}),
 });
-const userVerificationRequestSchema = z.object({
-	body: z.object({ code: z.string().length(env.EMAIL_VERIFICATION_CODE_LENGTH) }),
-});
 export const userRequests = {
 	get: commonZodSchemas.requestIdParam,
 	delete: commonZodSchemas.requestIdParam,
 	update: updateUserRequestSchema,
 	updateActivation: updateUserActivationStatusRequestSchema,
-	verifyEmail: userVerificationRequestSchema,
-	verifyPhone: userVerificationRequestSchema,
+	verifyEmail: z.object({
+		code: z.string().length(env.EMAIL_VERIFICATION_CODE_LENGTH),
+	}),
+	verifyPhone: z.object({
+		code: z.string().length(env.PHONE_VERIFICATION_CODE_LENGTH),
+	}),
 } as const;
