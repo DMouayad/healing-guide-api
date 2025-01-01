@@ -5,7 +5,7 @@ export type UserResourceProps = ClassProperties<UserResource>;
 export class UserResource {
 	role: string;
 	activated: boolean;
-	email: string;
+	email: string | null;
 	phoneNumber: string;
 	emailVerifiedAt: Date | null;
 	phoneNumberVerifiedAt: Date | null;

@@ -42,7 +42,7 @@ export type KyselyQueryUser = {
 	role_id: number;
 	created_at: Date;
 	activated: boolean;
-	email: string;
+	email: string | null;
 	email_verified_at: Date | null;
 	password_hash: string;
 	phone_number: string;

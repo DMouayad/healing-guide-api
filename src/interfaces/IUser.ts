@@ -14,7 +14,7 @@ export abstract class IUser extends IHasAuthorization {
 	override readonly role: Role;
 	readonly passwordHash: string;
 	activated: boolean;
-	email: string;
+	email: string | null;
 	phoneNumber: string;
 	emailVerifiedAt: Date | null;
 	phoneNumberVerifiedAt: Date | null;
@@ -45,7 +45,7 @@ export type UpdateUserDTO = RequireAtLeastOne<{
 }>;
 export class CreateUserDTO {
 	readonly role: Role;
-	readonly email: string;
+	readonly email: string | null;
 	readonly phoneNumber: string;
 	readonly activated: boolean;
 	readonly password: string;

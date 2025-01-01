@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addForeignKeyConstraint("role_id_foreign", ["role_id"], "roles", ["id"], (cb) =>
 			cb.onDelete("set null"),
 		)
-		.addColumn("email", "varchar(255)", (col) => col.notNull().unique())
+		.addColumn("email", "varchar(255)", (col) => col.unique())
 		.addColumn("phone_number", "varchar(255)", (col) => col.notNull().unique())
 		.addColumn("password_hash", "varchar", (col) => col.notNull().unique())
 		.addColumn("email_verified_at", "timestamp")
