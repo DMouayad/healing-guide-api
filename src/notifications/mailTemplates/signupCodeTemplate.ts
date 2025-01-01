@@ -6,7 +6,7 @@ import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 function getTimeToExpiration(): number {
 	const d = new Date();
 	d.setHours(0, env.SIGNUP_CODE_EXPIRATION, 0, 0);
-	return d.getHours();
+	return d.getMinutes();
 }
 const title = "Complete your registration";
 export function signupCodeMailTemplate(signupCode: SignupCode) {
@@ -217,7 +217,7 @@ export function signupCodeMailTemplate(signupCode: SignupCode) {
 <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                <p style="margin: 0;">This code expires after ${getTimeToExpiration()} hours.</p>
+                <p style="margin: 0;">This code expires after ${getTimeToExpiration()} minutes.</p>
             </td>
           </tr>
           <!-- end copy -->
