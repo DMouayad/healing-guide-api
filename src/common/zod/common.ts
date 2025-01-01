@@ -1,6 +1,7 @@
+import parsePhoneNumber from "libphonenumber-js";
 import { z } from "zod";
+import { ASSIGNABLE_ROLES } from "../constants";
 import { env } from "../utils/envConfig";
-import { validatePhoneNo } from "../utils/validators";
 
 const IDSchema = z
 	.string()
@@ -9,6 +10,7 @@ const IDSchema = z
 	.refine((num) => num > 0, "ID must be a positive number");
 export const commonZodSchemas = {
 	id: IDSchema,
+	role: z.string().transform(validateRole),
 	password: z
 		.string()
 		.refine((value) => value.length >= 8, "Password must be at least 8 characters"),
@@ -46,3 +48,30 @@ export const ZodPaginatedJsonResponse = z.object({
 	to: commonZodSchemas.id.nullable(),
 	items: z.array(z.any()),
 });
+
+function validateRole(value: string, ctx: z.RefinementCtx) {
+	const matchingAppRole = ASSIGNABLE_ROLES.find((appRole) => appRole.slug === value);
+	if (!matchingAppRole) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: "Invalid role",
+		});
+		return z.NEVER;
+	}
+	return matchingAppRole;
+}
+function validatePhoneNo(value: string, ctx: z.RefinementCtx) {
+	const phoneNumber = parsePhoneNumber(value, {
+		defaultCountry: "SY",
+	});
+
+	if (!phoneNumber?.isValid()) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: "Invalid phone number",
+		});
+		return z.NEVER;
+	}
+
+	return phoneNumber.formatInternational();
+}

@@ -1,11 +1,10 @@
 import { env } from "@/common/utils/envConfig";
-import { validatePhoneNo } from "@/common/utils/validators";
 import { commonZodSchemas } from "@/common/zod/common";
 import { z } from "zod";
 
 const updateUserReqBody = z.object({
 	email: z.string().email(),
-	phoneNumber: z.string().transform(validatePhoneNo),
+	phoneNumber: commonZodSchemas.phoneNumber,
 });
 
 export const updateUserRequestSchema = z.object({
