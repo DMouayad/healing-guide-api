@@ -13,6 +13,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 			["id"],
 			(cb) => cb.onDelete("cascade"),
 		)
+		.ifNotExists()
+
 		.execute();
 }
 

@@ -18,6 +18,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addForeignKeyConstraint("user_id_foreign", ["user_id"], "users", ["id"], (cb) =>
 			cb.onDelete("cascade"),
 		)
+		.ifNotExists()
+
 		.execute();
 }
 

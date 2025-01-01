@@ -5,6 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.createTable("medical_departments")
 		.addColumn("id", "serial", (col) => col.primaryKey())
 		.addColumn("name", "varchar", (col) => col.unique().notNull())
+		.ifNotExists()
 		.execute();
 }
 

@@ -21,6 +21,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			"physicians",
 			["id"],
 		)
+		.ifNotExists()
 		.execute();
 }
 

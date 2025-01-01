@@ -8,6 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("created_at", "timestamp", (col) =>
 			col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
 		)
+		.ifNotExists()
 		.execute();
 	await db.schema.createIndex("roles_slug_index").on("roles").column("slug").execute();
 }
