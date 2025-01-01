@@ -1,6 +1,6 @@
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
-import type { UserTOTP } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
+import type { OTPMailNotification } from "../MailNotification";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
 function getTimeToExpireInHours(): number {
@@ -8,7 +8,7 @@ function getTimeToExpireInHours(): number {
 	d.setHours(0, env.EMAIL_VERIFICATION_CODE_EXPIRATION, 0, 0);
 	return d.getHours();
 }
-export function emailVerificationMailTemplate(userTotp: UserTOTP) {
+export function emailVerificationMailTemplate(notification: OTPMailNotification) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -202,7 +202,7 @@ export function emailVerificationMailTemplate(userTotp: UserTOTP) {
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${userTotp.code}</p>
+                          <p>${notification.otp.code}</p>
                           </td>
                           
                       </tr>

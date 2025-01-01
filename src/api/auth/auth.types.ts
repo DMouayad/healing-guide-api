@@ -1,7 +1,9 @@
 import type { AccessToken } from "@/common/models/accessToken";
 import type { ObjectValues } from "@/common/types";
 import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
+import { commonZodSchemas } from "@/common/zod/common";
 import { objectToCamel } from "ts-case-convert";
+import { z } from "zod";
 
 export type KyselyQueryAccessToken = {
 	id: number;
@@ -30,16 +32,33 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 
 export type NewAccessToken = string;
 
-export type SignupCode = {
-	email: string | undefined | null;
-	phoneNumber: string;
-	code: string;
-	expiresAt: Date;
-};
-
 export type SignupCodeSendingMethod = ObjectValues<typeof SIGNUP_CODE_SENDING_METHODS>;
 
 export const SIGNUP_CODE_SENDING_METHODS = {
 	sms: "SMS",
 	mail: "MAIL",
 } as const;
+
+const ZodRoleObj = z.object({ role: commonZodSchemas.role });
+export const ZodSignupCodeViaEmail = z
+	.object({
+		email: z.string().email(),
+		phoneNumber: commonZodSchemas.phoneNumber,
+		receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.mail),
+	})
+	.merge(ZodRoleObj);
+
+export const ZodSignupCodeViaSMS = z
+	.object({
+		email: z.string().email().optional(),
+		phoneNumber: commonZodSchemas.phoneNumber,
+		receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.sms),
+	})
+	.merge(ZodRoleObj);
+
+export const ZodCreateSignupCodeDto = ZodSignupCodeViaEmail.or(ZodSignupCodeViaSMS);
+export const ZodSignupCode = ZodSignupCodeViaEmail.or(ZodSignupCodeViaSMS);
+export type SignupCodeViaEmail = typeof ZodSignupCodeViaEmail._output;
+export type SignupCodedViaSMS = typeof ZodSignupCodeViaSMS._output;
+export type SignupCode = typeof ZodSignupCode._output;
+export type SignupCodeDTO = z.infer<typeof ZodCreateSignupCodeDto>;

@@ -1,6 +1,6 @@
-import type { SignupCode } from "@/api/auth/auth.types";
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
+import type { SignupCodeMailNotification } from "../MailNotification";
 import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
@@ -9,7 +9,7 @@ function getTimeToExpiration(): number {
 	return d.getMinutes();
 }
 const title = "Complete your registration";
-export function signupCodeMailTemplate(signupCode: SignupCode) {
+export function signupCodeMailTemplate(notification: SignupCodeMailNotification) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -204,7 +204,7 @@ export function signupCodeMailTemplate(signupCode: SignupCode) {
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${signupCode.code}</p>
+                          <p>${notification.otpCode}</p>
                         </td>
                       </tr>
                     </table>

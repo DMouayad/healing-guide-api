@@ -1,6 +1,6 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
-import type { CreateAccessTokenParams } from "@/common/types";
+import type { CreateAccessTokenParams, Role } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { generateRandomString, sha256 } from "@/common/utils/hashing";
@@ -8,6 +8,7 @@ import type { IUser } from "@/interfaces/IUser";
 import { MailNotification } from "@/notifications/MailNotification";
 import { SmsNotification } from "@/notifications/SmsNotification";
 import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
+import type { OTPWithCode } from "@/otp/otp.types";
 import bcrypt from "bcryptjs";
 import type { Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -16,7 +17,6 @@ import {
 	type NewAccessToken,
 	SIGNUP_CODE_SENDING_METHODS,
 	type SignupCode,
-	type SignupCodeSendingMethod,
 } from "./auth.types";
 
 export async function checkCredentials(
@@ -102,16 +102,22 @@ export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
 		statusCode: StatusCodes.CREATED,
 	});
 }
-export async function sendSignupCode(
-	code: SignupCode,
-	sendVia: SignupCodeSendingMethod,
-) {
-	switch (sendVia) {
+export function getSignupCodeUniqueIdentifier(params: {
+	role: Role;
+	phoneNumber: string;
+	email?: string;
+}) {
+	const input =
+		(params.email ? params.email : "") + params.phoneNumber + params.role.slug;
+	return sha256(input);
+}
+export async function sendSignupCode(signupCode: SignupCode, otp: OTPWithCode) {
+	switch (signupCode.receiveVia) {
 		case SIGNUP_CODE_SENDING_METHODS.mail: {
-			return sendMailNotification(MailNotification.signupCode(code));
+			return sendMailNotification(MailNotification.signupCode(signupCode, otp.code));
 		}
 		case SIGNUP_CODE_SENDING_METHODS.sms: {
-			return sendSmsNotification(SmsNotification.signupCode(code));
+			return sendSmsNotification(SmsNotification.signupCode(signupCode));
 		}
 		default:
 			break;

@@ -1,5 +1,7 @@
-import type { SignupCode } from "@/api/auth/auth.types";
-import type { ObjectValues, UserTOTP } from "@/common/types";
+import type { SignupCodedViaSMS } from "@/api/auth/auth.types";
+import type { ObjectValues } from "@/common/types";
+import type { IUser } from "@/interfaces/IUser";
+import type { OTPWithCode } from "@/otp/otp.types";
 
 export const SMS_NOTIFICATIONS = {
 	phoneVerification: "PHONE_VERIFICATION_NOTIFICATION",
@@ -10,20 +12,21 @@ export type SmsNotificationType = ObjectValues<typeof SMS_NOTIFICATIONS>;
 export abstract class SmsNotification {
 	abstract receiverPhone(): string;
 	constructor(readonly type: SmsNotificationType) {}
-	static phoneVerification(userTOTP: UserTOTP) {
-		return new TOTPSmsNotification(userTOTP, SMS_NOTIFICATIONS.phoneVerification);
+	static phoneVerification(user: IUser, otp: OTPWithCode) {
+		return new OtpSmsNotification(user, otp, SMS_NOTIFICATIONS.phoneVerification);
 	}
-	static signupCode(code: SignupCode): SmsNotification {
-		throw new Error("Method not implemented.");
+	static signupCode(code: SignupCodedViaSMS): SmsNotification {
+		return new SignupCodeSmsNotification(code);
 	}
 }
 
-export class TOTPSmsNotification extends SmsNotification {
+export class OtpSmsNotification extends SmsNotification {
 	override receiverPhone(): string {
-		return this.userTOTP.user.phoneNumber;
+		return this.user.phoneNumber;
 	}
 	constructor(
-		readonly userTOTP: UserTOTP,
+		readonly user: IUser,
+		readonly otp: OTPWithCode,
 		type: SmsNotificationType,
 	) {
 		super(type);
@@ -33,7 +36,7 @@ export class SignupCodeSmsNotification extends SmsNotification {
 	override receiverPhone(): string {
 		return this.signupCode.phoneNumber;
 	}
-	constructor(readonly signupCode: SignupCode) {
+	constructor(readonly signupCode: SignupCodedViaSMS) {
 		super(SMS_NOTIFICATIONS.signupCode);
 	}
 }

@@ -13,7 +13,7 @@ import {
 	sendPhoneVerificationAction,
 	verifyEmailAction,
 	verifyPhoneAction,
-} from "./verification/userVerification.actions";
+} from "./userVerification.actions";
 
 export const userRouter: Router = express.Router();
 

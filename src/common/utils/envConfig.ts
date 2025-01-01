@@ -8,6 +8,7 @@ export const env = cleanEnv(process.env, {
 		devDefault: testOnly("test"),
 		choices: ["development", "production", "test"],
 	}),
+	HMAC_SECRET: str(),
 	ZOHO_EMAIL: str(),
 	ZOHO_PASSWORD: str(),
 	DEFAULT_OTP_LENGTH: num({ devDefault: 7 }),

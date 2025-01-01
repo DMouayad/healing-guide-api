@@ -1,23 +1,26 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
 import { APP_ROLES, type AuthState } from "@/common/types";
-import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
-import { generateOTP, validateOTP } from "@/common/utils/otp";
-import { CreateUserDTO, type IUser } from "@/interfaces/IUser";
+import { CreateUserDTO } from "@/interfaces/IUser";
+import { OTP_PURPOSES } from "@/otp/otp.types";
+import {
+	generateOTP,
+	validateIdentityConfirmationCode,
+	validateSignupCode,
+} from "@/otp/otp.utils";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
-import type { SignupCode } from "./auth.types";
 import {
 	checkCredentials,
 	getAccessTokenApiResponse,
 	getSignupApiResponse,
+	getSignupCodeUniqueIdentifier,
 	getUserFromResponse,
 	issuePersonalAccessToken,
 	sendSignupCode,
@@ -32,19 +35,9 @@ export async function signupAction(req: Request, res: Response) {
 		activated: userAccountActivatedByDefault,
 		identityConfirmedAt: new Date(),
 	});
-	// find the signup code associated with the user credentials
-	const storedCode = await getAppCtx().signupCodesRepository.find({
-		email: data.email,
-		phoneNumber: data.phoneNumber,
-	});
-	if (!storedCode) {
-		return ApiResponse.error(
-			AppError.SERVER_ERROR({ errCode: APP_ERR_CODES.MISSING_SIGNUP_CODE }),
-		).send(res);
-	}
-	await validateOTP(data.signupCode, storedCode);
+	await validateSignupCode({ code: data.signupCode, ...data });
 
-	getAppCtx()
+	return getAppCtx()
 		.userRepository.create(dto)
 		.then((newUser) => {
 			if (!newUser) {
@@ -101,43 +94,42 @@ export async function logoutAction(req: Request, res: Response) {
 
 export async function createSignupCodeAction(req: Request, res: Response) {
 	const data = await authRequests.createSignupCode.body.parseAsync(req.body);
+	const isUnique = await getAppCtx().userRepository.verifyCredentialsAreUnique(
+		data.phoneNumber,
+		data.email,
+	);
+
+	if (!isUnique) {
+		return ApiResponse.error(AppError.ACCOUNT_ALREADY_EXISTS()).send(res);
+	}
+	await getAppCtx().otpRepository.delete(
+		getSignupCodeUniqueIdentifier(data),
+		OTP_PURPOSES.signupConfirmation,
+	);
+	const otp = generateOTP({
+		length: env.SIGNUP_CODE_LENGTH,
+		expirationInMinutes: env.SIGNUP_CODE_EXPIRATION,
+		issuedFor: getSignupCodeUniqueIdentifier(data),
+		purpose: OTP_PURPOSES.signupConfirmation,
+	});
 
 	return getAppCtx()
-		.userRepository.verifyCredentialsAreUnique(data.phoneNumber, data.email)
-		.then((isUnique) => {
-			if (isUnique) {
-				const otp = generateOTP(env.SIGNUP_CODE_LENGTH);
-				const signupCode: SignupCode = {
-					code: otp,
-					expiresAt: getExpiresAt(env.SIGNUP_CODE_EXPIRATION),
-					email: data.email,
-					phoneNumber: data.phoneNumber,
-				};
-				return getAppCtx()
-					.signupCodesRepository.store(signupCode)
-					.then((storedCode) => sendSignupCode(storedCode, data.receiveVia))
-					.then((_) => ApiResponse.success({ statusCode: StatusCodes.CREATED }));
-			}
-			return ApiResponse.error(AppError.ACCOUNT_ALREADY_EXISTS());
-		})
+		.otpRepository.store(otp)
+		.then((storedOtp) => sendSignupCode(data, otp))
+		.then((_) => ApiResponse.success({ statusCode: StatusCodes.CREATED }))
 		.then((response) => response.send(res));
 }
 export async function confirmIdentityAction(req: Request, res: Response) {
 	const data = await authRequests.confirmIdentity.body.parseAsync(req.body);
-	const providedCode = data.code;
 	const user = getUserFromResponse(res);
 
-	return getAppCtx()
-		.identityConfirmationRepo.findBy(user)
-		.then((identityConfirmation) => validateOTP(providedCode, identityConfirmation))
+	return validateIdentityConfirmationCode(data.code, user)
 		.then((_) =>
 			getAppCtx().userRepository.update(user!, { identityConfirmedAt: new Date() }),
 		)
 		.then((user) => {
 			if (!user) {
 				logUserUpdateResultIsUndefined();
-			} else {
-				getAppCtx().identityConfirmationRepo.deleteAllForUser(user);
 			}
 		})
 		.then((_) => ApiResponse.success().send(res));

@@ -3,7 +3,6 @@ import { authRoutes } from "@/api/auth/authRouter";
 import { UserSchema } from "@/api/user/user.model";
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
@@ -60,9 +59,7 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
 				description: "Failure: signup code is missing for these credentials",
 				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(
-					AppError.SERVER_ERROR({ errCode: APP_ERR_CODES.MISSING_SIGNUP_CODE }),
-				),
+				example: ApiResponse.error(AppError.INVALID_OTP()),
 			},
 		]),
 	});

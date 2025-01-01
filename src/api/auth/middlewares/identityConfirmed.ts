@@ -2,10 +2,11 @@ import AppError from "@/common/models/appError";
 import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { generateUserTOTP } from "@/common/utils/otp";
 import type { IUser } from "@/interfaces/IUser";
 import { MailNotification } from "@/notifications/MailNotification";
 import { sendMailNotification } from "@/notifications/mail.utils";
+import { OTP_PURPOSES } from "@/otp/otp.types";
+import { generateIdentityConfirmationOTP } from "@/otp/otp.utils";
 import type { NextFunction, Request, Response } from "express";
 import { getUserFromResponse } from "../utils";
 
@@ -15,21 +16,22 @@ export async function identityConfirmed(
 	next: NextFunction,
 ) {
 	const user = getUserFromResponse(res);
-	if (lastConfirmedAtIsValid(user.identityConfirmedAt)) {
+	if (confirmationDateIsValid(user.identityConfirmedAt)) {
 		next();
 	}
-	const lastConfirmationCode = await getAppCtx().identityConfirmationRepo.findBy(user);
+	const lastConfirmationCode = await getAppCtx().otpRepository.findIdentityConfirmation(
+		user,
+		{ unexpiredOnly: true },
+	);
 
-	const shouldSendNewCode = !lastConfirmationCode;
-
-	if (shouldSendNewCode) {
-		const newConfirmation = await createIdentityConfirmationCode(user);
-		const notification = MailNotification.identityConfirmation(newConfirmation);
+	if (!lastConfirmationCode) {
+		const otp = await createIdentityConfirmationCode(user);
+		const notification = MailNotification.identityConfirmation(user, otp);
 		sendMailNotification(notification);
 	}
 	throw AppError.FORBIDDEN({ errCode: APP_ERR_CODES.CONFIRM_IDENTITY });
 }
-function lastConfirmedAtIsValid(confirmationDate: Date | null): boolean {
+function confirmationDateIsValid(confirmationDate: Date | null): boolean {
 	if (!confirmationDate) {
 		return false;
 	}
@@ -38,12 +40,11 @@ function lastConfirmedAtIsValid(confirmationDate: Date | null): boolean {
 	return Date.now() < confirmedAtPlusTimeWindow;
 }
 async function createIdentityConfirmationCode(user: IUser) {
-	const totp = generateUserTOTP(
-		user,
-		env.IDENTITY_CONFIRMATION_CODE_LENGTH,
-		env.IDENTITY_CONFIRMATION_CODE_EXPIRATION,
+	const otp = generateIdentityConfirmationOTP(user);
+	await getAppCtx().otpRepository.delete(
+		user.id.toString(),
+		OTP_PURPOSES.identityConfirmation,
 	);
-	return getAppCtx()
-		.identityConfirmationRepo.deleteAllForUser(user)
-		.then((_) => getAppCtx().identityConfirmationRepo.store(totp));
+	await getAppCtx().otpRepository.store(otp);
+	return otp;
 }

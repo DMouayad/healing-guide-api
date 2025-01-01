@@ -1,9 +1,11 @@
 import { APP_ROLES } from "@/common/types";
 import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
 import { logger } from "@/common/utils/logger";
+import { commonZodSchemas, z_enumFromArray } from "@/common/zod/common";
 
 import { IUser } from "@/interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
+import { z } from "zod";
 
 export class DBUser extends IUser {
 	public static fromQueryResult(kyselyUser?: KyselyQueryUser): DBUser | undefined {
@@ -59,3 +61,13 @@ export function prepareUserToInsertWithKysely(user: IUser) {
 		password_hash: user.passwordHash,
 	};
 }
+export const UserSchema = z.object({
+	id: z.number(),
+	activated: z.boolean().default(false),
+	role: z_enumFromArray(Object.keys(APP_ROLES)),
+	email: z.string().email(),
+	phoneNumber: commonZodSchemas.phoneNumber,
+	createdAt: z.string().datetime(),
+	emailVerifiedAt: z.string().datetime().optional(),
+	phoneNumberVerifiedAt: z.string().datetime().optional(),
+});

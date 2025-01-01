@@ -1,14 +1,15 @@
-import type { SignupCode } from "@/api/auth/auth.types";
+import { SIGNUP_CODE_SENDING_METHODS } from "@/api/auth/auth.types";
 import { isAdmin } from "@/api/auth/middlewares/isAdmin";
-import { generateEmailVerificationTOTP } from "@/api/user/verification/utils";
 import { createUser } from "@/common/factories/userFactory";
-import { getExpiresAt } from "@/common/utils/dateHelpers";
+import { APP_ROLES } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
-import { generateUserTOTP } from "@/common/utils/otp";
-import type { IUser } from "@/interfaces/IUser";
+import {
+	generateEmailVerificationOTP,
+	generateIdentityConfirmationOTP,
+} from "@/otp/otp.utils";
 import { faker } from "@faker-js/faker";
 import express, { type Request, type Response } from "express";
-import { MailNotification } from "../MailNotification";
+import { MailNotification, SignupCodeMailNotification } from "../MailNotification";
 import { emailVerificationMailTemplate } from "./emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "./identityConfirmationTemplate";
 import { signupCodeMailTemplate } from "./signupCodeTemplate";
@@ -19,36 +20,31 @@ if (env.NODE_ENV !== "development") {
 }
 mailTemplatesRouter.get("/email-verification", async (_req: Request, res: Response) => {
 	const user = await createUser();
-	const ev = generateEmailVerificationTOTP(user);
-	return res.send(emailVerificationMailTemplate(ev));
+	const otp = generateEmailVerificationOTP(user);
+	const notification = MailNotification.emailVerification(user, otp);
+	return res.send(emailVerificationMailTemplate(notification));
 });
 
 mailTemplatesRouter.get(
 	"/identity-confirmation",
 	async (_req: Request, res: Response) => {
 		const user = await createUser();
-		const notification = createIdentityConfirmationNotification(user);
-		return res.send(identityConfirmationMailTemplate(notification.userTOTP));
+		const otp = generateIdentityConfirmationOTP(user);
+
+		const notification = MailNotification.identityConfirmation(user, otp);
+		return res.send(identityConfirmationMailTemplate(notification));
 	},
 );
 
 mailTemplatesRouter.get("/signup-code", async (_req: Request, res: Response) => {
-	return res.send(signupCodeMailTemplate(createFakeSignupCode()));
+	const notification = new SignupCodeMailNotification(createFakeSignupCode(), "1234");
+	return res.send(signupCodeMailTemplate(notification));
 });
-
-function createIdentityConfirmationNotification(user: IUser) {
-	const totp = generateUserTOTP(
-		user,
-		env.IDENTITY_CONFIRMATION_CODE_LENGTH,
-		env.IDENTITY_CONFIRMATION_CODE_EXPIRATION,
-	);
-	return MailNotification.identityConfirmation(totp);
-}
-function createFakeSignupCode(): SignupCode {
+function createFakeSignupCode() {
 	return {
-		code: "123456",
 		email: faker.internet.email(),
 		phoneNumber: faker.phone.number(),
-		expiresAt: getExpiresAt(60),
+		receiveVia: SIGNUP_CODE_SENDING_METHODS.mail,
+		role: APP_ROLES.patient,
 	};
 }

@@ -1,5 +1,7 @@
-import type { SignupCode } from "@/api/auth/auth.types";
-import type { ObjectValues, UserTOTP } from "@/common/types";
+import type { SignupCodeViaEmail } from "@/api/auth/auth.types";
+import type { ObjectValues } from "@/common/types";
+import type { IUser } from "@/interfaces/IUser";
+import type { OTPWithCode } from "@/otp/otp.types";
 
 export const MAIL_NOTIFICATIONS = {
 	emailVerification: "EMAIL_VERIFICATION_NOTIFICATION",
@@ -12,23 +14,24 @@ export abstract class MailNotification {
 	constructor(readonly type: MailNotificationType) {}
 	abstract getReceiver(): string;
 
-	static signupCode(code: SignupCode) {
-		return new SignupCodeMailNotification(code);
+	static signupCode(signupCode: SignupCodeViaEmail, otpCode: string) {
+		return new SignupCodeMailNotification(signupCode, otpCode);
 	}
-	static emailVerification(userTOTP: UserTOTP) {
-		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.emailVerification);
+	static emailVerification(user: IUser, otp: OTPWithCode) {
+		return new OTPMailNotification(user, otp, MAIL_NOTIFICATIONS.emailVerification);
 	}
-	static identityConfirmation(userTOTP: UserTOTP) {
-		return new TOTPMailNotification(userTOTP, MAIL_NOTIFICATIONS.identityConfirmation);
+	static identityConfirmation(user: IUser, otp: OTPWithCode) {
+		return new OTPMailNotification(user, otp, MAIL_NOTIFICATIONS.identityConfirmation);
 	}
 }
 
-export class TOTPMailNotification extends MailNotification {
+export class OTPMailNotification extends MailNotification {
 	override getReceiver(): string {
-		return this.userTOTP.user.email;
+		return this.user.email;
 	}
 	constructor(
-		readonly userTOTP: UserTOTP,
+		readonly user: IUser,
+		readonly otp: OTPWithCode,
 		type: MailNotificationType,
 	) {
 		super(type);
@@ -37,9 +40,12 @@ export class TOTPMailNotification extends MailNotification {
 
 export class SignupCodeMailNotification extends MailNotification {
 	override getReceiver(): string {
-		return this.signupCode.email!;
+		return this.signupCode.email;
 	}
-	constructor(readonly signupCode: SignupCode) {
+	constructor(
+		readonly signupCode: SignupCodeViaEmail,
+		readonly otpCode: string,
+	) {
 		super(MAIL_NOTIFICATIONS.signupCode);
 	}
 }

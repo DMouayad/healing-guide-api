@@ -55,13 +55,6 @@ export const APP_ROLES = {
 	physician: { roleId: 5, slug: "physician" },
 } as const;
 
-/** Time-based OTP issued for a user */
-export type UserTOTP = {
-	user: IUser;
-	expiresAt: Date;
-	code: string;
-};
-
 export abstract class IAppEvent {
 	constructor(readonly name: string) {}
 	abstract handler(): void;
