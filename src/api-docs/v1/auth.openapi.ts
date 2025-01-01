@@ -44,22 +44,17 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				example: ApiResponse.error(AppError.ACCOUNT_ALREADY_EXISTS()),
 			},
 			{
-				statusCode: StatusCodes.GONE,
-				description: "Failure: signup code has expired",
+				statusCode: StatusCodes.BAD_REQUEST,
+				description: "Failure: invalid signup code",
 				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.EXPIRED_OTP()),
-			},
-			{
-				statusCode: StatusCodes.FORBIDDEN,
-				description: "Failure: wrong signup code",
-				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.FORBIDDEN()),
-			},
-			{
-				statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-				description: "Failure: signup code is missing for these credentials",
-				schema: ZodAppErrorSchema,
-				example: ApiResponse.error(AppError.INVALID_OTP()),
+				examples: {
+					"signup code has expired": {
+						value: ApiResponse.error(AppError.EXPIRED_OTP()),
+					},
+					"signup code is wrong": {
+						value: ApiResponse.error(AppError.INVALID_OTP()),
+					},
+				},
 			},
 		]),
 	});
