@@ -14,6 +14,6 @@ export const HEALING_GUIDE_WEBSITE = "https://dmouayad.github.io/healing-guide-w
 export const IMAGES = {
 	logo: {
 		name: "App_Logo",
-		path: "./src/notifications/mailTemplates/images/logo.png",
+		path: "./src/transactionalEmailTemplates/images/logo.png",
 	},
 } as const;

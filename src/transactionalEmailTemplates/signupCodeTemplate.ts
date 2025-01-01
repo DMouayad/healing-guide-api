@@ -1,14 +1,15 @@
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
-import type { OTPMailNotification } from "../MailNotification";
-import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
+import type { SignupCodeMailNotification } from "@/notifications/MailNotification";
+import { LOGO_IMG_CID } from "@/notifications/services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
 	const d = new Date();
-	d.setHours(0, env.IDENTITY_CONFIRMATION_CODE_EXPIRATION, 0, 0);
+	d.setHours(0, env.SIGNUP_CODE_EXPIRATION, 0, 0);
 	return d.getMinutes();
 }
-export function identityConfirmationMailTemplate(notification: OTPMailNotification) {
+const title = "Complete your registration";
+export function signupCodeMailTemplate(notification: SignupCodeMailNotification) {
 	return `
     <!DOCTYPE html>
 <html>
@@ -162,7 +163,8 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Confirm Your identity</h1>
+            <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">${title}</h1>
+            <h2 style="margin: 0;  font-weight: 700; letter-spacing: -1px; line-height: 48px;">Thank you for joining us</h2>
             </td>
           </tr>
         </table>
@@ -188,7 +190,7 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Please use the following code to confirm your identity and access\\modify your account settings:</p>
+              <p style="margin: 0;">Use the following code in order to finish your signup process:</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -198,11 +200,11 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
             <td align="left" bgcolor="#ffffff">
               <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td align="center" bgcolor="#ffffff" style="padding: 12px;">
+                  <td align="center" bgcolor="#ffffff" style="padding: 0 24px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
-                          <p>${notification.otp.code}</p>
+                          <p>${notification.otpCode}</p>
                         </td>
                       </tr>
                     </table>
@@ -214,16 +216,15 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
           <!-- end button -->
 <!-- start copy -->
           <tr>
-            <td align="left" bgcolor="#ffffff" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                <p style="margin: 0;">This code expires after ${getTimeToExpiration()} minutes.</p>
+            <td align="left" bgcolor="#ffffff" style="padding: 0 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                <p style="margin: 0;">This code will expire in ${getTimeToExpiration()} minutes.</p>
             </td>
           </tr>
           <!-- end copy -->
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">If you did not request to access your account, we recommend that you change your password immediately or contact us at</p>
-              <p style="margin: 0;"><a href="mailto:healingguide@zohomail.eu" target="_blank">healingguide@zohomail.eu</a></p>
+              <p style="margin: 0;">If you did not signup with our app, you can safely ignore this email</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -260,7 +261,7 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
 
           <!-- start unsubscribe -->
           <tr>
-            <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <td align="center" bgcolor="#e9ecef" style="padding: 0 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
               <p style="margin: 0;"><a href=${HEALING_GUIDE_WEBSITE} target="_blank">Healing Guide</a></p>
               <p style="margin: 0;">Damsscus, Syria, +963 912 345 678</p>
             </td>

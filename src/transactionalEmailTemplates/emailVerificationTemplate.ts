@@ -1,7 +1,7 @@
 import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
 import { env } from "@/common/utils/envConfig";
-import type { OTPMailNotification } from "../MailNotification";
-import { LOGO_IMG_CID } from "../services/NodemailerEmailNotifier";
+import type { OTPMailNotification } from "@/notifications/MailNotification";
+import { LOGO_IMG_CID } from "@/notifications/services/NodemailerEmailNotifier";
 
 function getTimeToExpireInHours(): number {
 	const d = new Date();
@@ -198,7 +198,7 @@ export function emailVerificationMailTemplate(notification: OTPMailNotification)
             <td align="left" bgcolor="#ffffff">
               <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td align="center" bgcolor="#ffffff" style="padding: 12px;">
+                  <td align="center" bgcolor="#ffffff" style="padding: 0 24px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#fff" style="letter-spacing:5px;font-weight:bold;font-size:28px">
@@ -214,8 +214,8 @@ export function emailVerificationMailTemplate(notification: OTPMailNotification)
           </tr>
            <!-- start copy -->
           <tr>
-            <td align="left" bgcolor="#ffffff" style="padding:  12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                <p style="margin: 0;">This code expires after ${getTimeToExpireInHours()} hours.</p>
+            <td align="left" bgcolor="#ffffff" style="padding: 0 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                <p style="margin: 0;">This code will expire in ${getTimeToExpireInHours()} hours.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -263,7 +263,7 @@ export function emailVerificationMailTemplate(notification: OTPMailNotification)
 
           <!-- start unsubscribe -->
           <tr>
-            <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <td align="center" bgcolor="#e9ecef" style="padding: 0 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
               <p style="margin: 0;"><a href=${HEALING_GUIDE_WEBSITE} target="_blank">Healing Guide</a></p>
               <p style="margin: 0;">Damsscus, Syria, +963 912 345 678</p>
             </td>

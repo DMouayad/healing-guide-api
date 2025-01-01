@@ -19,7 +19,7 @@ import { userRouter } from "./api/user/user.router";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
 import { requestLogger } from "./middleware/requestLogger";
-import { mailTemplatesRouter } from "./notifications/mailTemplates/router";
+import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
 const app: Express = express();
 // Set the application to trust the reverse proxy
@@ -41,6 +41,7 @@ app.use(hasValidContentType);
 app.use("/health-check", healthCheckRouter);
 // Restful API Routes - latest version
 const apiRouter: Router = Router();
+app.use("/mail-templates", mailTemplatesRouter);
 app.use(`/api/${env.API_VERSION}`, apiRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
@@ -51,7 +52,6 @@ apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
-app.use("/mail-templates", mailTemplatesRouter);
 // Swagger UI
 app.use(openAPIRouter);
 // Error handlers

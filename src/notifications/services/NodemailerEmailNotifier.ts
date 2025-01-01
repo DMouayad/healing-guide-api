@@ -9,10 +9,10 @@ import {
 	OTPMailNotification,
 	SignupCodeMailNotification,
 } from "@/notifications/MailNotification";
-import { emailVerificationMailTemplate } from "@/notifications/mailTemplates/emailVerificationTemplate";
+import { emailVerificationMailTemplate } from "@/transactionalEmailTemplates/emailVerificationTemplate";
+import { identityConfirmationMailTemplate } from "@/transactionalEmailTemplates/identityConfirmationTemplate";
+import { signupCodeMailTemplate } from "@/transactionalEmailTemplates/signupCodeTemplate";
 import type Mail from "nodemailer/lib/mailer";
-import { identityConfirmationMailTemplate } from "../mailTemplates/identityConfirmationTemplate";
-import { signupCodeMailTemplate } from "../mailTemplates/signupCodeTemplate";
 
 export const LOGO_IMG_CID = "template_logo_img";
 

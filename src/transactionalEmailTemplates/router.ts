@@ -4,12 +4,15 @@ import { createUser } from "@/common/factories/userFactory";
 import { APP_ROLES } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import {
+	MailNotification,
+	SignupCodeMailNotification,
+} from "@/notifications/MailNotification";
+import {
 	generateEmailVerificationOTP,
 	generateIdentityConfirmationOTP,
 } from "@/otp/otp.utils";
 import { faker } from "@faker-js/faker";
 import express, { type Request, type Response } from "express";
-import { MailNotification, SignupCodeMailNotification } from "../MailNotification";
 import { emailVerificationMailTemplate } from "./emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "./identityConfirmationTemplate";
 import { signupCodeMailTemplate } from "./signupCodeTemplate";
