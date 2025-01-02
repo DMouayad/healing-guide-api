@@ -16,6 +16,7 @@ import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
 import { physicianRouter } from "./api/physician/physician.router";
 import { physicianFeedbackRouter } from "./api/physicianFeedback/router";
 import { userRouter } from "./api/user/user.router";
+import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
 import { requestLogger } from "./middleware/requestLogger";
@@ -23,7 +24,7 @@ import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
 const app: Express = express();
 // Set the application to trust the reverse proxy
-app.set("trust proxy", true);
+app.set("trust proxy", getTrustedProxiesFromEnv());
 
 // Middlewares
 app.use(express.json());

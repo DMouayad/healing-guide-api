@@ -9,6 +9,10 @@ export const env = cleanEnv(process.env, {
 		choices: ["development", "production", "test"],
 	}),
 	HMAC_SECRET: str(),
+	TRUSTED_PROXIES: str({
+		desc: "A comma-separated list of IP addresses",
+		devDefault: "loopback",
+	}),
 	ZOHO_EMAIL: str(),
 	ZOHO_PASSWORD: str(),
 	DEFAULT_OTP_LENGTH: num({ devDefault: 7 }),
