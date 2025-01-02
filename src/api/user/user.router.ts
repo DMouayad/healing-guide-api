@@ -1,12 +1,15 @@
-import express, { type Request, type Response, type Router } from "express";
+import rateLimitByIP from "@/middleware/rateLimitByIP";
+import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { isAdmin } from "../auth/middlewares/isAdmin";
-import { getUserFromResponse } from "../auth/utils";
+
+import rateLimitByUser from "@/middleware/rateLimitByUser";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
 	updateUserActivationStatus,
 } from "./user.actions";
+import rateLimiters from "./user.rateLimiters";
 import {
 	sendEmailVerificationAction,
 	sendPhoneVerificationAction,
@@ -39,21 +42,34 @@ userRouter.patch(
 /**======================== END OF Admin Protected Routes ================================== */
 
 /**======================== Email Verification ================================== */
-userRouter.post(userRoutes.verifyEmail, authenticated, verifyEmailAction);
+userRouter.post(
+	userRoutes.verifyEmail,
+	rateLimitByIP(rateLimiters.verifyEmail.byIP),
+	authenticated,
+	rateLimitByUser(rateLimiters.verifyEmail.byUser),
+	verifyEmailAction,
+);
 userRouter.post(
 	userRoutes.sendEmailVerification,
+	rateLimitByIP(rateLimiters.sendEmailVerification.byIP),
 	authenticated,
+	rateLimitByUser(rateLimiters.sendEmailVerification.byUser),
 	sendEmailVerificationAction,
 );
 /**======================== END Of Email Verification ================================== */
 /**======================== Phone Verification ================================== */
-userRouter.post(userRoutes.verifyPhone, authenticated, verifyPhoneAction);
+userRouter.post(
+	userRoutes.verifyPhone,
+	rateLimitByIP(rateLimiters.verifyPhone.byIP),
+	authenticated,
+	rateLimitByUser(rateLimiters.verifyPhone.byUser),
+	verifyPhoneAction,
+);
 userRouter.post(
 	userRoutes.sendPhoneVerification,
+	rateLimitByIP(rateLimiters.sendPhoneVerification.byIP),
 	authenticated,
+	rateLimitByUser(rateLimiters.sendPhoneVerification.byUser),
 	sendPhoneVerificationAction,
 );
-function getCurrentUserId(_req: Request, res: Response) {
-	return getUserFromResponse(res).id.toString();
-}
 /**======================== END Of Phone Verification ================================== */
