@@ -1,4 +1,3 @@
-import rateLimiter from "@/middleware/rateLimiter";
 import { Router } from "express";
 import {
 	confirmIdentityAction,
@@ -18,11 +17,7 @@ export const authRoutes = {
 export const authRouter: Router = Router();
 authRouter.post(authRoutes.logout, authenticated, logoutAction);
 authRouter.post(authRoutes.signup, signupAction);
-authRouter.post(
-	authRoutes.createSignupCode,
-	rateLimiter(3, 15),
-	createSignupCodeAction,
-);
+authRouter.post(authRoutes.createSignupCode, createSignupCodeAction);
 authRouter.post(authRoutes.login, loginAction);
 
 authRouter.post(authRoutes.confirmIdentity, authenticated, confirmIdentityAction);

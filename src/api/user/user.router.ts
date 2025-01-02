@@ -1,4 +1,3 @@
-import rateLimiter from "@/middleware/rateLimiter";
 import express, { type Request, type Response, type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { isAdmin } from "../auth/middlewares/isAdmin";
@@ -44,7 +43,6 @@ userRouter.post(userRoutes.verifyEmail, authenticated, verifyEmailAction);
 userRouter.post(
 	userRoutes.sendEmailVerification,
 	authenticated,
-	rateLimiter(3, 15, getCurrentUserId),
 	sendEmailVerificationAction,
 );
 /**======================== END Of Email Verification ================================== */
@@ -53,7 +51,6 @@ userRouter.post(userRoutes.verifyPhone, authenticated, verifyPhoneAction);
 userRouter.post(
 	userRoutes.sendPhoneVerification,
 	authenticated,
-	rateLimiter(3, 15, getCurrentUserId),
 	sendPhoneVerificationAction,
 );
 function getCurrentUserId(_req: Request, res: Response) {

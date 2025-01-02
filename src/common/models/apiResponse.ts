@@ -1,5 +1,6 @@
 import type { Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { ClassProperties } from "../types";
 import type AppError from "./appError";
 import type { AppErrCode } from "./errorCodes";
 
@@ -27,6 +28,9 @@ export default abstract class ApiResponse {
 
 	static error(error: AppError): ErrorApiResponse {
 		return new ErrorApiResponse(error);
+	}
+	static rateLimited(props: { retryAfterSecs?: number } = {}): RateLimitedApiResponse {
+		return new RateLimitedApiResponse(props);
 	}
 
 	/**
@@ -61,4 +65,19 @@ export class ErrorApiResponse extends ApiResponse {
 		description?: string;
 		errCode: AppErrCode;
 	};
+}
+
+export class RateLimitedApiResponse extends ApiResponse {
+	readonly retryAfterSecs?: number;
+	constructor(props: { retryAfterSecs?: number }) {
+		super(StatusCodes.TOO_MANY_REQUESTS);
+		this.retryAfterSecs = props.retryAfterSecs;
+	}
+	override send(res: Response): void {
+		res.status(this.statusCode);
+		if (this.retryAfterSecs) {
+			res.setHeader("Retry-After", this.retryAfterSecs);
+		}
+		res.send("Too Many Requests");
+	}
 }

@@ -64,3 +64,13 @@ export type SimplePaginationParams = {
 	from: number;
 };
 export type PaginatedJsonResponse = typeof ZodPaginatedJsonResponse._output;
+
+export type RateLimitConfig = {
+	maxRequests: number;
+	resetDuration: number;
+	blockDuration?: number;
+};
+export type MultipleRateLimits = {
+	byIP: RateLimitConfig;
+	byCredentials: RateLimitConfig;
+};

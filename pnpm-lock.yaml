@@ -35,9 +35,6 @@ importers:
       express:
         specifier: ^5.0.1
         version: 5.0.1
-      express-rate-limit:
-        specifier: ^7.5.0
-        version: 7.5.0(express@5.0.1)
       helmet:
         specifier: ^8.0.0
         version: 8.0.0
@@ -62,6 +59,9 @@ importers:
       pino:
         specifier: ^9.6.0
         version: 9.6.0
+      proxy-addr:
+        specifier: ^2.0.7
+        version: 2.0.7
       rate-limiter-flexible:
         specifier: ^5.0.4
         version: 5.0.4
@@ -1249,12 +1249,6 @@ packages:
   expect-type@1.1.0:
     resolution: {integrity: sha512-bFi65yM+xZgk+u/KRIpekdSYkTB5W1pEf0Lt8Q8Msh7b+eQ7LXVtIB1Bkm4fvclDEL1b2CZkMhv2mOeF8tMdkA==}
     engines: {node: '>=12.0.0'}
-
-  express-rate-limit@7.5.0:
-    resolution: {integrity: sha512-eB5zbQh5h+VenMPM3fh+nw1YExi5nMr6HUCR62ELSP11huvxm/Uir1H1QEyTkk5QX6A58pX6NmaTMceKZ0Eodg==}
-    engines: {node: '>= 16'}
-    peerDependencies:
-      express: ^4.11 || 5 || ^5.0.0-beta.1
 
   express@5.0.1:
     resolution: {integrity: sha512-ORF7g6qGnD+YtUG9yx4DFoqCShNMmUKiXuT5oWMHiOvt/4WFbHC6yCwQMTSBMno7AqntNCAzzcnnjowRkTL9eQ==}
@@ -3357,10 +3351,6 @@ snapshots:
       strip-final-newline: 3.0.0
 
   expect-type@1.1.0: {}
-
-  express-rate-limit@7.5.0(express@5.0.1):
-    dependencies:
-      express: 5.0.1
 
   express@5.0.1:
     dependencies:

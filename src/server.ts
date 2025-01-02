@@ -6,7 +6,6 @@ import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { env } from "@/common/utils/envConfig";
 
-import rateLimiter from "@/middleware/rateLimiter";
 import { authRouter } from "./api/auth/authRouter";
 import { languageRouter } from "./api/languages/language.router";
 import { medicalConditionsRouter } from "./api/medicalConditions/router";
@@ -16,9 +15,11 @@ import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
 import { physicianRouter } from "./api/physician/physician.router";
 import { physicianFeedbackRouter } from "./api/physicianFeedback/router";
 import { userRouter } from "./api/user/user.router";
+import { defaultRateLimiterByIP } from "./common/rateLimiters";
 import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
+import rateLimitByIP from "./middleware/rateLimitByIP";
 import { requestLogger } from "./middleware/requestLogger";
 import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
@@ -31,7 +32,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
-app.use(rateLimiter());
+
+app.use(rateLimitByIP(defaultRateLimiterByIP));
 app.use(requestLogger);
 
 // for every PUT, POST or PATCH request will check if Request has the correct content-type headers

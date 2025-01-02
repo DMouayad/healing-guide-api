@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-import { cleanEnv, host, num, port, str, testOnly } from "envalid";
+import { cleanEnv, host, json, num, port, str, testOnly } from "envalid";
+import type { MultipleRateLimits, RateLimitConfig } from "../types";
 
 dotenv.config();
 
@@ -24,8 +25,9 @@ export const env = cleanEnv(process.env, {
 	HOST: host({ devDefault: "localhost" }),
 	PORT: port({ devDefault: 8080 }),
 	CORS_ORIGIN: str({ devDefault: "http://localhost:8080" }),
-	COMMON_RATE_LIMIT_MAX_REQUESTS: num({ devDefault: 100 }),
-	COMMON_RATE_LIMIT_WINDOW_MINUTES: num({ devDefault: 15 }),
+	API_DEFAULT_RATE_LIMIT: json<RateLimitConfig>(),
+	SEND_OTP_RATE_LIMIT: json<MultipleRateLimits>(),
+	VERIFY_USER_RATE_LIMIT: json<MultipleRateLimits>(),
 	DATABASE_URL: str({
 		example: "postgres://username:password@yourdomain.com/database",
 	}),
