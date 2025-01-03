@@ -22,15 +22,14 @@ import {
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
 	existingUser?: IUser,
-): Promise<IUser> {
+): Promise<boolean> {
 	if (
 		creds.emailOrPhoneNo === existingUser?.email ||
 		creds.emailOrPhoneNo === existingUser?.phoneNumber
 	) {
-		const matched = await bcrypt.compare(creds.password, existingUser.passwordHash);
-		return matched ? existingUser : Promise.reject(AppError.WRONG_LOGIN_CREDS());
+		return await bcrypt.compare(creds.password, existingUser?.passwordHash);
 	}
-	return Promise.reject(AppError.ACCOUNT_NOT_FOUND());
+	return false;
 }
 
 export async function issuePersonalAccessToken(

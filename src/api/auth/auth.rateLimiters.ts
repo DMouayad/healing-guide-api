@@ -12,4 +12,11 @@ export const authRateLimits = {
 			env.SEND_OTP_RATE_LIMIT.byCredentials,
 		),
 	},
+	login: {
+		byIP: memoryRateLimiter("login_limit_by_IP", env.LOGIN_RATE_LIMIT.byIP),
+		byCredentials: memoryRateLimiter(
+			"login_limit_by_credentials",
+			env.LOGIN_RATE_LIMIT.byCredentials,
+		),
+	},
 };

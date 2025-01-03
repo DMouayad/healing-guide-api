@@ -26,6 +26,6 @@ authRouter.post(
 	rateLimitByEmailAndPhone(authRateLimits.sendSignupCode.byCredentials),
 	createSignupCodeAction,
 );
-authRouter.post(authRoutes.login, loginAction);
+authRouter.post(authRoutes.login, loginAction(authRateLimits.login));
 
 authRouter.post(authRoutes.confirmIdentity, authenticated, confirmIdentityAction);

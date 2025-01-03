@@ -1,9 +1,15 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
+import {
+	type MultipleRateLimiters,
+	checkRateLimitsHavePoints,
+	consumeByIP,
+} from "@/common/rateLimiters";
 import { APP_ROLES, type AuthState } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
+import { getClientIp } from "@/common/utils/getClientIp";
 import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
 import { CreateUserDTO } from "@/interfaces/IUser";
 import { OTP_PURPOSES } from "@/otp/otp.types";
@@ -12,8 +18,9 @@ import {
 	validateIdentityConfirmationCode,
 	validateSignupCode,
 } from "@/otp/otp.utils";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { RateLimiterRes } from "rate-limiter-flexible";
 import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
@@ -54,27 +61,37 @@ export async function signupAction(req: Request, res: Response) {
 		.then((response) => response.send(res));
 }
 
-export async function loginAction(req: Request, res: Response) {
-	const data = await authRequests.login.body.parseAsync(req.body);
-	return getAppCtx()
-		.userRepository.findByEmailOrPhoneNumber(data.emailOrPhoneNo)
-		.then((user) => checkCredentials(data, user))
-		.then(async (authUser) => {
-			const user = await getAppCtx().userRepository.update(authUser, {
+export function loginAction(limiters: MultipleRateLimiters) {
+	return async (req: Request, res: Response, _: NextFunction) => {
+		const data = await authRequests.login.body.parseAsync(req.body);
+
+		await checkRateLimitsHavePoints(req, data.emailOrPhoneNo, limiters);
+
+		const user = await getAppCtx().userRepository.findByEmailOrPhoneNumber(
+			data.emailOrPhoneNo,
+		);
+		if (!user) {
+			await consumeByIP(limiters.byIP, req);
+			throw AppError.ACCOUNT_NOT_FOUND(); // Throw error to be caught below
+		}
+
+		const credsAreValid = await checkCredentials(data, user);
+		if (credsAreValid) {
+			await limiters.byCredentials.delete(data.emailOrPhoneNo);
+			await getAppCtx().userRepository.update(user, {
 				identityConfirmedAt: new Date(),
 			});
-			if (!user) {
-				logUserUpdateResultIsUndefined();
-			}
-			return user ?? authUser;
-		})
-		.then((authUser) =>
-			issuePersonalAccessToken(authUser, req.ip ?? authUser.passwordHash),
-		)
-		.then(getAccessTokenApiResponse)
-		.then((apiResponse) => apiResponse.send(res));
+			const tokenFingerPrint = getClientIp(req) ?? `${user.id}_${Date.now()}`;
+			const token = await issuePersonalAccessToken(user, tokenFingerPrint);
+			const apiResponse = getAccessTokenApiResponse(token);
+			return apiResponse.send(res);
+		} else {
+			await consumeByIP(limiters.byIP, req);
+			await limiters.byCredentials.consume(data.emailOrPhoneNo);
+			throw AppError.WRONG_LOGIN_CREDS();
+		}
+	};
 }
-
 export async function logoutAction(req: Request, res: Response) {
 	const authState: AuthState | undefined = res.locals.auth;
 	if (!authState) {
