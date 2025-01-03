@@ -1,3 +1,5 @@
+import rateLimitByEmailAndPhone from "@/middleware/rateLimitByEmailAndPhone";
+import rateLimitByIP from "@/middleware/rateLimitByIP";
 import { Router } from "express";
 import {
 	confirmIdentityAction,
@@ -6,6 +8,7 @@ import {
 	logoutAction,
 	signupAction,
 } from "./auth.actions";
+import { authRateLimits } from "./auth.rateLimiters";
 import { authenticated } from "./middlewares/authenticated";
 export const authRoutes = {
 	signup: "/signup",
@@ -17,7 +20,12 @@ export const authRoutes = {
 export const authRouter: Router = Router();
 authRouter.post(authRoutes.logout, authenticated, logoutAction);
 authRouter.post(authRoutes.signup, signupAction);
-authRouter.post(authRoutes.createSignupCode, createSignupCodeAction);
+authRouter.post(
+	authRoutes.createSignupCode,
+	rateLimitByIP(authRateLimits.sendSignupCode.byIP),
+	rateLimitByEmailAndPhone(authRateLimits.sendSignupCode.byCredentials),
+	createSignupCodeAction,
+);
 authRouter.post(authRoutes.login, loginAction);
 
 authRouter.post(authRoutes.confirmIdentity, authenticated, confirmIdentityAction);
