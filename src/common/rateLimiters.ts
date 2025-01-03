@@ -1,6 +1,12 @@
-import { RateLimiterMemory, type RateLimiterRes } from "rate-limiter-flexible";
+import { z } from "zod";
 import type { RateLimitConfig } from "./types";
 import { env } from "./utils/envConfig";
+import { commonZodSchemas } from "./zod/common";
+
+export type MultipleRateLimiters = {
+	byIP: RateLimiterAbstract;
+	byCredentials: RateLimiterAbstract;
+};
 
 export const memoryRateLimiter = (limiterName: string, config: RateLimitConfig) => {
 	return new RateLimiterMemory({
