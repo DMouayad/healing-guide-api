@@ -1,4 +1,5 @@
 import ApiResponse from "@/common/models/apiResponse";
+import { getRetryAfterSecs } from "@/common/rateLimiters";
 import { getClientIp } from "@/common/utils/getClientIp";
 import { logger } from "@/common/utils/logger";
 import type { NextFunction, Request, Response } from "express";
@@ -17,11 +18,10 @@ export default (limiter: RateLimiterAbstract) =>
 				.consume(clientIP)
 				.then((_) => next())
 				.catch(async (_) => {
-					const ipRes = await limiter.get(clientIP);
-					const retryAfterSecs = ipRes?.msBeforeNext
-						? Math.floor(ipRes.msBeforeNext / 60)
-						: undefined;
-					return ApiResponse.rateLimited({ retryAfterSecs }).send(res);
+					const rateLimitRes = await limiter.get(clientIP);
+					return ApiResponse.rateLimited({
+						retryAfterSecs: getRetryAfterSecs(rateLimitRes),
+					}).send(res);
 				});
 		}
 	};

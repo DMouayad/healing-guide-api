@@ -1,4 +1,4 @@
-import { RateLimiterMemory } from "rate-limiter-flexible";
+import { RateLimiterMemory, type RateLimiterRes } from "rate-limiter-flexible";
 import type { RateLimitConfig } from "./types";
 import { env } from "./utils/envConfig";
 
@@ -14,3 +14,7 @@ export const defaultRateLimiterByIP = memoryRateLimiter(
 	"Default_IP_limiter",
 	env.API_DEFAULT_RATE_LIMIT,
 );
+
+export function getRetryAfterSecs(res: RateLimiterRes | null) {
+	return res?.msBeforeNext ? Math.round(res.msBeforeNext / 1000) || 1 : undefined;
+}
