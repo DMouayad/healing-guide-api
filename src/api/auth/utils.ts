@@ -1,6 +1,7 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import type { CreateAccessTokenParams, Role } from "@/common/types";
+import { getExpiresAt } from "@/common/utils/dateHelpers";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { generateRandomString, sha256 } from "@/common/utils/hashing";
@@ -56,7 +57,9 @@ async function createToken(params: CreateAccessTokenParams): Promise<NewAccessTo
 		hash: sha256(plainTextToken),
 		fingerprint: params.name,
 		createdAt: new Date(),
-		expiresAt: getExpiresAt(params.expirationInMinutes),
+		expiresAt: getExpiresAt(
+			params.expirationInMinutes ?? env.PERSONAL_ACCESS_TOKEN_EXPIRATION,
+		),
 	};
 	// @ts-ignore missing property `id`on `token` => will be assigned after saving the token
 	const tokenId = await getAppCtx().authTokensRepository.storeToken(token);
@@ -64,14 +67,6 @@ async function createToken(params: CreateAccessTokenParams): Promise<NewAccessTo
 		throw AppError.UNAUTHENTICATED();
 	}
 	return `${tokenId}|${plainTextToken}`;
-}
-
-function getExpiresAt(expirationInMinutes?: number) {
-	const expiresIn = expirationInMinutes ?? env.PERSONAL_ACCESS_TOKEN_EXPIRATION;
-	const createdAt = new Date();
-	const expiresAt = new Date();
-	expiresAt.setTime(createdAt.getTime() + expiresIn * 60000);
-	return expiresAt;
 }
 
 export function getUserFromResponse(res: Response, throwIfUndefined?: true): IUser;
