@@ -73,5 +73,5 @@ function validatePhoneNo(value: string, ctx: z.RefinementCtx) {
 		return z.NEVER;
 	}
 
-	return phoneNumber.formatInternational();
+	return phoneNumber.format("INTERNATIONAL", { fromCountry: "SY" });
 }
