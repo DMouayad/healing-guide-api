@@ -1,4 +1,4 @@
-import ApiResponse from "@/common/models/apiResponse";
+import AppError from "@/common/models/appError";
 import { getRetryAfterSecs } from "@/common/rateLimiters";
 import { commonZodSchemas } from "@/common/zod/common";
 import type { NextFunction, Request, Response } from "express";
@@ -23,8 +23,8 @@ export default (limiter: RateLimiterAbstract) =>
 			.then((_) => next())
 			.catch(async (_) => {
 				const rateLimitRes = await limiter.get(key);
-				return ApiResponse.rateLimited({
-					retryAfterSecs: getRetryAfterSecs(rateLimitRes),
-				}).send(res);
+
+				const retryAfterSecs = getRetryAfterSecs(rateLimitRes);
+				return Promise.reject(AppError.RATE_LIMIT_EXCEEDED({ retryAfterSecs }));
 			});
 	};

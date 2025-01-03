@@ -1,4 +1,4 @@
-import ApiResponse from "@/common/models/apiResponse";
+import AppError from "@/common/models/appError";
 import { getRetryAfterSecs } from "@/common/rateLimiters";
 import { getClientIp } from "@/common/utils/getClientIp";
 import { logger } from "@/common/utils/logger";
@@ -19,9 +19,8 @@ export default (limiter: RateLimiterAbstract) =>
 				.then((_) => next())
 				.catch(async (_) => {
 					const rateLimitRes = await limiter.get(clientIP);
-					return ApiResponse.rateLimited({
-						retryAfterSecs: getRetryAfterSecs(rateLimitRes),
-					}).send(res);
+					const retryAfterSecs = getRetryAfterSecs(rateLimitRes);
+					return Promise.reject(AppError.RATE_LIMIT_EXCEEDED({ retryAfterSecs }));
 				});
 		}
 	};

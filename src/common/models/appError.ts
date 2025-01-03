@@ -125,6 +125,9 @@ class AppError extends Error {
 			params,
 		);
 	}
+	static RATE_LIMIT_EXCEEDED(props: { retryAfterSecs?: number } = {}): AppError {
+		return new RateLimitError(props.retryAfterSecs);
+	}
 }
 function constructErr(
 	errCode: AppErrCode,
@@ -138,5 +141,13 @@ function constructErr(
 		params?.description,
 	);
 }
-
+export class RateLimitError extends AppError {
+	constructor(readonly retryAfterSecs?: number) {
+		super(
+			"Too many requests",
+			StatusCodes.TOO_MANY_REQUESTS,
+			APP_ERR_CODES.RATE_LIMIT_EXCEEDED,
+		);
+	}
+}
 export default AppError;

@@ -1,5 +1,5 @@
 import { getUserFromResponse } from "@/api/auth/utils";
-import ApiResponse from "@/common/models/apiResponse";
+import AppError from "@/common/models/appError";
 import { getRetryAfterSecs } from "@/common/rateLimiters";
 import type { NextFunction, Request, Response } from "express";
 import type { RateLimiterAbstract } from "rate-limiter-flexible";
@@ -13,8 +13,8 @@ export default (limiter: RateLimiterAbstract) =>
 			.then((_) => next())
 			.catch(async (_) => {
 				const rateLimitRes = await limiter.get(key);
-				return ApiResponse.rateLimited({
-					retryAfterSecs: getRetryAfterSecs(rateLimitRes),
-				}).send(res);
+
+				const retryAfterSecs = getRetryAfterSecs(rateLimitRes);
+				return Promise.reject(AppError.RATE_LIMIT_EXCEEDED({ retryAfterSecs }));
 			});
 	};
