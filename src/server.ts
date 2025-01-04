@@ -19,7 +19,7 @@ import { defaultRateLimiterByIP } from "./common/rateLimiters";
 import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";
 import { errorHandler, unexpectedRequestHandler } from "./middleware/errorHandler";
 import { hasValidContentType } from "./middleware/hasValidContentType";
-import rateLimitByIP from "./middleware/rateLimitByIP";
+import { rateLimiterByIP } from "./middleware/rateLimiter";
 import { requestLogger } from "./middleware/requestLogger";
 import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 
-app.use(rateLimitByIP(defaultRateLimiterByIP));
 app.use(requestLogger);
+app.use(rateLimiterByIP(defaultRateLimiterByIP));
 
 // for every PUT, POST or PATCH request will check if Request has the correct content-type headers
 app.use(hasValidContentType);

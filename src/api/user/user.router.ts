@@ -1,9 +1,8 @@
-import rateLimitByIP from "@/middleware/rateLimitByIP";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 
-import rateLimitByUser from "@/middleware/rateLimitByUser";
+import { rateLimiterByIP, rateLimiterByUser } from "@/middleware/rateLimiter";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
@@ -44,32 +43,32 @@ userRouter.patch(
 /**======================== Email Verification ================================== */
 userRouter.post(
 	userRoutes.verifyEmail,
-	rateLimitByIP(rateLimiters.verifyEmail.byIP),
+	rateLimiterByIP(rateLimiters.verifyEmail.byIP),
 	authenticated,
-	rateLimitByUser(rateLimiters.verifyEmail.byUser),
+	rateLimiterByUser(rateLimiters.verifyEmail.byUser),
 	verifyEmailAction,
 );
 userRouter.post(
 	userRoutes.sendEmailVerification,
-	rateLimitByIP(rateLimiters.sendEmailVerification.byIP),
+	rateLimiterByIP(rateLimiters.sendEmailVerification.byIP),
 	authenticated,
-	rateLimitByUser(rateLimiters.sendEmailVerification.byUser),
+	rateLimiterByUser(rateLimiters.sendEmailVerification.byUser),
 	sendEmailVerificationAction,
 );
 /**======================== END Of Email Verification ================================== */
 /**======================== Phone Verification ================================== */
 userRouter.post(
 	userRoutes.verifyPhone,
-	rateLimitByIP(rateLimiters.verifyPhone.byIP),
+	rateLimiterByIP(rateLimiters.verifyPhone.byIP),
 	authenticated,
-	rateLimitByUser(rateLimiters.verifyPhone.byUser),
+	rateLimiterByUser(rateLimiters.verifyPhone.byUser),
 	verifyPhoneAction,
 );
 userRouter.post(
 	userRoutes.sendPhoneVerification,
-	rateLimitByIP(rateLimiters.sendPhoneVerification.byIP),
+	rateLimiterByIP(rateLimiters.sendPhoneVerification.byIP),
 	authenticated,
-	rateLimitByUser(rateLimiters.sendPhoneVerification.byUser),
+	rateLimiterByUser(rateLimiters.sendPhoneVerification.byUser),
 	sendPhoneVerificationAction,
 );
 /**======================== END Of Phone Verification ================================== */

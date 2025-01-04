@@ -55,6 +55,28 @@ export const PhysicianFeedbackZodSchema = PhysicianFeedbackCategoryZodSchema.omi
 );
 
 export type PhysicianFeedback = typeof PhysicianFeedbackZodSchema._output;
+export const ZodPhysicianFeedbackWithResponse = PhysicianFeedbackZodSchema.merge(
+	z.object({
+		questions: z.array(
+			questionSchema.merge(
+				z.object({
+					userResponse: z.boolean().nullable(),
+					positiveResponseCount: z.number().max(100).min(0),
+					totalResponsesCount: z.number(),
+				}),
+			),
+		),
+	}),
+);
+export type PhysicianFeedbackWithUserResponses =
+	typeof ZodPhysicianFeedbackWithResponse._output;
+export const ZodPhysicianReceivedFeedback = z.object({
+	physicianId: commonZodSchemas.id,
+	questionId: commonZodSchemas.id,
+	userId: commonZodSchemas.id,
+	response: z.boolean(),
+});
+export type PhysicianReceivedFeedback = z.infer<typeof ZodPhysicianReceivedFeedback>;
 /**
  * Requests
  */

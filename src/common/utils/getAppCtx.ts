@@ -5,6 +5,7 @@ import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/Medical
 import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
 import { DBPhysicianRepository } from "@/api/physician/physician.repository";
+import { DBPhysicianReceivedFeedbackRepository } from "@/api/physician/physicianReceivedFeedbackRepository";
 import { DBPhysicianFeedbackRepository } from "@/api/physicianFeedback/PhysicianFeedbackRepository";
 import { DBUserRepository } from "@/api/user/user.repository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
@@ -25,6 +26,7 @@ const productionAppCtx: AppCtx = {
 	physicianFeedbackRepository: new DBPhysicianFeedbackRepository(),
 	physicianRepository: new DBPhysicianRepository(),
 	languagesRepository: new DBLanguageRepository(),
+	physicianReceivedFeedbackRepository: new DBPhysicianReceivedFeedbackRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

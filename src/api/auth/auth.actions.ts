@@ -1,5 +1,6 @@
 import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
+import { APP_ERR_CODES } from "@/common/models/errorCodes";
 import { myEventEmitter } from "@/common/models/myEventEmitter";
 import {
 	type MultipleRateLimiters,
@@ -12,6 +13,7 @@ import { getAppCtx } from "@/common/utils/getAppCtx";
 import { getClientIp } from "@/common/utils/getClientIp";
 import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
 import { CreateUserDTO } from "@/interfaces/IUser";
+import { getCredsRateLimitingKey } from "@/middleware/rateLimiter";
 import { OTP_PURPOSES } from "@/otp/otp.types";
 import {
 	generateOTP,
@@ -20,7 +22,6 @@ import {
 } from "@/otp/otp.utils";
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { RateLimiterRes } from "rate-limiter-flexible";
 import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
@@ -33,32 +34,47 @@ import {
 	sendSignupCode,
 } from "./utils";
 
-export async function signupAction(req: Request, res: Response) {
-	const data = await authRequests.signup.body.parseAsync(req.body);
-	const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
+export function signupAction(limiters: MultipleRateLimiters) {
+	return async (req: Request, res: Response, _: NextFunction) => {
+		const data = await authRequests.signup.body.parseAsync(req.body);
+		const credsLimiterKey = getCredsRateLimitingKey(data);
+		await checkRateLimitsHavePoints(req, credsLimiterKey, limiters);
 
-	const dto = new CreateUserDTO({
-		...data,
-		activated: userAccountActivatedByDefault,
-		identityConfirmedAt: new Date(),
-	});
-	await validateSignupCode({ code: data.signupCode, ...data });
+		const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
 
-	return getAppCtx()
-		.userRepository.create(dto)
-		.then((newUser) => {
-			if (!newUser) {
-				return Promise.reject(AppError.SIGNUP_FAILED);
+		const dto = new CreateUserDTO({
+			...data,
+			activated: userAccountActivatedByDefault,
+			identityConfirmedAt: new Date(),
+		});
+		try {
+			await validateSignupCode({ code: data.signupCode, ...data });
+		} catch (err) {
+			if (
+				err instanceof AppError &&
+				err.errCode in [APP_ERR_CODES.INVALID_OTP, APP_ERR_CODES.EXPIRED_OTP]
+			) {
+				// Consume points if signup code is invalid or expired
+				await consumeByIP(limiters.byIP, req);
+				await limiters.byCredentials.consume(credsLimiterKey);
 			}
-			myEventEmitter.emitAppEvent(new UserRegisteredEvent(newUser));
-			return Promise.resolve(newUser);
-		})
-		.then((newUser) =>
-			issuePersonalAccessToken(newUser, req.ip!).then((token) =>
-				getSignupApiResponse(newUser, token),
-			),
-		)
-		.then((response) => response.send(res));
+			throw err; // Re-throw
+		}
+
+		const newUser = await getAppCtx().userRepository.create(dto);
+		if (!newUser) {
+			await consumeByIP(limiters.byIP, req);
+			await limiters.byCredentials.consume(credsLimiterKey);
+			throw AppError.SIGNUP_FAILED();
+		}
+		// clear limiter points on signup success
+		await limiters.byCredentials.delete(credsLimiterKey);
+
+		myEventEmitter.emitAppEvent(new UserRegisteredEvent(newUser));
+
+		const token = await issuePersonalAccessToken(newUser, req.ip!);
+		return getSignupApiResponse(newUser, token).send(res);
+	};
 }
 
 export function loginAction(limiters: MultipleRateLimiters) {
