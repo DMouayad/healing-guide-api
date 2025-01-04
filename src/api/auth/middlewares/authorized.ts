@@ -1,13 +1,12 @@
 import AppError from "@/common/models/appError";
-import type { AuthState, Role } from "@/common/types";
+import type { Role } from "@/common/types";
 import type { NextFunction, Request, Response } from "express";
+import { getUserFromResponse } from "../utils";
 
 export function authorized(role: Role) {
-	return (req: Request, res: Response, next: NextFunction) => {
-		const user = (res.locals.auth as AuthState | undefined)?.user;
-		if (!user) {
-			throw AppError.UNAUTHENTICATED();
-		}
+	return (_: Request, res: Response, next: NextFunction) => {
+		const user = getUserFromResponse(res);
+
 		if (user.isAuthorizedAs(role)) {
 			next();
 		}
@@ -15,11 +14,9 @@ export function authorized(role: Role) {
 	};
 }
 export function authorizedAsAny(roles: Role[]) {
-	return (req: Request, res: Response, next: NextFunction) => {
-		const user = (res.locals.auth as AuthState | undefined)?.user;
-		if (!user) {
-			throw AppError.UNAUTHENTICATED();
-		}
+	return (_: Request, res: Response, next: NextFunction) => {
+		const user = getUserFromResponse(res);
+
 		if (user.isAuthorizedAsAny(roles)) {
 			next();
 		}
