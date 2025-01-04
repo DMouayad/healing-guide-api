@@ -1,10 +1,9 @@
-import type { Request, Response } from "express";
+import type { Request } from "express";
 import {
 	type RateLimiterAbstract,
 	RateLimiterMemory,
 	type RateLimiterRes,
 } from "rate-limiter-flexible";
-import ApiResponse from "./models/apiResponse";
 import AppError from "./models/appError";
 import type { RateLimitConfig } from "./types";
 import { env } from "./utils/envConfig";

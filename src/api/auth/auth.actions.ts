@@ -20,7 +20,6 @@ import {
 } from "@/otp/otp.utils";
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { RateLimiterRes } from "rate-limiter-flexible";
 import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
