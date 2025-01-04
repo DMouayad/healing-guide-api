@@ -63,10 +63,19 @@ export function createNewPhysicianResource(physician?: PhysicianWithRelations) {
 }
 /**
  * Physician Requests Schemas */
+
+const PhysicianIdParam = z.object({ physicianId: commonZodSchemas.id });
 export const physicianRequests = {
 	create: ZodCreatePhysicianDTO.omit({ userId: true }),
 	update: z.object({
 		params: commonZodSchemas.requestIdParam,
 		body: ZodUpdatePhysicianDTO,
 	}),
+	createOrUpdateFeedback: {
+		params: PhysicianIdParam,
+		body: z.object({ response: z.boolean(), questionId: commonZodSchemas.id }),
+	},
+	getPhysicianFeedbacks: {
+		params: PhysicianIdParam,
+	},
 };

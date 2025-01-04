@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
 
-app.use(rateLimiterByIP(defaultRateLimiterByIP));
 app.use(requestLogger);
+app.use(rateLimiterByIP(defaultRateLimiterByIP));
 
 // for every PUT, POST or PATCH request will check if Request has the correct content-type headers
 app.use(hasValidContentType);

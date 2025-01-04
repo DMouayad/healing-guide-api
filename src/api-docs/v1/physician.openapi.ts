@@ -6,9 +6,11 @@ import {
 	ZodPhysicianResource,
 	physicianRequests,
 } from "@/api/physician/physician.types";
+import { ZodPhysicianFeedbackWithResponse } from "@/api/physicianFeedback/types";
 import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
+import { z } from "zod";
 import {
 	duplicateResourceResponse,
 	identityConfirmationRequiredResponse,
@@ -88,6 +90,72 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 				statusCode: StatusCodes.OK,
 				description: "Success: Returns a `Physician` if exists",
 				schema: ZodPhysicianResource.merge(ZodPhysicianRelations).optional(),
+			},
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.createNewFeedback("{physicianId}"),
+		description: "Adds a new feedback to physician received feedbacks",
+		tags: ["Physician"],
+		security: [{ bearerAuth: [] }],
+		request: {
+			params: physicianRequests.createOrUpdateFeedback.params,
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.createOrUpdateFeedback.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: feedback was added",
+			},
+			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "patch",
+		path: physicianRoute + physicianRoutes.updateFeedback("{physicianId}"),
+		description: "Updates the auth user feedback response for physician",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			params: physicianRequests.createOrUpdateFeedback.params,
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.createOrUpdateFeedback.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: feedback was updated",
+			},
+			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "get",
+		path: physicianRoute + physicianRoutes.getPhysicianFeedbacks("{physicianId}"),
+		description: "Retrieves feedbacks for a given physician",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			params: physicianRequests.getPhysicianFeedbacks.params,
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description:
+					"Success: returns the information of a physician received feedbacks",
+				schema: z.array(ZodPhysicianFeedbackWithResponse),
 			},
 		]),
 	});
