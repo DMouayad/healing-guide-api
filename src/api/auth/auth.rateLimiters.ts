@@ -19,4 +19,11 @@ export const authRateLimits = {
 			env.LOGIN_RATE_LIMIT.byCredentials,
 		),
 	},
+	signup: {
+		byIP: memoryRateLimiter("signup_limit_by_IP", env.SIGNUP_RATE_LIMIT.byIP),
+		byCredentials: memoryRateLimiter(
+			"signup_limit_by_credentials",
+			env.SIGNUP_RATE_LIMIT.byCredentials,
+		),
+	},
 };

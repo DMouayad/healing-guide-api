@@ -18,7 +18,7 @@ export const authRoutes = {
 } as const;
 export const authRouter: Router = Router();
 authRouter.post(authRoutes.logout, authenticated, logoutAction);
-authRouter.post(authRoutes.signup, signupAction);
+authRouter.post(authRoutes.signup, signupAction(authRateLimits.signup));
 authRouter.post(
 	authRoutes.createSignupCode,
 	rateLimiterByIP(authRateLimits.sendSignupCode.byIP),

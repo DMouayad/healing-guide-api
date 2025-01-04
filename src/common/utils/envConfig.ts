@@ -29,6 +29,7 @@ export const env = cleanEnv(process.env, {
 	SEND_OTP_RATE_LIMIT: json<MultipleRateLimits>(),
 	VERIFY_USER_RATE_LIMIT: json<MultipleRateLimits>(),
 	LOGIN_RATE_LIMIT: json<MultipleRateLimits>(),
+	SIGNUP_RATE_LIMIT: json<MultipleRateLimits>(),
 	DATABASE_URL: str({
 		example: "postgres://username:password@yourdomain.com/database",
 	}),
