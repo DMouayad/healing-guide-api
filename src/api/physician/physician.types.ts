@@ -35,7 +35,11 @@ const ZodCreatePhysicianDTO = PhysicianZodSchema.merge(ZodPhysicianRelations).om
 });
 export type CreatePhysicianDTO = typeof ZodCreatePhysicianDTO._output;
 
-const ZodUpdatePhysicianDTO = ZodCreatePhysicianDTO.omit({ userId: true }).partial();
+const ZodUpdatePhysicianDTO = PhysicianZodSchema.omit({
+	userId: true,
+	id: true,
+	createdAt: true,
+}).partial();
 export type UpdatePhysicianDTO = typeof ZodUpdatePhysicianDTO._output;
 /**
  * Physician Resources */
@@ -67,10 +71,7 @@ export function createNewPhysicianResource(physician?: PhysicianWithRelations) {
 const PhysicianIdParam = z.object({ physicianId: commonZodSchemas.id });
 export const physicianRequests = {
 	create: ZodCreatePhysicianDTO.omit({ userId: true }),
-	update: z.object({
-		params: commonZodSchemas.requestIdParam,
-		body: ZodUpdatePhysicianDTO,
-	}),
+	update: { body: ZodUpdatePhysicianDTO },
 	createOrUpdateFeedback: {
 		params: PhysicianIdParam,
 		body: z.object({ response: z.boolean(), questionId: commonZodSchemas.id }),

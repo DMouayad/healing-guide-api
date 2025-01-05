@@ -1,5 +1,7 @@
+import { APP_ROLES } from "@/common/types";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
+import { authorized } from "../auth/middlewares/authorized";
 import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
 import {
 	createAction,
@@ -15,22 +17,24 @@ const routes = {
 	baseRoute: "/physicians",
 	create: "",
 	getById: (id = ":id") => `/${id}`,
-	update: (id = ":id") => `/${id}`,
-	createNewFeedback: (physicianId = ":physicianId") =>
-		`/${physicianId}/received-feedbacks`,
-	getPhysicianFeedbacks: (physicianId = ":physicianId") =>
-		`/${physicianId}/received-feedbacks`,
-	updateFeedback: (physicianId = ":physicianId") =>
+	update: "/me",
+	receivedFeedbacks: (physicianId = ":physicianId") =>
 		`/${physicianId}/received-feedbacks`,
 } as const;
 
 router.get(routes.getById(), getByIdAction);
 router.post(routes.create, authenticated, identityConfirmed, createAction);
-router.patch(routes.update(), authenticated, identityConfirmed, updateAction);
-
-router.post(routes.createNewFeedback(), authenticated, createFeedbackAction);
-router.patch(routes.updateFeedback(), authenticated, updateFeedbackAction);
-router.get(routes.getPhysicianFeedbacks(), getPhysicianFeedbacksAction);
+router.patch(
+	routes.update,
+	authenticated,
+	authorized(APP_ROLES.physician),
+	identityConfirmed,
+	updateAction,
+);
+/** Received Feedbacks */
+router.post(routes.receivedFeedbacks(), authenticated, createFeedbackAction);
+router.patch(routes.receivedFeedbacks(), authenticated, updateFeedbackAction);
+router.get(routes.receivedFeedbacks(), getPhysicianFeedbacksAction);
 
 export const physicianRoutes = routes;
 export const physicianRouter = router;

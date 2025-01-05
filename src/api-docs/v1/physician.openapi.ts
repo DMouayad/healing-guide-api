@@ -51,7 +51,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	});
 	registry.registerPath({
 		method: "patch",
-		path: physicianRoute + physicianRoutes.update("{id}"),
+		path: physicianRoute + physicianRoutes.update,
 		description: "Used to edit an existing `Physician`",
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
@@ -59,11 +59,10 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.update,
+						schema: physicianRequests.update.body,
 					},
 				},
 			},
-			params: commonZodSchemas.requestIdParam,
 		},
 		responses: createApiResponses([
 			{
@@ -95,7 +94,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	});
 	registry.registerPath({
 		method: "post",
-		path: physicianRoute + physicianRoutes.createNewFeedback("{physicianId}"),
+		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),
 		description: "Adds a new feedback to physician received feedbacks",
 		tags: ["Physician"],
 		security: [{ bearerAuth: [] }],
@@ -119,7 +118,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	});
 	registry.registerPath({
 		method: "patch",
-		path: physicianRoute + physicianRoutes.updateFeedback("{physicianId}"),
+		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),
 		description: "Updates the auth user feedback response for physician",
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
@@ -143,7 +142,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	});
 	registry.registerPath({
 		method: "get",
-		path: physicianRoute + physicianRoutes.getPhysicianFeedbacks("{physicianId}"),
+		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),
 		description: "Retrieves feedbacks for a given physician",
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],

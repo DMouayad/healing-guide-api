@@ -1,3 +1,4 @@
+import AppError from "@/common/models/appError";
 import { db } from "@/db";
 import { handleDBErrors } from "@/db/utils";
 import type { Expression } from "kysely";
@@ -16,13 +17,22 @@ import type {
 } from "./physician.types";
 
 export interface IPhysicianRepository {
+	getPhysicianUserId(physicianId: number): Promise<number | undefined>;
 	getWithRelations(id: number): Promise<PhysicianWithRelations | undefined>;
 	store(dto: CreatePhysicianDTO): Promise<Physician>;
-	update(id: number, dto: UpdatePhysicianDTO): Promise<Physician>;
+	updateByUserId(userId: number, dto: UpdatePhysicianDTO): Promise<Physician>;
 	deleteWhereUserId(userId: number): Promise<void>;
 }
 
 export class DBPhysicianRepository implements IPhysicianRepository {
+	getPhysicianUserId(physicianId: number): Promise<number | undefined> {
+		return db
+			.selectFrom("physicians")
+			.where("id", "=", physicianId)
+			.select("user_id")
+			.executeTakeFirst()
+			.then((res) => res?.user_id);
+	}
 	getWithRelations(id: number): Promise<PhysicianWithRelations | undefined> {
 		return getPhysician(id, {
 			conditions: true,
@@ -47,10 +57,10 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 				this.storePhysicianProvideProcedures(physician, dto.provideProcedures),
 			);
 	}
-	update(id: number, dto: UpdatePhysicianDTO): Promise<Physician> {
+	updateByUserId(userId: number, dto: UpdatePhysicianDTO): Promise<Physician> {
 		return db
 			.updateTable("physicians")
-			.where("id", "=", id)
+			.where("user_id", "=", userId)
 			.$if(dto.biography != null, (qb) => qb.set("biography", dto.biography!))
 			.$if(dto.fullName != null, (qb) => qb.set("full_name", dto.fullName!))
 			.$if(dto.dateOfBirth != null, (qb) => qb.set("date_of_birth", dto.dateOfBirth!))
@@ -61,7 +71,7 @@ export class DBPhysicianRepository implements IPhysicianRepository {
 			)
 			.$if(dto.pictureUrl != null, (qb) => qb.set("picture_url", dto.pictureUrl!))
 			.returningAll()
-			.executeTakeFirstOrThrow()
+			.executeTakeFirstOrThrow((_) => AppError.ENTITY_NOT_FOUND())
 			.then(objectToCamel);
 	}
 	async deleteWhereUserId(userId: number): Promise<void> {
