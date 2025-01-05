@@ -79,4 +79,7 @@ export const physicianRequests = {
 	getPhysicianFeedbacks: {
 		params: PhysicianIdParam,
 	},
+	setRelationItems: {
+		body: z.object({ itemsIds: z.array(commonZodSchemas.id) }),
+	},
 };

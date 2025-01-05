@@ -17,22 +17,129 @@ import type {
 } from "./physician.types";
 
 export interface IPhysicianRepository {
-	getPhysicianUserId(physicianId: number): Promise<number | undefined>;
+	getByUserId(userId: number): Promise<Physician | undefined>;
 	getWithRelations(id: number): Promise<PhysicianWithRelations | undefined>;
 	store(dto: CreatePhysicianDTO): Promise<Physician>;
 	updateByUserId(userId: number, dto: UpdatePhysicianDTO): Promise<Physician>;
 	deleteWhereUserId(userId: number): Promise<void>;
+	setPhysicianLanguages(
+		physicianId: number,
+		languageIds: number[],
+	): Promise<Language[]>;
+	setPhysicianSpecialties(
+		physicianId: number,
+		specialtyIds: number[],
+	): Promise<MedicalSpecialty[]>;
+	setPhysicianProvidedProcedures(
+		physicianId: number,
+		procedureIds: number[],
+	): Promise<MedicalProcedure[]>;
+
+	setPhysicianTreatedConditions(
+		physicianId: number,
+		conditionIds: number[],
+	): Promise<MedicalCondition[]>;
 }
 
 export class DBPhysicianRepository implements IPhysicianRepository {
-	getPhysicianUserId(physicianId: number): Promise<number | undefined> {
+	async setPhysicianLanguages(
+		physicianId: number,
+		languageIds: number[],
+	): Promise<Language[]> {
+		const values = languageIds.map((langId) => {
+			return { language_id: langId, physician_id: physicianId };
+		});
+		return await db.transaction().execute(async (trx) => {
+			await trx.deleteFrom("physicians_languages").execute();
+			await trx
+				.insertInto("physicians_languages")
+				.values(values)
+				.returningAll()
+				.execute();
+			return trx
+				.selectFrom("languages")
+				.selectAll()
+				.where("id", "in", languageIds)
+				.execute()
+				.then(objectToCamel);
+		});
+	}
+	async setPhysicianSpecialties(
+		physicianId: number,
+		specialtyIds: number[],
+	): Promise<MedicalSpecialty[]> {
+		const values = specialtyIds.map((langId) => {
+			return { specialty_id: langId, physician_id: physicianId };
+		});
+		return await db.transaction().execute(async (trx) => {
+			await trx.deleteFrom("physicians_specialties").execute();
+			await trx
+				.insertInto("physicians_specialties")
+				.values(values)
+				.returningAll()
+				.execute();
+			return trx
+				.selectFrom("medical_specialties")
+				.selectAll()
+				.where("id", "in", specialtyIds)
+				.execute()
+				.then(objectToCamel);
+		});
+	}
+	async setPhysicianProvidedProcedures(
+		physicianId: number,
+		procedureIds: number[],
+	): Promise<MedicalProcedure[]> {
+		const values = procedureIds.map((langId) => {
+			return { procedure_id: langId, physician_id: physicianId };
+		});
+		return await db.transaction().execute(async (trx) => {
+			await trx.deleteFrom("physicians_provided_procedures").execute();
+			await trx
+				.insertInto("physicians_provided_procedures")
+				.values(values)
+				.returningAll()
+				.execute();
+			return trx
+				.selectFrom("medical_procedures")
+				.selectAll()
+				.where("id", "in", procedureIds)
+				.execute()
+				.then(objectToCamel);
+		});
+	}
+	async setPhysicianTreatedConditions(
+		physicianId: number,
+		conditionIds: number[],
+	): Promise<MedicalCondition[]> {
+		const values = conditionIds.map((langId) => {
+			return { condition_id: langId, physician_id: physicianId };
+		});
+		return await db.transaction().execute(async (trx) => {
+			await trx.deleteFrom("physicians_treat_conditions").execute();
+			await trx
+				.insertInto("physicians_treat_conditions")
+				.values(values)
+				.returningAll()
+				.execute();
+			return trx
+				.selectFrom("medical_conditions")
+				.selectAll()
+				.where("id", "in", conditionIds)
+				.execute()
+				.then(objectToCamel);
+		});
+	}
+
+	getByUserId(userId: number): Promise<Physician | undefined> {
 		return db
 			.selectFrom("physicians")
-			.where("id", "=", physicianId)
-			.select("user_id")
+			.where("user_id", "=", userId)
+			.selectAll()
 			.executeTakeFirst()
-			.then((res) => res?.user_id);
+			.then((result) => (result ? objectToCamel(result) : undefined));
 	}
+
 	getWithRelations(id: number): Promise<PhysicianWithRelations | undefined> {
 		return getPhysician(id, {
 			conditions: true,

@@ -1,3 +1,7 @@
+import { ZodLanguage } from "@/api/languages/language.types";
+import { MedicalConditionZodSchema } from "@/api/medicalConditions/types";
+import { MedicalProcedureZodSchema } from "@/api/medicalProcedures/types";
+import { MedicalSpecialtyZodSchema } from "@/api/medicalSpecialties/types";
 import { physicianRoutes } from "@/api/physician/physician.router";
 import {
 	PhysicianZodSchema,
@@ -15,6 +19,7 @@ import {
 	duplicateResourceResponse,
 	identityConfirmationRequiredResponse,
 	unauthenticatedResponse,
+	unauthorizedResponse,
 } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
 import { v1BearerAuth } from "./openAPIDocumentGenerator";
@@ -75,7 +80,6 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			duplicateResourceResponse("Failure: a `Physician` already exists for this user"),
 		]),
 	});
-
 	registry.registerPath({
 		method: "get",
 		path: physicianRoute + physicianRoutes.getById("{id}"),
@@ -92,6 +96,108 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			},
 		]),
 	});
+	/** Physician Relations */
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.treatConditions,
+		description: "Used to set treated conditions of the `Physician`",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.setRelationItems.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns a list of `MedicalCondition`",
+				schema: z.array(MedicalConditionZodSchema),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.providedProcedures,
+		description: "Used to set provided procedures by a `Physician`",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.setRelationItems.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns a list of `MedicalProcedure`",
+				schema: z.array(MedicalProcedureZodSchema),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.languages,
+		description: "Used to set a `Physician` spoken languages",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.setRelationItems.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns a list of `Language`",
+				schema: z.array(ZodLanguage),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.specialties,
+		description: "Used to set the `Physician` specialties",
+		tags: ["Physician"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.setRelationItems.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns a list of `MedicalSpecialty`",
+				schema: z.array(MedicalSpecialtyZodSchema),
+			},
+			unauthenticatedResponse,
+			unauthorizedResponse,
+		]),
+	});
+	/** Physician Received Feedbacks */
 	registry.registerPath({
 		method: "post",
 		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),

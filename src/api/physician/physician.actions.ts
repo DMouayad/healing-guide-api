@@ -2,9 +2,7 @@ import ApiResponse from "@/common/models/apiResponse";
 import AppError from "@/common/models/appError";
 import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
-import { logger } from "@/common/utils/logger";
 import { commonZodSchemas } from "@/common/zod/common";
-import type { IUser } from "@/interfaces/IUser";
 import type { Request, Response } from "express";
 import { getUserFromResponse } from "../auth/utils";
 import { createNewPhysicianResource, physicianRequests } from "./physician.types";
@@ -70,12 +68,55 @@ export async function getPhysicianFeedbacksAction(req: Request, res: Response) {
 		);
 	ApiResponse.success({ data: result }).send(res);
 }
-async function userBelongsToPhysician(user: IUser, physicianId: number) {
-	const physicianUserId =
-		await getAppCtx().physicianRepository.getPhysicianUserId(physicianId);
-	const matched = physicianUserId && physicianUserId === user.id;
-	if (!matched) {
-		logger.warn(`User ${user.id} is not authorized to access physician ${physicianId}`);
+
+async function setPhysicianRelationAction(
+	req: Request,
+	res: Response,
+	repositoryResult: (
+		physicianId: number,
+		relationItemsIds: number[],
+	) => Promise<object[]>,
+) {
+	const user = getUserFromResponse(res);
+	const data = physicianRequests.setRelationItems.body.parse(req.body);
+
+	const physician = await getAppCtx().physicianRepository.getByUserId(user.id);
+	if (!physician) {
+		throw AppError.FORBIDDEN();
 	}
-	return matched;
+	const result = await repositoryResult(physician.id, data.itemsIds);
+	return ApiResponse.success({ data: result }).send(res);
+}
+
+/** Treat Conditions Actions */
+export async function setTreatConditions(req: Request, res: Response) {
+	return setPhysicianRelationAction(
+		req,
+		res,
+		getAppCtx().physicianRepository.setPhysicianTreatedConditions,
+	);
+}
+/** Provided Procedures Actions */
+export async function setProvidedProcedures(req: Request, res: Response) {
+	return setPhysicianRelationAction(
+		req,
+		res,
+		getAppCtx().physicianRepository.setPhysicianProvidedProcedures,
+	);
+}
+/** Languages Actions */
+export async function setSpokenLanguages(req: Request, res: Response) {
+	return setPhysicianRelationAction(
+		req,
+		res,
+		getAppCtx().physicianRepository.setPhysicianLanguages,
+	);
+}
+/** Specialties Actions */
+export async function setSpecialties(req: Request, res: Response) {
+	return setPhysicianRelationAction(
+		req,
+		res,
+		getAppCtx().physicianRepository.setPhysicianSpecialties,
+	);
 }
