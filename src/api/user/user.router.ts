@@ -3,6 +3,7 @@ import { authenticated } from "../auth/middlewares/authenticated";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 
 import { rateLimiterByIP, rateLimiterByUser } from "@/middleware/rateLimiter";
+import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
 import {
 	deleteUserAction,
 	getNonAdminUsersAction,
@@ -28,7 +29,12 @@ export const userRoutes = {
 	sendPhoneVerification: "/me/phone-verification/send",
 } as const;
 
-userRouter.delete(userRoutes.currentUser, authenticated, deleteUserAction);
+userRouter.delete(
+	userRoutes.currentUser,
+	authenticated,
+	identityConfirmed,
+	deleteUserAction,
+);
 
 /**======================== Admin Protected Routes ================================== */
 userRouter.get(userRoutes.index, authenticated, isAdmin, getNonAdminUsersAction);
