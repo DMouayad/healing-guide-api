@@ -12,15 +12,16 @@ function baseRateLimiter(limiter: RateLimiterAbstract, key?: string | number) {
 		if (!key) {
 			next();
 		} else {
-			limiter
+			return limiter
 				.consume(key)
 				.then((_) => next())
 				.catch(async (err) => {
 					if (err instanceof RateLimiterRes) {
 						const retryAfterSecs = getRetryAfterSecs(err);
-						throw AppError.RATE_LIMIT_EXCEEDED({ retryAfterSecs });
+						next(AppError.RATE_LIMIT_EXCEEDED({ retryAfterSecs }));
+					} else {
+						next(err);
 					}
-					return Promise.reject(err);
 				});
 		}
 	};
