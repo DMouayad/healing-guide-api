@@ -6,8 +6,12 @@ import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
 import {
 	createAction,
 	createFeedbackAction,
+	createReviewByUser,
+	deleteReview,
+	editReview,
 	getByIdAction,
 	getPhysicianFeedbacksAction,
+	getPhysicianReviews,
 	setProvidedProcedures,
 	setSpecialties,
 	setSpokenLanguages,
@@ -28,6 +32,10 @@ const routes = {
 	providedProcedures: "/me/provided-procedures",
 	languages: "/me/languages",
 	specialties: "/me/specialties",
+	getReviews: (physicianId = ":physicianId") => `/${physicianId}/reviews`,
+	createPhysicianReview: (physicianId = ":physicianId") => `/${physicianId}/reviews`,
+	reviewById: (physicianId = ":physicianId", reviewId = ":reviewId") =>
+		`/${physicianId}/reviews/${reviewId}`,
 } as const;
 
 router.get(routes.getById(), getByIdAction);
@@ -72,6 +80,11 @@ router.post(
 	authorized(APP_ROLES.physician),
 	setSpokenLanguages,
 );
+/** Reviews  */
+router.get(routes.getReviews(), getPhysicianReviews);
+router.post(routes.createPhysicianReview(), authenticated, createReviewByUser);
+router.patch(routes.reviewById(), authenticated, editReview);
+router.delete(routes.reviewById(), authenticated, deleteReview);
 
 export const physicianRoutes = routes;
 export const physicianRouter = router;

@@ -2,6 +2,7 @@ import { ZodLanguage } from "@/api/languages/language.types";
 import { MedicalConditionZodSchema } from "@/api/medicalConditions/types";
 import { MedicalProcedureZodSchema } from "@/api/medicalProcedures/types";
 import { MedicalSpecialtyZodSchema } from "@/api/medicalSpecialties/types";
+import { ZodPhysicianReview } from "@/api/physician/PhysicianReview";
 import { physicianRoutes } from "@/api/physician/physician.router";
 import {
 	PhysicianZodSchema,
@@ -243,7 +244,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		},
 		responses: createApiResponses([
 			{
-				statusCode: StatusCodes.NO_CONTENT,
+				statusCode: StatusCodes.OK,
 				description: "Success: feedback was updated",
 				schema: ZodPhysicianReceivedFeedback,
 			},
@@ -266,6 +267,93 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 					"Success: returns the information of a physician received feedbacks",
 				schema: z.array(ZodPhysicianFeedbackWithResponse),
 			},
+		]),
+	});
+	/**
+	 * Physician Reviews
+	 */
+	registry.registerPath({
+		method: "get",
+		path: physicianRoute + physicianRoutes.getReviews("{physicianId}"),
+		description: "Retrieves a list of `PhysicianReview` by physician id",
+		tags: ["Physician Reviews"],
+		request: {
+			params: physicianRequests.getPhysicianReviews.params,
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns a list of `MedicalCondition`",
+				schema: z.array(ZodPhysicianReview),
+			},
+		]),
+	});
+
+	registry.registerPath({
+		method: "post",
+		path: physicianRoute + physicianRoutes.createPhysicianReview("{physicianId}"),
+		description: "Creates a new review for the physician with `physicianId`",
+		tags: ["Physician Reviews"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			params: physicianRequests.addReviewByUser.params,
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.addReviewByUser.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: review was created",
+				schema: ZodPhysicianReview,
+			},
+			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "patch",
+		path: physicianRoute + physicianRoutes.reviewById("{physicianId}", "{reviewId}"),
+		description: "Updates a review identified with `reviewId` and `physicianId`",
+		tags: ["Physician Reviews"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			params: physicianRequests.updateReview.params,
+			body: {
+				content: {
+					"application/json": {
+						schema: physicianRequests.updateReview.body,
+					},
+				},
+			},
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: review was updated",
+				schema: ZodPhysicianReview,
+			},
+			unauthenticatedResponse,
+		]),
+	});
+	registry.registerPath({
+		method: "delete",
+		path: physicianRoute + physicianRoutes.reviewById("{physicianId}", "{reviewId}"),
+		description: "Deletes a review identified with `reviewId` and `physicianId`",
+		tags: ["Physician Reviews"],
+		security: [{ [v1BearerAuth.name]: [] }],
+		request: {
+			params: physicianRequests.deleteReview.params,
+		},
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.NO_CONTENT,
+				description: "Success: review was deleted",
+			},
+			unauthenticatedResponse,
 		]),
 	});
 }

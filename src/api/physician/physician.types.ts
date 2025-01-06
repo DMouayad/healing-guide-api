@@ -4,6 +4,10 @@ import { ZodLanguage } from "../languages/language.types";
 import { MedicalConditionZodSchema } from "../medicalConditions/types";
 import { MedicalProcedureZodSchema } from "../medicalProcedures/types";
 import { MedicalSpecialtyZodSchema } from "../medicalSpecialties/types";
+import {
+	ZodCreatePhysicianReviewDTO,
+	ZodUpdatePhysicianReviewDTO,
+} from "./PhysicianReview";
 
 export const PhysicianZodSchema = z.object({
 	id: commonZodSchemas.id,
@@ -78,6 +82,24 @@ export const physicianRequests = {
 	},
 	getPhysicianFeedbacks: {
 		params: PhysicianIdParam,
+	},
+	getPhysicianReviews: {
+		params: PhysicianIdParam,
+	},
+	addReviewByUser: {
+		params: PhysicianIdParam,
+		body: ZodCreatePhysicianReviewDTO.omit({ physicianId: true, reviewerId: true }),
+	},
+	updateReview: {
+		params: PhysicianIdParam.merge(z.object({ reviewId: commonZodSchemas.id })),
+		body: ZodUpdatePhysicianReviewDTO.omit({
+			reviewId: true,
+			physicianId: true,
+			reviewerId: true,
+		}),
+	},
+	deleteReview: {
+		params: PhysicianIdParam.merge(z.object({ reviewId: commonZodSchemas.id })),
 	},
 	setRelationItems: {
 		body: z.object({ itemsIds: z.array(commonZodSchemas.id) }),

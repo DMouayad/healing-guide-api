@@ -8,6 +8,7 @@ import {
 	type MigrationResultSet,
 	Migrator,
 	NO_MIGRATIONS,
+	NoResultError,
 	sql,
 } from "kysely";
 import { DatabaseError as PgDatabaseError } from "pg";
@@ -71,6 +72,9 @@ export function handleDBErrors(err: any) {
 			case PG_ERR_CODE.DUPLICATE_VALUE:
 				return Promise.reject(AppError.RESOURCE_ALREADY_EXISTS());
 		}
+	}
+	if (err instanceof NoResultError) {
+		return Promise.reject(AppError.ENTITY_NOT_FOUND());
 	}
 	return Promise.reject(err);
 }
