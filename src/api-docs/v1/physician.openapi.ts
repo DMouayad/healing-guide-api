@@ -10,7 +10,10 @@ import {
 	ZodPhysicianResource,
 	physicianRequests,
 } from "@/api/physician/physician.types";
-import { ZodPhysicianFeedbackWithResponse } from "@/api/physicianFeedback/types";
+import {
+	ZodPhysicianFeedbackWithResponse,
+	ZodPhysicianReceivedFeedback,
+} from "@/api/physicianFeedback/types";
 import { commonZodSchemas } from "@/common/zod/common";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
@@ -242,6 +245,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			{
 				statusCode: StatusCodes.NO_CONTENT,
 				description: "Success: feedback was updated",
+				schema: ZodPhysicianReceivedFeedback,
 			},
 			unauthenticatedResponse,
 		]),
