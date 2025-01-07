@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import type { IMailNotifier } from "./IMailNotifier";
 
 import { IMAGES } from "@/common/constants";
+import AppError from "@/common/models/appError";
 import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
@@ -23,8 +24,12 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 		await client.sendMail(payload);
 	}
 	getMailPayload(notification: MailNotification): Mail.Options {
+		const receiver = getReceiver(notification);
+		if (!receiver) {
+			throw AppError.SERVER_ERROR({ message: "Invalid email receiver" });
+		}
 		const basePayload = {
-			to: getReceivers(notification),
+			to: receiver,
 			from: getSender(),
 			attachments: [
 				{
@@ -65,7 +70,7 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 function getSender() {
 	return `Healing Guide <${env.ZOHO_EMAIL}>`;
 }
-function getReceivers(notification: MailNotification) {
+function getReceiver(notification: MailNotification) {
 	return env.NODE_ENV === "production"
 		? notification.getReceiver()
 		: "mouayad.alhamwi.ma@gmail.com";

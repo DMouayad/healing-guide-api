@@ -12,7 +12,7 @@ export type MailNotificationType = ObjectValues<typeof MAIL_NOTIFICATIONS>;
 
 export abstract class MailNotification {
 	constructor(readonly type: MailNotificationType) {}
-	abstract getReceiver(): string;
+	abstract getReceiver(): string | null;
 
 	static signupCode(signupCode: SignupCodeViaEmail, otpCode: string) {
 		return new SignupCodeMailNotification(signupCode, otpCode);
@@ -26,7 +26,7 @@ export abstract class MailNotification {
 }
 
 export class OTPMailNotification extends MailNotification {
-	override getReceiver(): string {
+	override getReceiver(): string | null {
 		return this.user.email;
 	}
 	constructor(
