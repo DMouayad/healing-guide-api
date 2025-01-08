@@ -48,13 +48,13 @@ export class CreateUserDTO {
 	readonly email: string | null;
 	readonly phoneNumber: string;
 	readonly activated: boolean;
-	readonly password: string;
+	readonly passwordHash: string;
 	readonly identityConfirmedAt: Date;
 
 	constructor(props: ClassProperties<CreateUserDTO>) {
 		this.email = props.email;
 		this.phoneNumber = props.phoneNumber;
-		this.password = props.password;
+		this.passwordHash = props.passwordHash;
 		this.activated = props.activated;
 		this.identityConfirmedAt = new Date();
 

@@ -1,7 +1,6 @@
 import { PG_ERR_CODE } from "@/common/constants";
 import AppError from "@/common/models/appError";
 import { APP_ROLES, type Role } from "@/common/types";
-import { bcryptHash } from "@/common/utils/hashing";
 import { db } from "@/db";
 import type { CreateUserDTO, UpdateUserDTO } from "@/interfaces/IUser";
 import type { IUserRepository } from "@/interfaces/IUserRepository";
@@ -13,15 +12,12 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		phoneNumber?: string,
 		email?: string,
 	): Promise<boolean> {
-		console.log(email);
-		console.log(phoneNumber);
 		const result = await db
 			.selectFrom("users")
 			.$if(email != null, (qb) => qb.where("email", "=", email!))
 			.$if(phoneNumber != null, (qb) => qb.where("phone_number", "=", phoneNumber!))
 			.select(({ fn }) => fn.countAll<number>().as("matching_users"))
 			.executeTakeFirst();
-		console.log(result);
 		return result ? result?.matching_users === 0 : false;
 	}
 	async findByEmailOrPhoneNumber(emailOrPhoneNo: string): Promise<DBUser | undefined> {
@@ -37,13 +33,12 @@ export class DBUserRepository implements IUserRepository<DBUser> {
 		return query.executeTakeFirst().then((result) => DBUser.fromQueryResult(result));
 	}
 	async create(dto: CreateUserDTO): Promise<DBUser | undefined> {
-		const hash = await bcryptHash(dto.password);
 		const insertStmt = db
 			.insertInto("users")
 			.values({
 				email: dto.email,
 				phone_number: dto.phoneNumber,
-				password_hash: hash,
+				password_hash: dto.passwordHash,
 				role_id: dto.role.roleId,
 				activated: dto.activated,
 				identity_confirmed_at: dto.identityConfirmedAt,

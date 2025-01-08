@@ -11,6 +11,7 @@ import { APP_ROLES, type AuthState } from "@/common/types";
 import { env } from "@/common/utils/envConfig";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import { getClientIp } from "@/common/utils/getClientIp";
+import { bcryptHash } from "@/common/utils/hashing";
 import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
 import { CreateUserDTO } from "@/interfaces/IUser";
 import { getCredsRateLimitingKey } from "@/middleware/rateLimiter";
@@ -41,11 +42,15 @@ export function signupAction(limiters: MultipleRateLimiters) {
 		await checkRateLimitsHavePoints(req, credsLimiterKey, limiters);
 
 		const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
+		const passwordHash = await bcryptHash(data.password);
 
 		const dto = new CreateUserDTO({
-			...data,
+			email: data.email,
+			phoneNumber: data.phoneNumber,
+			role: data.role,
 			activated: userAccountActivatedByDefault,
 			identityConfirmedAt: new Date(),
+			passwordHash,
 		});
 		try {
 			await validateSignupCode({ code: data.signupCode, ...data });
