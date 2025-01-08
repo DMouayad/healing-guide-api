@@ -262,7 +262,7 @@ export function identityConfirmationMailTemplate(notification: OTPMailNotificati
           <tr>
             <td align="center" bgcolor="#e9ecef" style="padding: 0 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
               <p style="margin: 0;"><a href=${HEALING_GUIDE_WEBSITE} target="_blank">Healing Guide</a></p>
-              <p style="margin: 0;">Damsscus, Syria, +963 912 345 678</p>
+              <p style="margin: 0;">Damascus, Syria, +963 912 345 678</p>
             </td>
           </tr>
           <!-- end unsubscribe -->
