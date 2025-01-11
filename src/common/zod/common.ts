@@ -1,4 +1,4 @@
-import parsePhoneNumber from "libphonenumber-js";
+import parsePhoneNumber from "libphonenumber-js/mobile";
 import { z } from "zod";
 import { ASSIGNABLE_ROLES } from "../constants";
 import { env } from "../utils/envConfig";
@@ -61,10 +61,7 @@ function validateRole(value: string, ctx: z.RefinementCtx) {
 	return matchingAppRole;
 }
 function validatePhoneNo(value: string, ctx: z.RefinementCtx) {
-	const phoneNumber = parsePhoneNumber(value, {
-		defaultCountry: "SY",
-	});
-
+	const phoneNumber = parsePhoneNumber(value, "SY");
 	if (!phoneNumber?.isValid()) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
