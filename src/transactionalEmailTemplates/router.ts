@@ -1,4 +1,4 @@
-import { SIGNUP_CODE_SENDING_METHODS } from "@/api/auth/auth.types";
+import { OTP_SENDING_METHODS } from "@/api/auth/auth.types";
 import { isAdmin } from "@/api/auth/middlewares/isAdmin";
 import { createUser } from "@/common/factories/userFactory";
 import { APP_ROLES } from "@/common/types";
@@ -51,3 +51,4 @@ function createFakeSignupCode() {
 		role: APP_ROLES.patient,
 	};
 }
+OTP_SENDING_METHODS;

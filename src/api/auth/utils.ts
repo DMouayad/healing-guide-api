@@ -16,7 +16,7 @@ import { StatusCodes } from "http-status-codes";
 import { UserResource } from "../user/user.resource";
 import {
 	type NewAccessToken,
-	SIGNUP_CODE_SENDING_METHODS,
+	OTP_SENDING_METHODS,
 	type SignupCode,
 } from "./auth.types";
 
@@ -107,10 +107,10 @@ export function getSignupCodeUniqueIdentifier(params: {
 }
 export async function sendSignupCode(signupCode: SignupCode, otp: OTPWithCode) {
 	switch (signupCode.receiveVia) {
-		case SIGNUP_CODE_SENDING_METHODS.mail: {
+		case OTP_SENDING_METHODS.mail: {
 			return sendMailNotification(MailNotification.signupCode(signupCode, otp.code));
 		}
-		case SIGNUP_CODE_SENDING_METHODS.sms: {
+		case OTP_SENDING_METHODS.sms: {
 			return sendSmsNotification(SmsNotification.signupCode(signupCode));
 		}
 		default:

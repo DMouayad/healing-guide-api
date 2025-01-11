@@ -32,9 +32,9 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 
 export type NewAccessToken = string;
 
-export type SignupCodeSendingMethod = ObjectValues<typeof SIGNUP_CODE_SENDING_METHODS>;
+export type SignupCodeSendingMethod = ObjectValues<typeof OTP_SENDING_METHODS>;
 
-export const SIGNUP_CODE_SENDING_METHODS = {
+export const OTP_SENDING_METHODS = {
 	sms: "SMS",
 	mail: "MAIL",
 } as const;
@@ -44,7 +44,7 @@ export const ZodSignupCodeViaEmail = z
 	.object({
 		email: z.string().email(),
 		phoneNumber: commonZodSchemas.phoneNumber,
-		receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.mail),
+		receiveVia: z.literal(OTP_SENDING_METHODS.mail),
 	})
 	.merge(ZodRoleObj);
 
@@ -52,7 +52,7 @@ export const ZodSignupCodeViaSMS = z
 	.object({
 		email: z.string().email().optional(),
 		phoneNumber: commonZodSchemas.phoneNumber,
-		receiveVia: z.literal(SIGNUP_CODE_SENDING_METHODS.sms),
+		receiveVia: z.literal(OTP_SENDING_METHODS.sms),
 	})
 	.merge(ZodRoleObj);
 
