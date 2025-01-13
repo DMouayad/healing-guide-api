@@ -1,8 +1,8 @@
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { APP_ROLES } from "@/common/types";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import { commonZodSchemas } from "@/common/zod/common";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { APP_ROLES } from "@common/types";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import { commonZodSchemas } from "@common/zod/common";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { getUserFromResponse } from "../auth/utils";

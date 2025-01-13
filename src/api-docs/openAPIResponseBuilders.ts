@@ -1,7 +1,7 @@
-import type ApiResponse from "@/common/models/apiResponse";
-import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
 import type { OpenAPIRegistry, ResponseConfig } from "@asteasolutions/zod-to-openapi";
 import type { ExamplesObject } from "@asteasolutions/zod-to-openapi/dist/openapi-registry";
+import type ApiResponse from "@common/models/apiResponse";
+import { ZodAppErrorSchema } from "@common/zod/appError.zod";
 import type { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 

@@ -7,10 +7,13 @@
 			"@/*": ["src/*"],
 			"@utils/*": ["src/common/utils/*"],
 			"@api/*": ["src/api/*"],
+			"@api-docs/*": ["src/api-docs/*"],
 			"@middleware/*": ["src/middleware/*"],
 			"@db/*": ["src/db/*"],
 			"@notifications/*": ["src/notifications/*"],
-			"@interfaces/*": ["src/interfaces/*"]
+			"@interfaces/*": ["src/interfaces/*"],
+			"@common/*": ["src/common/*"],
+			"@otp/*": ["src/otp/*"]
 		},
 		"moduleResolution": "Node",
 		"outDir": "dist",

@@ -1,5 +1,5 @@
-import type { AccessToken } from "@/common/models/accessToken";
-import type { ExtractedBearerToken } from "@/common/types";
+import type { AccessToken } from "@common/models/accessToken";
+import type { ExtractedBearerToken } from "@common/types";
 import type { IUser } from "./IUser";
 
 export type TokenId = number | undefined;

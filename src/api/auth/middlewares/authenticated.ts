@@ -1,6 +1,6 @@
-import AppError from "@/common/models/appError";
-import type { AuthState, ExtractedBearerToken } from "@/common/types";
-import { getAppCtx } from "@/common/utils/getAppCtx";
+import AppError from "@common/models/appError";
+import type { AuthState, ExtractedBearerToken } from "@common/types";
+import { getAppCtx } from "@common/utils/getAppCtx";
 import type { NextFunction, Request, Response } from "express";
 import type { AccessToken } from "../../../common/models/accessToken";
 

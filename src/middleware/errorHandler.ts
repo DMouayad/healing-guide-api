@@ -1,6 +1,6 @@
-import ApiResponse from "@/common/models/apiResponse";
-import { RateLimitError } from "@/common/models/appError";
-import { toAppError } from "@/common/utils/toAppError";
+import ApiResponse from "@common/models/apiResponse";
+import { RateLimitError } from "@common/models/appError";
+import { toAppError } from "@common/utils/toAppError";
 import { logErrIfNeeded, logger } from "@utils/logger";
 import type { ErrorRequestHandler, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";

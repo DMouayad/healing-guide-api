@@ -1,9 +1,9 @@
-import { APP_ROLES } from "@/common/types";
-import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
-import { logger } from "@/common/utils/logger";
-import { commonZodSchemas, z_enumFromArray } from "@/common/zod/common";
+import { APP_ROLES } from "@common/types";
+import { isNotDate, tryParseDate } from "@common/utils/dateHelpers";
+import { logger } from "@common/utils/logger";
+import { commonZodSchemas, z_enumFromArray } from "@common/zod/common";
 
-import { IUser } from "@/interfaces/IUser";
+import { IUser } from "@interfaces/IUser";
 import { objectToCamel } from "ts-case-convert";
 import { z } from "zod";
 

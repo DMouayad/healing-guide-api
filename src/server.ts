@@ -2,9 +2,9 @@ import cors from "cors";
 import express, { Router, type Express } from "express";
 import helmet from "helmet";
 
-import { openAPIRouter } from "@/api-docs/openAPIRouter";
-import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
-import { env } from "@/common/utils/envConfig";
+import { openAPIRouter } from "@api-docs/openAPIRouter";
+import { healthCheckRouter } from "@api/healthCheck/healthCheckRouter";
+import { env } from "@common/utils/envConfig";
 
 import { authRouter } from "./api/auth/authRouter";
 import { languageRouter } from "./api/languages/language.router";

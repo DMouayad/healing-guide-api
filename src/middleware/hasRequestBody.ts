@@ -1,4 +1,4 @@
-import AppError from "@/common/models/appError";
+import AppError from "@common/models/appError";
 import type { NextFunction, Request, Response } from "express";
 
 export const hasRequestBody = (req: Request, _res: Response, next: NextFunction) => {

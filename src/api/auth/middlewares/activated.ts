@@ -1,5 +1,5 @@
-import AppError from "@/common/models/appError";
-import type { IUser } from "@/interfaces/IUser";
+import AppError from "@common/models/appError";
+import type { IUser } from "@interfaces/IUser";
 import type { NextFunction, Request, Response } from "express";
 
 export async function activated(_req: Request, res: Response, next: NextFunction) {

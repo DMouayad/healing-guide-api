@@ -1,12 +1,12 @@
-import { UserSchema } from "@/api/user/user.model";
-import { userRoutes } from "@/api/user/user.router";
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
+import { UserSchema } from "@api/user/user.model";
+import { userRoutes } from "@api/user/user.router";
 import {
 	type OpenAPIRegistry,
 	extendZodWithOpenApi,
 } from "@asteasolutions/zod-to-openapi";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { ZodAppErrorSchema } from "@common/zod/appError.zod";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import {

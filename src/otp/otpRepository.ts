@@ -1,8 +1,7 @@
-import type { SignupCode } from "@/api/auth/auth.types";
-import { getSignupCodeUniqueIdentifier } from "@/api/auth/utils";
-import { db } from "@/db";
-import type { IUser } from "@/interfaces/IUser";
-import { objectToSnake } from "ts-case-convert";
+import type { SignupCode } from "@api/auth/auth.types";
+import { getSignupCodeUniqueIdentifier } from "@api/auth/utils";
+import { db } from "@db/index";
+import type { IUser } from "@interfaces/IUser";
 import { type OTP, OTP_PURPOSES, type OtpPurpose } from "./otp.types";
 
 export type OtpFilter = { unexpiredOnly: boolean };

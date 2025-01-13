@@ -1,4 +1,4 @@
-import { logger } from "@/common/utils/logger";
+import { logger } from "@common/utils/logger";
 import type { SmsNotification } from "../SmsNotification";
 import type { ISmsNotifier } from "./ISmsNotifier";
 

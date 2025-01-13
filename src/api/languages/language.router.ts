@@ -1,7 +1,7 @@
-import ApiResponse from "@/common/models/apiResponse";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import { createPaginatedJsonResponse } from "@/common/utils/paginationHelpers";
-import { commonZodSchemas } from "@/common/zod/common";
+import ApiResponse from "@common/models/apiResponse";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import { createPaginatedJsonResponse } from "@common/utils/paginationHelpers";
+import { commonZodSchemas } from "@common/zod/common";
 import express, { type Router, type Response, type Request } from "express";
 import { isAdmin } from "../auth/middlewares/isAdmin";
 

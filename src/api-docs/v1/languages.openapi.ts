@@ -1,7 +1,7 @@
-import { languageRoutes } from "@/api/languages/language.router";
-import { ZodLanguage } from "@/api/languages/language.types";
-import { commonZodSchemas } from "@/common/zod/common";
+import { languageRoutes } from "@api/languages/language.router";
+import { ZodLanguage } from "@api/languages/language.types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import {
 	duplicateResourceResponse,

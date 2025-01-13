@@ -1,8 +1,8 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
-import { PG_ERR_CODE } from "@/common/constants";
-import AppError from "@/common/models/appError";
-import { logger } from "@/common/utils/logger";
+import { PG_ERR_CODE } from "@common/constants";
+import AppError from "@common/models/appError";
+import { logger } from "@common/utils/logger";
 import {
 	FileMigrationProvider,
 	type MigrationResultSet,

@@ -1,5 +1,5 @@
-import { memoryRateLimiter } from "@/common/rateLimiters";
-import { env } from "@/common/utils/envConfig";
+import { memoryRateLimiter } from "@common/rateLimiters";
+import { env } from "@common/utils/envConfig";
 
 export const authRateLimits = {
 	sendSignupCode: {

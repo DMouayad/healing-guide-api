@@ -1,17 +1,17 @@
-import { DBAuthTokensRepository } from "@/api/auth/authTokens.repository";
-import { DBLanguageRepository } from "@/api/languages/LanguageRepository";
-import { DBMedicalConditionsRepository } from "@/api/medicalConditions/MedicalConditionsRepository";
-import { DBMedicalDepartmentsRepository } from "@/api/medicalDepartments/MedicalDepartmentsRepository";
-import { DBMedicalProceduresRepository } from "@/api/medicalProcedures/MedicalProceduresRepository";
-import { DBMedicalSpecialtiesRepository } from "@/api/medicalSpecialties/MedicalSpecialtiesRepository";
-import { DBPhysicianRepository } from "@/api/physician/physician.repository";
-import { DBPhysicianReceivedFeedbackRepository } from "@/api/physician/physicianReceivedFeedbackRepository";
-import { DBPhysicianReviewsRepository } from "@/api/physician/physicianReviewsRepository";
-import { DBPhysicianFeedbackRepository } from "@/api/physicianFeedback/PhysicianFeedbackRepository";
-import { DBUserRepository } from "@/api/user/user.repository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
-import { DBOtpRepository } from "@/otp/otpRepository";
+import { DBAuthTokensRepository } from "@api/auth/authTokens.repository";
+import { DBLanguageRepository } from "@api/languages/LanguageRepository";
+import { DBMedicalConditionsRepository } from "@api/medicalConditions/MedicalConditionsRepository";
+import { DBMedicalDepartmentsRepository } from "@api/medicalDepartments/MedicalDepartmentsRepository";
+import { DBMedicalProceduresRepository } from "@api/medicalProcedures/MedicalProceduresRepository";
+import { DBMedicalSpecialtiesRepository } from "@api/medicalSpecialties/MedicalSpecialtiesRepository";
+import { DBPhysicianRepository } from "@api/physician/physician.repository";
+import { DBPhysicianReceivedFeedbackRepository } from "@api/physician/physicianReceivedFeedbackRepository";
+import { DBPhysicianReviewsRepository } from "@api/physician/physicianReviewsRepository";
+import { DBPhysicianFeedbackRepository } from "@api/physicianFeedback/PhysicianFeedbackRepository";
+import { DBUserRepository } from "@api/user/user.repository";
+import { DBOtpRepository } from "@otp/otpRepository";
 import type { AppCtx } from "../models/appCtx";
 
 const productionAppCtx: AppCtx = {

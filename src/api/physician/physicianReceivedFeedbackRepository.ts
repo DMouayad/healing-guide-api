@@ -1,4 +1,4 @@
-import { db } from "@/db";
+import { db } from "@db/index";
 import { objectToCamel } from "ts-case-convert";
 import type {
 	PhysicianFeedbackWithUserResponses,

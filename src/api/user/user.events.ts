@@ -1,5 +1,5 @@
-import { IAppEvent } from "@/common/types";
-import type { IUser } from "@/interfaces/IUser";
+import { IAppEvent } from "@common/types";
+import type { IUser } from "@interfaces/IUser";
 
 export abstract class IUserEvent extends IAppEvent {
 	constructor(

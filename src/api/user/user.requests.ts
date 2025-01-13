@@ -1,5 +1,5 @@
-import { env } from "@/common/utils/envConfig";
-import { commonZodSchemas } from "@/common/zod/common";
+import { env } from "@common/utils/envConfig";
+import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
 
 const updateUserReqBody = z.object({

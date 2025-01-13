@@ -1,10 +1,10 @@
 import { createHmac, randomInt } from "node:crypto";
-import { getSignupCodeUniqueIdentifier } from "@/api/auth/utils";
-import AppError from "@/common/models/appError";
-import type { Role } from "@/common/types";
-import { env } from "@/common/utils/envConfig";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import type { IUser } from "@/interfaces/IUser";
+import { getSignupCodeUniqueIdentifier } from "@api/auth/utils";
+import AppError from "@common/models/appError";
+import type { Role } from "@common/types";
+import { env } from "@common/utils/envConfig";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import type { IUser } from "@interfaces/IUser";
 import {
 	type CreateOtpDTO,
 	type OTPWithCode,

@@ -1,7 +1,7 @@
-import { medicalDepartmentsRoutes } from "@/api/medicalDepartments/router";
-import { MedicalDepartmentZodSchema } from "@/api/medicalDepartments/types";
-import { commonZodSchemas } from "@/common/zod/common";
+import { medicalDepartmentsRoutes } from "@api/medicalDepartments/router";
+import { MedicalDepartmentZodSchema } from "@api/medicalDepartments/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import {
 	duplicateResourceResponse,

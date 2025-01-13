@@ -1,5 +1,5 @@
-import { ZodPaginatedJsonResponse } from "@/common/zod/common";
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
+import { ZodPaginatedJsonResponse } from "@common/zod/common";
 import { registerAuthPaths } from "./auth.openapi";
 import { registerLanguagesPaths } from "./languages.openapi";
 import { registerMedicalConditionsPaths } from "./medicalConditions.openapi";

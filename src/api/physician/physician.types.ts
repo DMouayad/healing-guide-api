@@ -1,4 +1,4 @@
-import { commonZodSchemas } from "@/common/zod/common";
+import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
 import { ZodLanguage } from "../languages/language.types";
 import { MedicalConditionZodSchema } from "../medicalConditions/types";

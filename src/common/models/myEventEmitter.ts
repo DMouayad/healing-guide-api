@@ -1,5 +1,5 @@
 import EventEmitter from "node:events";
-import { USER_EVENTS } from "@/api/user/user.events";
+import { USER_EVENTS } from "@api/user/user.events";
 import type { IAppEvent } from "../types";
 
 class MyEventEmitter extends EventEmitter {

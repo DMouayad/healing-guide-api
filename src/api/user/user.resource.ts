@@ -1,5 +1,5 @@
-import type { ClassProperties } from "@/common/types";
-import type { IUser } from "@/interfaces/IUser";
+import type { ClassProperties } from "@common/types";
+import type { IUser } from "@interfaces/IUser";
 export type UserResourceProps = ClassProperties<UserResource>;
 
 export class UserResource {

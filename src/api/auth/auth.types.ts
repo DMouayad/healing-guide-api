@@ -1,7 +1,7 @@
-import type { AccessToken } from "@/common/models/accessToken";
-import type { ObjectValues } from "@/common/types";
-import { isNotDate, tryParseDate } from "@/common/utils/dateHelpers";
-import { commonZodSchemas } from "@/common/zod/common";
+import type { AccessToken } from "@common/models/accessToken";
+import type { ObjectValues } from "@common/types";
+import { isNotDate, tryParseDate } from "@common/utils/dateHelpers";
+import { commonZodSchemas } from "@common/zod/common";
 import { objectToCamel } from "ts-case-convert";
 import { z } from "zod";
 

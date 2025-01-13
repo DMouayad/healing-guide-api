@@ -1,13 +1,10 @@
-import type { AccessToken } from "@/common/models/accessToken";
-import AppError from "@/common/models/appError";
-import type { ExtractedBearerToken } from "@/common/types";
-import { sha256 } from "@/common/utils/hashing";
-import { logger } from "@/common/utils/logger";
-import { db } from "@/db";
-import type {
-	IAuthTokensRepository,
-	TokenId,
-} from "@/interfaces/IAuthTokensRepository";
+import type { AccessToken } from "@common/models/accessToken";
+import AppError from "@common/models/appError";
+import type { ExtractedBearerToken } from "@common/types";
+import { sha256 } from "@common/utils/hashing";
+import { logger } from "@common/utils/logger";
+import { db } from "@db/index";
+import type { IAuthTokensRepository, TokenId } from "@interfaces/IAuthTokensRepository";
 import { sql } from "kysely";
 import { jsonBuildObject, jsonObjectFrom } from "kysely/helpers/postgres";
 import { objectToSnake } from "ts-case-convert";

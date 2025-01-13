@@ -1,4 +1,4 @@
-import AppError from "@/common/models/appError";
+import AppError from "@common/models/appError";
 import type { NextFunction, Request, Response } from "express";
 
 function skipRequest(req: Request) {

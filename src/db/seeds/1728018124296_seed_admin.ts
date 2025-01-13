@@ -1,7 +1,7 @@
-import { prepareUserToInsertWithKysely } from "@/api/user/user.model";
-import { createAdminUser } from "@/common/factories/userFactory";
-import { env } from "@/common/utils/envConfig";
-import { sha256 } from "@/common/utils/hashing";
+import { prepareUserToInsertWithKysely } from "@api/user/user.model";
+import { createAdminUser } from "@common/factories/userFactory";
+import { env } from "@common/utils/envConfig";
+import { sha256 } from "@common/utils/hashing";
 import type { Kysely } from "kysely";
 
 export async function seed(db: Kysely<any>): Promise<void> {

@@ -1,9 +1,7 @@
-import { env } from "@/common/utils/envConfig";
+import { env } from "@common/utils/envConfig";
 import nodemailer from "nodemailer";
 import type { IMailNotifier } from "./IMailNotifier";
 
-import { IMAGES } from "@/common/constants";
-import AppError from "@/common/models/appError";
 import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
@@ -13,6 +11,8 @@ import {
 import { emailVerificationMailTemplate } from "@/transactionalEmailTemplates/emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "@/transactionalEmailTemplates/identityConfirmationTemplate";
 import { signupCodeMailTemplate } from "@/transactionalEmailTemplates/signupCodeTemplate";
+import { IMAGES } from "@common/constants";
+import AppError from "@common/models/appError";
 import type Mail from "nodemailer/lib/mailer";
 
 export const LOGO_IMG_CID = "template_logo_img";

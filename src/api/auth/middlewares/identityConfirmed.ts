@@ -1,12 +1,12 @@
-import AppError from "@/common/models/appError";
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
-import { env } from "@/common/utils/envConfig";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import type { IUser } from "@/interfaces/IUser";
 import { MailNotification } from "@/notifications/MailNotification";
 import { sendMailNotification } from "@/notifications/mail.utils";
-import { OTP_PURPOSES } from "@/otp/otp.types";
-import { generateIdentityConfirmationOTP } from "@/otp/otp.utils";
+import AppError from "@common/models/appError";
+import { APP_ERR_CODES } from "@common/models/errorCodes";
+import { env } from "@common/utils/envConfig";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import type { IUser } from "@interfaces/IUser";
+import { OTP_PURPOSES } from "@otp/otp.types";
+import { generateIdentityConfirmationOTP } from "@otp/otp.utils";
 import type { NextFunction, Request, Response } from "express";
 import { getUserFromResponse } from "../utils";
 

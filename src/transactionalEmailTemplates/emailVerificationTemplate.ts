@@ -1,7 +1,7 @@
-import { HEALING_GUIDE_WEBSITE } from "@/common/constants";
-import { env } from "@/common/utils/envConfig";
 import type { OTPMailNotification } from "@/notifications/MailNotification";
 import { LOGO_IMG_CID } from "@/notifications/services/NodemailerEmailNotifier";
+import { HEALING_GUIDE_WEBSITE } from "@common/constants";
+import { env } from "@common/utils/envConfig";
 
 function getTimeToExpireInHours(): number {
 	const d = new Date();

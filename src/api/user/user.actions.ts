@@ -1,8 +1,8 @@
-import { UserResource } from "@/api/user/user.resource";
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { APP_ROLES } from "@/common/types";
-import { getAppCtx } from "@/common/utils/getAppCtx";
+import { UserResource } from "@api/user/user.resource";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { APP_ROLES } from "@common/types";
+import { getAppCtx } from "@common/utils/getAppCtx";
 import type { Request, Response } from "express";
 import { getUserFromResponse } from "../auth/utils";
 import { userRequests } from "./user.requests";

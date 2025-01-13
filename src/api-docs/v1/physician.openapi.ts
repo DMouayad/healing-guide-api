@@ -1,22 +1,22 @@
-import { ZodLanguage } from "@/api/languages/language.types";
-import { MedicalConditionZodSchema } from "@/api/medicalConditions/types";
-import { MedicalProcedureZodSchema } from "@/api/medicalProcedures/types";
-import { MedicalSpecialtyZodSchema } from "@/api/medicalSpecialties/types";
-import { ZodPhysicianReview } from "@/api/physician/PhysicianReview";
-import { physicianRoutes } from "@/api/physician/physician.router";
+import { ZodLanguage } from "@api/languages/language.types";
+import { MedicalConditionZodSchema } from "@api/medicalConditions/types";
+import { MedicalProcedureZodSchema } from "@api/medicalProcedures/types";
+import { MedicalSpecialtyZodSchema } from "@api/medicalSpecialties/types";
+import { ZodPhysicianReview } from "@api/physician/PhysicianReview";
+import { physicianRoutes } from "@api/physician/physician.router";
 import {
 	PhysicianZodSchema,
 	ZodNewPhysicianResource,
 	ZodPhysicianRelations,
 	ZodPhysicianResource,
 	physicianRequests,
-} from "@/api/physician/physician.types";
+} from "@api/physician/physician.types";
 import {
 	ZodPhysicianFeedbackWithResponse,
 	ZodPhysicianReceivedFeedback,
-} from "@/api/physicianFeedback/types";
-import { commonZodSchemas } from "@/common/zod/common";
+} from "@api/physicianFeedback/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import { z } from "zod";
 import {

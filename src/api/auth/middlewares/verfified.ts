@@ -1,6 +1,6 @@
-import AppError from "@/common/models/appError";
-import { APP_ROLES, type AuthState } from "@/common/types";
-import type { IUser } from "@/interfaces/IUser";
+import AppError from "@common/models/appError";
+import { APP_ROLES, type AuthState } from "@common/types";
+import type { IUser } from "@interfaces/IUser";
 import type { NextFunction, Request, Response } from "express";
 
 export async function verified(_req: Request, res: Response, next: NextFunction) {

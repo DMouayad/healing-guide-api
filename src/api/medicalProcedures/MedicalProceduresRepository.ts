@@ -1,6 +1,6 @@
-import type { SimplePaginationParams } from "@/common/types";
-import { db } from "@/db";
-import { handleDBErrors } from "@/db/utils";
+import type { SimplePaginationParams } from "@common/types";
+import { db } from "@db/index";
+import { handleDBErrors } from "@db/utils";
 import type { MedicalProcedure } from "./types";
 
 export interface IMedicalProceduresRepository {

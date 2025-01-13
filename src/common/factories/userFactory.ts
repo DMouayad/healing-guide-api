@@ -1,5 +1,5 @@
-import { IUser, type IUserProps } from "@/interfaces/IUser";
 import { faker } from "@faker-js/faker";
+import { IUser, type IUserProps } from "@interfaces/IUser";
 import parsePhoneNumber from "libphonenumber-js";
 import { APP_ROLES } from "../types";
 import { bcryptHash } from "../utils/hashing";

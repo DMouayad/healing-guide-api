@@ -1,8 +1,8 @@
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
-import { ZodAppErrorSchema } from "@/common/zod/appError.zod";
-import { ZodPaginatedJsonResponse } from "@/common/zod/common";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { APP_ERR_CODES } from "@common/models/errorCodes";
+import { ZodAppErrorSchema } from "@common/zod/appError.zod";
+import { ZodPaginatedJsonResponse } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import { type ZodTypeAny, z } from "zod";
 

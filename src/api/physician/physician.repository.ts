@@ -1,6 +1,6 @@
-import AppError from "@/common/models/appError";
-import { db } from "@/db";
-import { handleDBErrors } from "@/db/utils";
+import AppError from "@common/models/appError";
+import { db } from "@db/index";
+import { handleDBErrors } from "@db/utils";
 import type { Expression } from "kysely";
 import { jsonArrayFrom } from "kysely/helpers/postgres";
 import { objectToCamel, objectToSnake } from "ts-case-convert";

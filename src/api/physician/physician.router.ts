@@ -1,4 +1,4 @@
-import { APP_ROLES } from "@/common/types";
+import { APP_ROLES } from "@common/types";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { authorized } from "../auth/middlewares/authorized";

@@ -1,5 +1,5 @@
-import AppError from "@/common/models/appError";
-import type { Role } from "@/common/types";
+import AppError from "@common/models/appError";
+import type { Role } from "@common/types";
 import type { NextFunction, Request, Response } from "express";
 import { getUserFromResponse } from "../utils";
 

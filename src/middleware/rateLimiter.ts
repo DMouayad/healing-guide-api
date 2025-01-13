@@ -1,8 +1,8 @@
-import { getUserFromResponse } from "@/api/auth/utils";
-import AppError from "@/common/models/appError";
-import { getRetryAfterSecs } from "@/common/rateLimiters";
-import { getClientIp } from "@/common/utils/getClientIp";
-import { commonZodSchemas } from "@/common/zod/common";
+import { getUserFromResponse } from "@api/auth/utils";
+import AppError from "@common/models/appError";
+import { getRetryAfterSecs } from "@common/rateLimiters";
+import { getClientIp } from "@common/utils/getClientIp";
+import { commonZodSchemas } from "@common/zod/common";
 import type { NextFunction, Request, Response } from "express";
 import { type RateLimiterAbstract, RateLimiterRes } from "rate-limiter-flexible";
 import { z } from "zod";

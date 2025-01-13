@@ -1,4 +1,4 @@
-import { commonZodSchemas } from "@/common/zod/common";
+import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
 
 export type MedicalSpecialty = { id: number; name: string };

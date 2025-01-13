@@ -1,17 +1,17 @@
-import { OTP_SENDING_METHODS } from "@/api/auth/auth.types";
-import { isAdmin } from "@/api/auth/middlewares/isAdmin";
-import { createUser } from "@/common/factories/userFactory";
-import { APP_ROLES } from "@/common/types";
-import { env } from "@/common/utils/envConfig";
 import {
 	MailNotification,
 	SignupCodeMailNotification,
 } from "@/notifications/MailNotification";
+import { OTP_SENDING_METHODS } from "@api/auth/auth.types";
+import { isAdmin } from "@api/auth/middlewares/isAdmin";
+import { createUser } from "@common/factories/userFactory";
+import { APP_ROLES } from "@common/types";
+import { env } from "@common/utils/envConfig";
+import { faker } from "@faker-js/faker";
 import {
 	generateEmailVerificationOTP,
 	generateIdentityConfirmationOTP,
-} from "@/otp/otp.utils";
-import { faker } from "@faker-js/faker";
+} from "@otp/otp.utils";
 import express, { type Request, type Response } from "express";
 import { emailVerificationMailTemplate } from "./emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "./identityConfirmationTemplate";

@@ -1,12 +1,12 @@
-import { physicianFeedbackRoutes } from "@/api/physicianFeedback/router";
+import { physicianFeedbackRoutes } from "@api/physicianFeedback/router";
 import {
 	PhysicianFeedbackCategoryZodSchema,
 	PhysicianFeedbackQuestionZodSchema,
 	PhysicianFeedbackZodSchema,
 	UpdatePhysicianFeedbackQuestionDTOSchema,
-} from "@/api/physicianFeedback/types";
-import { commonZodSchemas } from "@/common/zod/common";
+} from "@api/physicianFeedback/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import {
 	duplicateResourceResponse,

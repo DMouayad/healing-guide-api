@@ -1,7 +1,7 @@
-import { medicalConditionsRoutes } from "@/api/medicalConditions/router";
-import { MedicalConditionZodSchema } from "@/api/medicalConditions/types";
-import { commonZodSchemas } from "@/common/zod/common";
+import { medicalConditionsRoutes } from "@api/medicalConditions/router";
+import { MedicalConditionZodSchema } from "@api/medicalConditions/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
 import {
 	duplicateResourceResponse,

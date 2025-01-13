@@ -1,4 +1,4 @@
-import type { IUser } from "@/interfaces/IUser";
+import type { IUser } from "@interfaces/IUser";
 import type { AccessToken } from "./models/accessToken";
 import type { ZodPaginatedJsonResponse } from "./zod/common";
 

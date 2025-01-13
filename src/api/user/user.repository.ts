@@ -1,9 +1,9 @@
-import { PG_ERR_CODE } from "@/common/constants";
-import AppError from "@/common/models/appError";
-import { APP_ROLES, type Role } from "@/common/types";
-import { db } from "@/db";
-import type { CreateUserDTO, UpdateUserDTO } from "@/interfaces/IUser";
-import type { IUserRepository } from "@/interfaces/IUserRepository";
+import { PG_ERR_CODE } from "@common/constants";
+import AppError from "@common/models/appError";
+import { APP_ROLES, type Role } from "@common/types";
+import { db } from "@db/index";
+import type { CreateUserDTO, UpdateUserDTO } from "@interfaces/IUser";
+import type { IUserRepository } from "@interfaces/IUserRepository";
 import { DatabaseError as PgDatabaseError } from "pg";
 import { DBUser } from "./user.model";
 

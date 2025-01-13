@@ -1,16 +1,16 @@
-import { getUserFromResponse } from "@/api/auth/utils";
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import type { IUser } from "@/interfaces/IUser";
 import { MailNotification } from "@/notifications/MailNotification";
 import { SmsNotification } from "@/notifications/SmsNotification";
 import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
+import { getUserFromResponse } from "@api/auth/utils";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import type { IUser } from "@interfaces/IUser";
 import {
 	generateEmailVerificationOTP,
 	generatePhoneVerificationOTP,
 	validateEmailVerificationCode,
-} from "@/otp/otp.utils";
+} from "@otp/otp.utils";
 import type { Request, Response } from "express";
 import { userRequests } from "./user.requests";
 

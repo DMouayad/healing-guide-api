@@ -1,26 +1,26 @@
-import ApiResponse from "@/common/models/apiResponse";
-import AppError from "@/common/models/appError";
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
-import { myEventEmitter } from "@/common/models/myEventEmitter";
+import { getCredsRateLimitingKey } from "@/middleware/rateLimiter";
+import ApiResponse from "@common/models/apiResponse";
+import AppError from "@common/models/appError";
+import { APP_ERR_CODES } from "@common/models/errorCodes";
+import { myEventEmitter } from "@common/models/myEventEmitter";
 import {
 	type MultipleRateLimiters,
 	checkRateLimitsHavePoints,
 	consumeByIP,
-} from "@/common/rateLimiters";
-import { APP_ROLES, type AuthState } from "@/common/types";
-import { env } from "@/common/utils/envConfig";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import { getClientIp } from "@/common/utils/getClientIp";
-import { bcryptHash } from "@/common/utils/hashing";
-import { logUserUpdateResultIsUndefined } from "@/common/utils/logger";
-import { CreateUserDTO } from "@/interfaces/IUser";
-import { getCredsRateLimitingKey } from "@/middleware/rateLimiter";
-import { OTP_PURPOSES } from "@/otp/otp.types";
+} from "@common/rateLimiters";
+import { APP_ROLES, type AuthState } from "@common/types";
+import { env } from "@common/utils/envConfig";
+import { getAppCtx } from "@common/utils/getAppCtx";
+import { getClientIp } from "@common/utils/getClientIp";
+import { bcryptHash } from "@common/utils/hashing";
+import { logUserUpdateResultIsUndefined } from "@common/utils/logger";
+import { CreateUserDTO } from "@interfaces/IUser";
+import { OTP_PURPOSES } from "@otp/otp.types";
 import {
 	generateOTP,
 	validateIdentityConfirmationCode,
 	validateSignupCode,
-} from "@/otp/otp.utils";
+} from "@otp/otp.utils";
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { UserRegisteredEvent } from "../user/user.events";

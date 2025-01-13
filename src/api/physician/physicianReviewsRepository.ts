@@ -1,5 +1,5 @@
-import { db } from "@/db";
-import { handleDBErrors } from "@/db/utils";
+import { db } from "@db/index";
+import { handleDBErrors } from "@db/utils";
 import { objectToCamel } from "ts-case-convert";
 import type {
 	CreatePhysicianReviewDTO,
