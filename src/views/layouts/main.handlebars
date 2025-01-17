@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            HealingGuide | {{pageTitle name}}
+        </title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon" sizes="any" />
+        <link rel="icon-192" type="image/png" href="/favicon/icon-192.png" type="image/png" sizes="192x192" />
+        <link rel="icon-512" type="image/png" href="/favicon/icon-512.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+        {{#each (styles name)}}
+        <link rel="stylesheet" href="{{this}}">
+        {{/each}}
+
+        {{#each (headDeferredScripts name)}}
+        <script defer src="{{this}}"></script>
+        {{/each}}
+        {{#each (headAsyncScripts name)}}
+        <script async src="{{this}}"></script>
+        {{/each}}
+        {{#each (headScripts name)}}
+        <script src="{{this}}"></script>
+        {{/each}}
+    </head>
+
+    <body>
+        <main>
+            {{{body}}}
+        </main>
+        {{#each (bodyScripts name)}}
+        <script src="{{this}}"></script>
+        {{/each}}
+        {{#each (bodyDeferredScripts name)}}
+        <script defer src="{{this}}"></script>
+        {{/each}}
+        {{#each (bodyAsyncScripts name)}}
+        <script src="{{this}}"></script>
+        {{/each}}
+    </body>
+
+</html>

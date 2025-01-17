@@ -1,7 +1,6 @@
 import { app } from "@/server";
 import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
-
 import { db } from "./db";
 import { migrateDBLatest, testDBConnection } from "./db/utils";
 

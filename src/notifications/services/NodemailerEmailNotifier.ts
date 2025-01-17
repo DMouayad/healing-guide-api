@@ -6,10 +6,12 @@ import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
 	OTPMailNotification,
+	PasswordResetMailNotification,
 	SignupCodeMailNotification,
 } from "@/notifications/MailNotification";
 import { emailVerificationMailTemplate } from "@/transactionalEmailTemplates/emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "@/transactionalEmailTemplates/identityConfirmationTemplate";
+import { passwordResetMailTemplate } from "@/transactionalEmailTemplates/passwordResetTemplate";
 import { signupCodeMailTemplate } from "@/transactionalEmailTemplates/signupCodeTemplate";
 import { IMAGES } from "@common/constants";
 import AppError from "@common/models/appError";
@@ -61,6 +63,13 @@ export class NodemailerEmailNotifier implements IMailNotifier {
 					subject: "Complete signing up",
 					text: "",
 					html: signupCodeMailTemplate(notification),
+				};
+			case notification instanceof PasswordResetMailNotification:
+				return {
+					...basePayload,
+					subject: "Reset your password",
+					text: "",
+					html: passwordResetMailTemplate(notification),
 				};
 			default:
 				return {};

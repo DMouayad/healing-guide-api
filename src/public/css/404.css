@@ -1,0 +1,21 @@
+.content {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 16px;
+    position: absolute;
+}
+
+.title {
+    /* font-s */
+    font-style: normal;
+    text-rendering: optimizeLegibility;
+    font-weight: 800;
+    font-size: 360px;
+
+}

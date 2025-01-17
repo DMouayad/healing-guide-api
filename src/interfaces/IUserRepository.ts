@@ -8,6 +8,7 @@ export interface IUserRepository<User extends IUser = IUser> {
 	verifyCredentialsAreUnique(phoneNumber?: string, email?: string): Promise<boolean>;
 	update(user: User, params: UpdateUserDTO): Promise<User | undefined>;
 	updateById(id: number, params: UpdateUserDTO): Promise<User | undefined>;
+	updateUserPassword(emailOrPhoneNo: string, newPassword: string): Promise<void>;
 	delete(user: User): Promise<User | undefined>;
 	create(dto: CreateUserDTO): Promise<User | undefined>;
 }

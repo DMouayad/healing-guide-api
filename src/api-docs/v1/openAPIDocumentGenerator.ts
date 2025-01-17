@@ -6,6 +6,7 @@ import { registerMedicalConditionsPaths } from "./medicalConditions.openapi";
 import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
 import { registerMedicalProceduresPaths } from "./medicalProcedures.openapi";
 import { registerMedicalSpecialtiesPaths } from "./medicalSpecialties.openapi";
+import { registerPasswordResetPaths } from "./passwordReset.openapi";
 import { registerPhysicianPaths } from "./physician.openapi";
 import { registerPhysicianFeedbackPaths } from "./physicianFeedback.openapi";
 import { registerUserPaths } from "./user.openapi";
@@ -26,6 +27,7 @@ const v1BaseUrl = "/api/v1";
 
 registerAuthPaths(v1Registry, v1BaseUrl);
 registerUserPaths(v1Registry, v1BaseUrl);
+registerPasswordResetPaths(v1Registry, v1BaseUrl);
 registerMedicalDepartmentsPaths(v1Registry, v1BaseUrl);
 registerMedicalSpecialtiesPaths(v1Registry, v1BaseUrl);
 registerMedicalProceduresPaths(v1Registry, v1BaseUrl);

@@ -32,7 +32,7 @@ export function accessTokenFromKyselyQuery(token: KyselyQueryAccessToken): Acces
 
 export type NewAccessToken = string;
 
-export type SignupCodeSendingMethod = ObjectValues<typeof OTP_SENDING_METHODS>;
+export type OtpSendingMethod = ObjectValues<typeof OTP_SENDING_METHODS>;
 
 export const OTP_SENDING_METHODS = {
 	sms: "SMS",

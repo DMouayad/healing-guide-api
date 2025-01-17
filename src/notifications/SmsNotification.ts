@@ -6,6 +6,7 @@ import type { OTPWithCode } from "@otp/otp.types";
 export const SMS_NOTIFICATIONS = {
 	phoneVerification: "PHONE_VERIFICATION_NOTIFICATION",
 	signupCode: "SIGNUP_CODE_NOTIFICATION",
+	passwordReset: "PASSWORD_RESET",
 } as const;
 export type SmsNotificationType = ObjectValues<typeof SMS_NOTIFICATIONS>;
 
@@ -14,6 +15,9 @@ export abstract class SmsNotification {
 	constructor(readonly type: SmsNotificationType) {}
 	static phoneVerification(user: IUser, otp: OTPWithCode) {
 		return new OtpSmsNotification(user, otp, SMS_NOTIFICATIONS.phoneVerification);
+	}
+	static passwordReset(user: IUser, resetLink: string) {
+		return new PasswordResetSmsNotification(user, resetLink);
 	}
 	static signupCode(code: SignupCodedViaSMS): SmsNotification {
 		return new SignupCodeSmsNotification(code);
@@ -38,5 +42,16 @@ export class SignupCodeSmsNotification extends SmsNotification {
 	}
 	constructor(readonly signupCode: SignupCodedViaSMS) {
 		super(SMS_NOTIFICATIONS.signupCode);
+	}
+}
+export class PasswordResetSmsNotification extends SmsNotification {
+	override receiverPhone(): string {
+		return this.user.phoneNumber;
+	}
+	constructor(
+		readonly user: IUser,
+		readonly resetLink: string,
+	) {
+		super(SMS_NOTIFICATIONS.passwordReset);
 	}
 }

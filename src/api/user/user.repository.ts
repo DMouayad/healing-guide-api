@@ -8,6 +8,19 @@ import { DatabaseError as PgDatabaseError } from "pg";
 import { DBUser } from "./user.model";
 
 export class DBUserRepository implements IUserRepository<DBUser> {
+	async updateUserPassword(emailOrPhoneNo: string, newPassword: string): Promise<void> {
+		await db
+			.updateTable("users")
+			.where((eb) =>
+				eb.or([
+					eb("email", "=", emailOrPhoneNo),
+					eb("phone_number", "=", emailOrPhoneNo),
+				]),
+			)
+			.set("password_hash", newPassword)
+			.returning("id")
+			.executeTakeFirstOrThrow();
+	}
 	async verifyCredentialsAreUnique(
 		phoneNumber?: string,
 		email?: string,

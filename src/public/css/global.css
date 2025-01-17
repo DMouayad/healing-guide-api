@@ -1,0 +1,249 @@
+body {
+    /* overflow: hidden; */
+    height: 100vh;
+}
+
+.mainDiv {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: space-evenly;
+    font-family: 'Open Sans', sans-serif;
+
+    @media (max-width:500px) {
+        margin: 0px 10px
+    }
+}
+
+.cardStyle {
+    width: 500px;
+    border-color: white;
+    background: #fff;
+    padding: 36px;
+    border-radius: 12px;
+    margin: 30px 0;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+
+    @media (max-width:500px) {
+        padding: 14px
+    }
+}
+
+#appLogo {
+    max-height: 100px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.formTitle {
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    color: #2F2D3B;
+    text-align: center;
+}
+
+.subtitle {
+    font-weight: 500;
+    margin-top: 30px;
+    color: #2F2D3B;
+    text-align: center;
+}
+
+.inputLabel {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 6px;
+    margin-top: 24px;
+}
+
+.inputDiv {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+
+    @media (max-width:500px) {
+        width: 80%;
+    }
+}
+
+input {
+    height: 40px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    border: solid 1px #ccc;
+    padding: 0 11px;
+}
+
+input:disabled {
+    cursor: not-allowed;
+    border: solid 1px #eee;
+}
+
+#buttonWrapper {
+    margin-top: 40px;
+}
+
+.submitButton {
+    width: 70%;
+    height: 46px;
+    margin: auto;
+    display: block;
+    color: #fff;
+    background-color: #065492;
+    border: none;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.035);
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+
+
+.submitButton:disabled,
+button[disabled] {
+    border: 1px solid #cccccc;
+    background-color: #cccccc;
+    color: #666666;
+}
+
+#loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #22BC66;
+    width: 26px;
+    height: 26px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    display: none;
+}
+
+.loaderWrapper {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.password-container {
+    display: inline-flex;
+    flex-direction: row;
+    margin-bottom: 6px;
+    position: relative;
+
+    input {
+        flex-grow: 1;
+    }
+}
+
+.password-container button {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    position: absolute;
+    font-weight: 500;
+    right: 0
+}
+
+/* CSS */
+.text-button {
+    width: 70%;
+    appearance: none;
+    backface-visibility: hidden;
+    background-color: white;
+    box-shadow: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    text-align: center;
+    letter-spacing: normal;
+    line-height: 1.5;
+    outline: none;
+    overflow: hidden;
+    padding: 14px 30px;
+    position: relative;
+    text-decoration: none;
+    transform: translate3d(0, 0, 0);
+    transition: all .3s;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
+    color: #065492
+}
+
+.button-65:hover {
+    color: #1366d6;
+    border-color: #1366d6;
+}
+
+button:hover {
+    box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+    opacity: 1;
+    transform: translateY(0);
+    transition-duration: .35s;
+}
+
+button:hover:after {
+    opacity: .5;
+}
+
+button:active {
+    box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+    transform: translateY(2px);
+    transition-duration: .35s;
+}
+
+button:active:after {
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+    button {
+        padding: 14px 22px;
+        width: 176px;
+    }
+}
+
+.link-button {
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
+    transition: all .3s;
+    font-weight: 700;
+    padding: 20px 10px;
+
+    &:hover {
+        text-decoration: underline;
+        box-shadow: none;
+    }
+}

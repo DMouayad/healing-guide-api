@@ -7,8 +7,11 @@ pg.types.setTypeParser(types.builtins.INT8, Number.parseInt);
 pg.types.setTypeParser(types.builtins.INT4, Number.parseInt);
 export const db = new Kysely<DB>({
 	dialect: new PostgresDialect({
-		pool: new pg.Pool({
-			connectionString: process.env.DATABASE_URL,
-		}),
+		pool: getDbPool(),
 	}),
 });
+export function getDbPool() {
+	return new pg.Pool({
+		connectionString: process.env.DATABASE_URL,
+	});
+}

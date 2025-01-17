@@ -19,7 +19,6 @@ import {
 	OTP_SENDING_METHODS,
 	type SignupCode,
 } from "./auth.types";
-
 export async function checkCredentials(
 	creds: { emailOrPhoneNo: string; password: string },
 	existingUser?: IUser,

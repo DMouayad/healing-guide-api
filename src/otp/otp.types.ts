@@ -13,6 +13,7 @@ export type CreateOtpDTO = {
 	purpose: OtpPurpose;
 	expirationInMinutes: number;
 	length: number;
+	secret?: string;
 };
 export interface OTP {
 	hash: string;

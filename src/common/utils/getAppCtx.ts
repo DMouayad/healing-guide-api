@@ -1,5 +1,6 @@
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
+import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
 import { DBAuthTokensRepository } from "@api/auth/authTokens.repository";
 import { DBLanguageRepository } from "@api/languages/LanguageRepository";
 import { DBMedicalConditionsRepository } from "@api/medicalConditions/MedicalConditionsRepository";
@@ -29,6 +30,7 @@ const productionAppCtx: AppCtx = {
 	languagesRepository: new DBLanguageRepository(),
 	physicianReceivedFeedbackRepository: new DBPhysicianReceivedFeedbackRepository(),
 	physicianReviewsRepository: new DBPhysicianReviewsRepository(),
+	passwordResetRepository: new DBPasswordResetRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

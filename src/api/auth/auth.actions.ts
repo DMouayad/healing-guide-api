@@ -1,4 +1,6 @@
+import { CreateUserDTO } from "@/interfaces/IUser";
 import { getCredsRateLimitingKey } from "@/middleware/rateLimiter";
+import { OTP_PURPOSES } from "@/otp/otp.types";
 import ApiResponse from "@common/models/apiResponse";
 import AppError from "@common/models/appError";
 import { APP_ERR_CODES } from "@common/models/errorCodes";
@@ -14,8 +16,6 @@ import { getAppCtx } from "@common/utils/getAppCtx";
 import { getClientIp } from "@common/utils/getClientIp";
 import { bcryptHash } from "@common/utils/hashing";
 import { logUserUpdateResultIsUndefined } from "@common/utils/logger";
-import { CreateUserDTO } from "@interfaces/IUser";
-import { OTP_PURPOSES } from "@otp/otp.types";
 import {
 	generateOTP,
 	validateIdentityConfirmationCode,

@@ -20,6 +20,7 @@ export function generateOTP(dto: CreateOtpDTO): OTPWithCode {
 		expiresAt,
 		issuedFor: dto.issuedFor,
 		purpose: dto.purpose,
+		secret: dto.secret,
 	});
 	return { expiresAt, hash, issuedFor: dto.issuedFor, purpose: dto.purpose, code };
 }
@@ -72,6 +73,7 @@ function generateHmac(params: {
 	issuedFor: string;
 	purpose: OtpPurpose;
 	expiresAt: Date;
+	secret?: string;
 }) {
 	const message = [
 		params.code,
@@ -79,7 +81,9 @@ function generateHmac(params: {
 		params.purpose,
 		params.expiresAt.getTime(),
 	].join("|");
-	return createHmac("sha256", env.HMAC_SECRET).update(message).digest("hex");
+	return createHmac("sha256", params.secret ?? env.HMAC_SECRET)
+		.update(message)
+		.digest("hex");
 }
 
 export function generateIdentityConfirmationOTP(user: IUser) {
@@ -145,6 +149,7 @@ async function validateOTPCode(params: {
 	code: string;
 	issuedFor: string;
 	purpose: OtpPurpose;
+	secret?: string;
 }): Promise<void> {
 	const result = await getAppCtx().otpRepository.find(params.issuedFor, params.purpose);
 

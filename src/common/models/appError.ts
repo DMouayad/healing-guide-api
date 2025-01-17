@@ -125,6 +125,13 @@ class AppError extends Error {
 			params,
 		);
 	}
+	static INVALID_PASSWORD_RESET(params?: ParamsOverride): AppError {
+		return constructErr(
+			APP_ERR_CODES.INVALID_PASSWORD_RESET,
+			StatusCodes.BAD_REQUEST,
+			params,
+		);
+	}
 	static RATE_LIMIT_EXCEEDED(props: { retryAfterSecs?: number } = {}): AppError {
 		return new RateLimitError(props.retryAfterSecs);
 	}

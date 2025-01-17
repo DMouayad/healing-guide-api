@@ -1,5 +1,6 @@
 import type { IMailNotifier } from "@/notifications/services/IMailNotifier";
 import type { ISmsNotifier } from "@/notifications/services/ISmsNotifier";
+import type { IPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
 import type { ILanguageRepository } from "@api/languages/LanguageRepository";
 import type { IMedicalConditionsRepository } from "@api/medicalConditions/MedicalConditionsRepository";
 import type { IMedicalDepartmentsRepository } from "@api/medicalDepartments/MedicalDepartmentsRepository";
@@ -28,4 +29,5 @@ export type AppCtx = {
 	readonly physicianReceivedFeedbackRepository: IPhysicianReceivedFeedbackRepository;
 	readonly languagesRepository: ILanguageRepository;
 	readonly physicianReviewsRepository: IPhysicianReviewsRepository;
+	readonly passwordResetRepository: IPasswordResetRepository;
 };

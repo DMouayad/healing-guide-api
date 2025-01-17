@@ -7,6 +7,7 @@ export const MAIL_NOTIFICATIONS = {
 	emailVerification: "EMAIL_VERIFICATION_NOTIFICATION",
 	identityConfirmation: "IDENTITY_CONFIRMATION_NOTIFICATION",
 	signupCode: "SIGNUP_CODE_NOTIFICATION",
+	passwordReset: "PASSWORD_RESET_NOTIFICATION",
 } as const;
 export type MailNotificationType = ObjectValues<typeof MAIL_NOTIFICATIONS>;
 
@@ -22,6 +23,9 @@ export abstract class MailNotification {
 	}
 	static identityConfirmation(user: IUser, otp: OTPWithCode) {
 		return new OTPMailNotification(user, otp, MAIL_NOTIFICATIONS.identityConfirmation);
+	}
+	static passwordReset(user: IUser, resetLink: string) {
+		return new PasswordResetMailNotification(user, resetLink);
 	}
 }
 
@@ -47,5 +51,16 @@ export class SignupCodeMailNotification extends MailNotification {
 		readonly otpCode: string,
 	) {
 		super(MAIL_NOTIFICATIONS.signupCode);
+	}
+}
+export class PasswordResetMailNotification extends MailNotification {
+	override getReceiver(): string | null {
+		return this.user.email;
+	}
+	constructor(
+		readonly user: IUser,
+		readonly resetLink: string,
+	) {
+		super(MAIL_NOTIFICATIONS.passwordReset);
 	}
 }

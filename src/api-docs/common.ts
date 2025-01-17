@@ -26,6 +26,14 @@ export const identityConfirmationRequiredResponse = {
 		AppError.FORBIDDEN({ errCode: APP_ERR_CODES.CONFIRM_IDENTITY }),
 	),
 };
+export const invalidPasswordResetResponse = {
+	statusCode: StatusCodes.BAD_REQUEST,
+	description: "Failure: password reset link is invalid or has expired",
+	schema: ZodAppErrorSchema,
+	example: ApiResponse.error(
+		AppError.BAD_REQUEST({ errCode: APP_ERR_CODES.INVALID_PASSWORD_RESET }),
+	),
+};
 export const duplicateResourceResponse = (description: string) => {
 	return {
 		statusCode: StatusCodes.CONFLICT,

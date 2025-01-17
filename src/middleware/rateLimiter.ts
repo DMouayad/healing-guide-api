@@ -1,4 +1,8 @@
-import { getUserFromResponse } from "@api/auth/utils";
+import { getUserFromResponse } from "@/api/auth/utils";
+import {
+	forgotPasswordRequest,
+	resetPasswordRequest,
+} from "@/passwordReset/passwordReset.types";
 import AppError from "@common/models/appError";
 import { getRetryAfterSecs } from "@common/rateLimiters";
 import { getClientIp } from "@common/utils/getClientIp";
@@ -43,6 +47,36 @@ export function rateLimiterByEmailAndPhone(limiter: RateLimiterAbstract) {
 		const creds = CredentialsForRateLimitSchema.parse(req.body);
 		const key = getCredsRateLimitingKey(creds);
 		return baseRateLimiter(limiter, key)(req, res, next);
+	};
+}
+export function forgotPasswordRateLimiterByCreds(limiter: RateLimiterAbstract) {
+	return (req: Request, res: Response, next: NextFunction) => {
+		const validationResult = forgotPasswordRequest.body.safeParse(req.body);
+		if (!validationResult.success) {
+			return res.redirect("/404");
+		}
+		const data = validationResult.data;
+		const key = data.receiveVia === "MAIL" ? data.email : data.phone;
+		console.log(key);
+		if (!key) {
+			return next();
+		}
+		return baseRateLimiter(limiter, key)(req, res, next);
+	};
+}
+export function passwordResetRateLimiterByToken(limiter: RateLimiterAbstract) {
+	return (req: Request, res: Response, next: NextFunction) => {
+		const validationResult = resetPasswordRequest.params.safeParse(req.params);
+		if (!validationResult.success) {
+			return res.redirect("/404");
+		}
+		const key = validationResult.data.token;
+
+		try {
+			return baseRateLimiter(limiter, key)(req, res, next);
+		} catch (err) {
+			return Promise.reject(err);
+		}
 	};
 }
 

@@ -1,14 +1,12 @@
+import { APP_ERR_CODES } from "@/common/models/errorCodes";
+import { passwordResetRoutes } from "@/passwordReset/passwordReset.router";
 import ApiResponse from "@common/models/apiResponse";
-import { RateLimitError } from "@common/models/appError";
+import AppError, { RateLimitError } from "@common/models/appError";
 import { toAppError } from "@common/utils/toAppError";
-import { logErrIfNeeded, logger } from "@utils/logger";
-import type { ErrorRequestHandler, RequestHandler } from "express";
+import { logErrIfNeeded } from "@utils/logger";
+import type { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-
-export const unexpectedRequestHandler: RequestHandler = (req, res) => {
-	logger.warn(`${req.method} Request made to unknown route: ${req.url}`);
-	res.status(StatusCodes.NOT_FOUND).send();
-};
+import { SignatureError } from "signed";
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	if (err instanceof RateLimitError) {
@@ -22,3 +20,26 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 		ApiResponse.error(appError).send(res);
 	}
 };
+
+export function handleInvalidPasswordReset(
+	err: unknown,
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	if (
+		(err instanceof AppError && err.errCode === APP_ERR_CODES.INVALID_PASSWORD_RESET) ||
+		err instanceof SignatureError
+	) {
+		if (req.accepts("html")) {
+			res.redirect(passwordResetRoutes.passwordResetInvalid);
+		} else {
+			ApiResponse.error(AppError.INVALID_PASSWORD_RESET()).send(res);
+		}
+		return;
+	} else if (err) {
+		console.log(err);
+		return next(err);
+	}
+	next();
+}

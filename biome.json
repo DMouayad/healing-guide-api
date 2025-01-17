@@ -5,7 +5,8 @@
 		"lineWidth": 88
 	},
 	"files": {
-		"include": ["src/**/*.ts", "src/**/*.js"]
+		"include": ["src/**/*.ts", "src/**/*.js"],
+		"ignore": ["src/public/**"]
 	},
 	"organizeImports": {
 		"enabled": true
