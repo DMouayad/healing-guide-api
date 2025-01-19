@@ -4,7 +4,9 @@ import { APP_ERR_CODES } from "../models/errorCodes";
 
 export function toAppError(err: any): AppError {
 	if (err instanceof ZodError) {
-		return AppError.VALIDATION({ message: JSON.stringify(err.format()) });
+		const appError = AppError.VALIDATION({ message: JSON.stringify(err.format()) });
+		appError.stack = err.stack;
+		return appError;
 	}
 	if (err instanceof AppError) {
 		err.stack = refineStackTrace(err.stack);
