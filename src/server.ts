@@ -16,8 +16,10 @@ import { medicalConditionsRouter } from "./api/medicalConditions/router";
 import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { medicalProceduresRouter } from "./api/medicalProcedures/router";
 import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
-import { physicianRouter } from "./api/physician/physician.router";
-import { physicianFeedbackRouter } from "./api/physicianFeedback/router";
+import {
+	physicianFeedbackRouter,
+	physicianRouter,
+} from "./api/physician/physician.router";
 import { userRouter } from "./api/user/user.router";
 import { defaultRateLimiterByIP } from "./common/rateLimiters";
 import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";

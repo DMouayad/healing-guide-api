@@ -1,23 +1,24 @@
+import { getAppCtx } from "@/common/utils/getAppCtx";
 import { APP_ROLES } from "@common/types";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { authorized } from "../auth/middlewares/authorized";
 import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
+import { getFeedbackRoutes } from "../feedbacks/feedback.utils";
+import { feedbackHandler } from "../feedbacks/feedbackHandlers";
+import { receivedFeedbackHandler } from "../feedbacks/receivedFeedbackHandler";
 import {
 	createAction,
-	createFeedbackAction,
 	createReviewByUser,
 	deleteReview,
 	editReview,
 	getByIdAction,
-	getPhysicianFeedbacksAction,
 	getPhysicianReviews,
 	setProvidedProcedures,
 	setSpecialties,
 	setSpokenLanguages,
 	setTreatConditions,
 	updateAction,
-	updateFeedbackAction,
 } from "./physician.actions";
 
 const router: Router = express.Router();
@@ -47,11 +48,6 @@ router.patch(
 	identityConfirmed,
 	updateAction,
 );
-/** Received Feedbacks */
-router.post(routes.receivedFeedbacks(), authenticated, createFeedbackAction);
-router.patch(routes.receivedFeedbacks(), authenticated, updateFeedbackAction);
-router.get(routes.receivedFeedbacks(), getPhysicianFeedbacksAction);
-
 /** Treat Conditions */
 router.post(
 	routes.treatConditions,
@@ -88,3 +84,21 @@ router.delete(routes.reviewById(), authenticated, deleteReview);
 
 export const physicianRoutes = routes;
 export const physicianRouter = router;
+
+// Physician Feedback questions & categories management
+export const physicianFeedbackRouter: Router = express.Router();
+export const physicianFeedbackRoutes = getFeedbackRoutes("/physician-feedbacks");
+
+feedbackHandler(
+	physicianFeedbackRouter,
+	physicianFeedbackRoutes,
+	getAppCtx().physicianFeedbackRepository,
+);
+
+// Physician Received Feedbacks
+receivedFeedbackHandler(
+	router,
+	routes.receivedFeedbacks(),
+	getAppCtx().physicianReceivedFeedbackRepository,
+	"physician",
+);

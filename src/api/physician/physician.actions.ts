@@ -37,42 +37,6 @@ export async function getByIdAction(req: Request, res: Response) {
 		: ApiResponse.error(AppError.ENTITY_NOT_FOUND());
 	response.send(res);
 }
-/** Physician Received Feedbacks */
-export async function createFeedbackAction(req: Request, res: Response) {
-	const user = getUserFromResponse(res);
-	const params = physicianRequests.createOrUpdateFeedback.params.parse(req.params);
-	const body = physicianRequests.createOrUpdateFeedback.body.parse(req.body);
-	await getAppCtx().physicianReceivedFeedbackRepository.create({
-		userId: user.id,
-		physicianId: params.physicianId,
-		questionId: body.questionId,
-		response: body.response,
-	});
-	return ApiResponse.success().send(res);
-}
-export async function updateFeedbackAction(req: Request, res: Response) {
-	const user = getUserFromResponse(res);
-	const params = physicianRequests.createOrUpdateFeedback.params.parse(req.params);
-	const body = physicianRequests.createOrUpdateFeedback.body.parse(req.body);
-	const updatedFeedback =
-		await getAppCtx().physicianReceivedFeedbackRepository.updateFeedbackResponse({
-			userId: user.id,
-			physicianId: params.physicianId,
-			questionId: body.questionId,
-			response: body.response,
-		});
-	return ApiResponse.success({ data: updatedFeedback }).send(res);
-}
-export async function getPhysicianFeedbacksAction(req: Request, res: Response) {
-	const user = getUserFromResponse(res, false);
-	const params = physicianRequests.getPhysicianFeedbacks.params.parse(req.params);
-	const result =
-		await getAppCtx().physicianReceivedFeedbackRepository.getPhysicianFeedbackWithUserResponses(
-			params.physicianId,
-			user?.id,
-		);
-	ApiResponse.success({ data: result }).send(res);
-}
 
 async function setPhysicianRelationAction(
 	req: Request,

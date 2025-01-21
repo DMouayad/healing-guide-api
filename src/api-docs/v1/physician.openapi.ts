@@ -1,3 +1,4 @@
+import { ZodFeedbackWithResponse, ZodReceivedFeedback } from "@/api/feedbacks/types";
 import { ZodLanguage } from "@api/languages/language.types";
 import { MedicalConditionZodSchema } from "@api/medicalConditions/types";
 import { MedicalProcedureZodSchema } from "@api/medicalProcedures/types";
@@ -11,10 +12,6 @@ import {
 	ZodPhysicianResource,
 	physicianRequests,
 } from "@api/physician/physician.types";
-import {
-	ZodPhysicianFeedbackWithResponse,
-	ZodPhysicianReceivedFeedback,
-} from "@api/physicianFeedback/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
@@ -246,7 +243,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: feedback was updated",
-				schema: ZodPhysicianReceivedFeedback,
+				schema: ZodReceivedFeedback,
 			},
 			unauthenticatedResponse,
 		]),
@@ -254,7 +251,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	registry.registerPath({
 		method: "get",
 		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),
-		description: "Retrieves feedbacks for a given physician",
+		description: "Retrieves given feedbacks for a physician",
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
@@ -265,7 +262,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 				statusCode: StatusCodes.OK,
 				description:
 					"Success: returns the information of a physician received feedbacks",
-				schema: z.array(ZodPhysicianFeedbackWithResponse),
+				schema: z.array(ZodFeedbackWithResponse),
 			},
 		]),
 	});

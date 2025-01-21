@@ -1,5 +1,7 @@
 import type { IFacilityResourceCategoriesRepository } from "@/api/facilityResourceCategory/FacilityResourceCategoriesRepository";
 import type { IFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
+import type { IFeedbackRepository } from "@/api/feedbacks/FeedbackRepository";
+import type { IReceivedFeedbackRepository } from "@/api/feedbacks/ReceivedFeedbackRepository";
 import type { IMailNotifier } from "@/notifications/services/IMailNotifier";
 import type { ISmsNotifier } from "@/notifications/services/ISmsNotifier";
 import type { IPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -9,9 +11,7 @@ import type { IMedicalDepartmentsRepository } from "@api/medicalDepartments/Medi
 import type { IMedicalProceduresRepository } from "@api/medicalProcedures/MedicalProceduresRepository";
 import type { IMedicalSpecialtiesRepository } from "@api/medicalSpecialties/MedicalSpecialtiesRepository";
 import type { IPhysicianRepository } from "@api/physician/physician.repository";
-import type { IPhysicianReceivedFeedbackRepository } from "@api/physician/physicianReceivedFeedbackRepository";
 import type { IPhysicianReviewsRepository } from "@api/physician/physicianReviewsRepository";
-import type { IPhysicianFeedbackRepository } from "@api/physicianFeedback/PhysicianFeedbackRepository";
 import type { IAuthTokensRepository } from "@interfaces/IAuthTokensRepository";
 import type { IUserRepository } from "@interfaces/IUserRepository";
 import type { IOtpRepository } from "@otp/otpRepository";
@@ -25,10 +25,10 @@ export type AppCtx = {
 	readonly medicalDepartmentsRepository: IMedicalDepartmentsRepository;
 	readonly medicalSpecialtiesRepository: IMedicalSpecialtiesRepository;
 	readonly medicalProceduresRepository: IMedicalProceduresRepository;
-	readonly physicianFeedbackRepository: IPhysicianFeedbackRepository;
+	readonly physicianFeedbackRepository: IFeedbackRepository;
 	readonly medicalConditionsRepository: IMedicalConditionsRepository;
 	readonly physicianRepository: IPhysicianRepository;
-	readonly physicianReceivedFeedbackRepository: IPhysicianReceivedFeedbackRepository;
+	readonly physicianReceivedFeedbackRepository: IReceivedFeedbackRepository;
 	readonly languagesRepository: ILanguageRepository;
 	readonly physicianReviewsRepository: IPhysicianReviewsRepository;
 	readonly passwordResetRepository: IPasswordResetRepository;

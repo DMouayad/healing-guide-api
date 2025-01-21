@@ -1,10 +1,10 @@
-import { physicianFeedbackRoutes } from "@api/physicianFeedback/router";
 import {
-	PhysicianFeedbackCategoryZodSchema,
-	PhysicianFeedbackQuestionZodSchema,
-	PhysicianFeedbackZodSchema,
-	UpdatePhysicianFeedbackQuestionDTOSchema,
-} from "@api/physicianFeedback/types";
+	FeedbackCategoryZodSchema,
+	FeedbackQuestionZodSchema,
+	FeedbackZodSchema,
+	UpdateFeedbackQuestionDTOSchema,
+} from "@/api/feedbacks/types";
+import { physicianFeedbackRoutes } from "@/api/physician/physician.router";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
@@ -21,15 +21,16 @@ export function registerPhysicianFeedbackPaths(
 	registry: OpenAPIRegistry,
 	baseUrl: string,
 ) {
-	const basePath = baseUrl + physicianFeedbackRoutes.baseRoute;
-	registry.register("PhysicianFeedbackCategory", PhysicianFeedbackCategoryZodSchema);
-	registry.register("PhysicianFeedback", PhysicianFeedbackZodSchema);
-	registry.register("PhysicianFeedbackQuestion", PhysicianFeedbackQuestionZodSchema);
+	const routes = physicianFeedbackRoutes;
+	const basePath = baseUrl + routes.baseRoute;
+	registry.register("FeedbackCategory", FeedbackCategoryZodSchema);
+	registry.register("Feedback", FeedbackZodSchema);
+	registry.register("FeedbackQuestion", FeedbackQuestionZodSchema);
 
 	registry.registerPath({
 		method: "post",
-		path: basePath + physicianFeedbackRoutes.addCategory,
-		description: "Used to add a new `PhysicianFeedbackCategory` to the database",
+		path: basePath + routes.addCategory,
+		description: "Used to add a new `FeedbackCategory` to the database",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -45,20 +46,20 @@ export function registerPhysicianFeedbackPaths(
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.CREATED,
-				description: "Success: a new `PhysicianFeedbackCategory` was created",
-				schema: PhysicianFeedbackCategoryZodSchema,
+				description: "Success: a new `FeedbackCategory` was created",
+				schema: FeedbackCategoryZodSchema,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
 			duplicateResourceResponse(
-				"Failure: a `PhysicianFeedbackCategory` already exists with the same name",
+				"Failure: a `FeedbackCategory` already exists with the same name",
 			),
 		]),
 	});
 	registry.registerPath({
 		method: "patch",
-		path: basePath + physicianFeedbackRoutes.editCategory("{id}"),
-		description: "Used to edit an existing `PhysicianFeedbackCategory`",
+		path: basePath + routes.editCategory("{id}"),
+		description: "Used to edit an existing `FeedbackCategory`",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -75,20 +76,20 @@ export function registerPhysicianFeedbackPaths(
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.OK,
-				description: "Success:`PhysicianFeedbackCategory` was updated",
-				schema: PhysicianFeedbackCategoryZodSchema,
+				description: "Success:`FeedbackCategory` was updated",
+				schema: FeedbackCategoryZodSchema,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
 			duplicateResourceResponse(
-				"Failure: a `PhysicianFeedbackCategory` already exists with the same name",
+				"Failure: a `FeedbackCategory` already exists with the same name",
 			),
 		]),
 	});
 	registry.registerPath({
 		method: "delete",
-		path: basePath + physicianFeedbackRoutes.deleteCategory("{id}"),
-		description: "Used by an admin to delete a specific `PhysicianFeedbackCategory`",
+		path: basePath + routes.deleteCategory("{id}"),
+		description: "Used by an admin to delete a specific `FeedbackCategory`",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -107,8 +108,8 @@ export function registerPhysicianFeedbackPaths(
 
 	registry.registerPath({
 		method: "post",
-		path: basePath + physicianFeedbackRoutes.addQuestion,
-		description: "Used to add a new `PhysicianFeedbackQuestion` to the database",
+		path: basePath + routes.addQuestion,
+		description: "Used to add a new `FeedbackQuestion` to the database",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -116,7 +117,7 @@ export function registerPhysicianFeedbackPaths(
 			body: {
 				content: {
 					"application/json": {
-						schema: UpdatePhysicianFeedbackQuestionDTOSchema,
+						schema: UpdateFeedbackQuestionDTOSchema,
 					},
 				},
 			},
@@ -124,20 +125,20 @@ export function registerPhysicianFeedbackPaths(
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.CREATED,
-				description: "Success: a new `PhysicianFeedbackQuestion` was created",
-				schema: PhysicianFeedbackQuestionZodSchema,
+				description: "Success: a new `FeedbackQuestion` was created",
+				schema: FeedbackQuestionZodSchema,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
 			duplicateResourceResponse(
-				"Failure: a `PhysicianFeedbackQuestion` already exists with the same name",
+				"Failure: a `FeedbackQuestion` already exists with the same name",
 			),
 		]),
 	});
 	registry.registerPath({
 		method: "patch",
-		path: basePath + physicianFeedbackRoutes.editQuestion("{id}"),
-		description: "Used to edit an existing `PhysicianFeedbackQuestion`",
+		path: basePath + routes.editQuestion("{id}"),
+		description: "Used to edit an existing `FeedbackQuestion`",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -145,7 +146,7 @@ export function registerPhysicianFeedbackPaths(
 			body: {
 				content: {
 					"application/json": {
-						schema: UpdatePhysicianFeedbackQuestionDTOSchema,
+						schema: UpdateFeedbackQuestionDTOSchema,
 					},
 				},
 			},
@@ -154,20 +155,20 @@ export function registerPhysicianFeedbackPaths(
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.OK,
-				description: "Success: `PhysicianFeedbackQuestion` was updated",
-				schema: PhysicianFeedbackQuestionZodSchema,
+				description: "Success: `FeedbackQuestion` was updated",
+				schema: FeedbackQuestionZodSchema,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
 			duplicateResourceResponse(
-				"Failure: a `PhysicianFeedbackQuestion` already exists with the same name",
+				"Failure: a `FeedbackQuestion` already exists with the same name",
 			),
 		]),
 	});
 	registry.registerPath({
 		method: "delete",
-		path: basePath + physicianFeedbackRoutes.deleteQuestion("{id}"),
-		description: "Used by an admin to delete a specific `PhysicianFeedbackQuestion`",
+		path: basePath + routes.deleteQuestion("{id}"),
+		description: "Used by an admin to delete a specific `FeedbackQuestion`",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
@@ -183,22 +184,17 @@ export function registerPhysicianFeedbackPaths(
 			unauthorizedResponse,
 		]),
 	});
-
 	registry.registerPath({
 		method: "get",
-		path: basePath + physicianFeedbackRoutes.getAll,
-		description: "Used to retrieve a list of `PhysicianFeedback`",
+		path: basePath + routes.getAll,
+		description: "Used to retrieve a list of `Feedback`",
 		tags: ["Physician Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
-
 		request: {
 			query: commonZodSchemas.queryParams,
 		},
 		responses: createApiResponses([
-			paginatedJsonResponse(
-				"Success: Returns a list of `PhysicianFeedback`",
-				PhysicianFeedbackZodSchema,
-			),
+			paginatedJsonResponse("Success: Returns a list of `Feedback`", FeedbackZodSchema),
 		]),
 	});
 }

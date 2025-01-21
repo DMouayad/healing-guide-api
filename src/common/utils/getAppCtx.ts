@@ -1,5 +1,7 @@
 import { DBFacilityResourceCategoriesRepository } from "@/api/facilityResourceCategory/FacilityResourceCategoriesRepository";
 import { DBFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
+import { DBPhysicianFeedbackRepository } from "@/api/feedbacks/FeedbackRepository";
+import { DBPhysicianReceivedFeedbackRepository } from "@/api/feedbacks/ReceivedFeedbackRepository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -10,9 +12,7 @@ import { DBMedicalDepartmentsRepository } from "@api/medicalDepartments/MedicalD
 import { DBMedicalProceduresRepository } from "@api/medicalProcedures/MedicalProceduresRepository";
 import { DBMedicalSpecialtiesRepository } from "@api/medicalSpecialties/MedicalSpecialtiesRepository";
 import { DBPhysicianRepository } from "@api/physician/physician.repository";
-import { DBPhysicianReceivedFeedbackRepository } from "@api/physician/physicianReceivedFeedbackRepository";
 import { DBPhysicianReviewsRepository } from "@api/physician/physicianReviewsRepository";
-import { DBPhysicianFeedbackRepository } from "@api/physicianFeedback/PhysicianFeedbackRepository";
 import { DBUserRepository } from "@api/user/user.repository";
 import { DBOtpRepository } from "@otp/otpRepository";
 import type { AppCtx } from "../models/appCtx";
