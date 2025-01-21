@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import type { Language } from "../languages/language.types";
 import type { MedicalCondition } from "../medicalConditions/types";
 import type { MedicalProcedure } from "../medicalProcedures/types";
 import type { MedicalSpecialty } from "../medicalSpecialties/types";
@@ -10,6 +11,7 @@ export const PhysicianFactory = {
 			treatConditions?: MedicalCondition[];
 			provideProcedures?: MedicalProcedure[];
 			specialties?: MedicalSpecialty[];
+			languages?: Language[];
 		} = {},
 	): CreatePhysicianDTO {
 		return {
@@ -21,11 +23,10 @@ export const PhysicianFactory = {
 			phoneNumber: faker.phone.number(),
 			userId: 2,
 			pictureUrl: null,
-			relations: {
-				provideProcedures: args.provideProcedures ?? [],
-				specialties: args.specialties ?? [],
-				treatConditions: args.treatConditions ?? [],
-			},
+			provideProcedures: args.provideProcedures ?? [],
+			specialties: args.specialties ?? [],
+			treatConditions: args.treatConditions ?? [],
+			languages: args.languages ?? [],
 		};
 	},
 };
