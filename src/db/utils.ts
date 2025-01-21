@@ -88,8 +88,11 @@ export async function checkPostgisExtension(): Promise<boolean> {
 	try {
 		const result =
 			await sql`SELECT 1 FROM pg_extension WHERE extname = 'postgis'`.execute(db);
-		logger.warn("PostGIS extension not enabled");
-		return result.rows.length > 0;
+		const enabled = result.rows.length > 0;
+		if (!enabled) {
+			logger.warn("PostGIS extension not enabled");
+		}
+		return enabled;
 	} catch (error) {
 		console.error("Error checking PostGIS extension:", error);
 		return false; // Handle potential errors (e.g., connection issues)
