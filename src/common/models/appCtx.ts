@@ -1,4 +1,5 @@
 import type { IFacilityResourceCategoriesRepository } from "@/api/facilityResourceCategory/FacilityResourceCategoriesRepository";
+import type { IFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
 import type { IMailNotifier } from "@/notifications/services/IMailNotifier";
 import type { ISmsNotifier } from "@/notifications/services/ISmsNotifier";
 import type { IPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -32,4 +33,5 @@ export type AppCtx = {
 	readonly physicianReviewsRepository: IPhysicianReviewsRepository;
 	readonly passwordResetRepository: IPasswordResetRepository;
 	readonly facilityResourceCategoryRepository: IFacilityResourceCategoriesRepository;
+	readonly facilityTypeRepository: IFacilityTypesRepository;
 };

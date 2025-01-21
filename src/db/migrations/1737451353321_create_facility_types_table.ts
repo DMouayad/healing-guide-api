@@ -4,7 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
 		.createTable("facility_types")
 		.addColumn("id", "serial", (col) => col.primaryKey())
-		.addColumn("name", "varchar", (col) => col.notNull())
+		.addColumn("name", "varchar", (col) => col.notNull().unique())
 		.ifNotExists()
 		.execute();
 }

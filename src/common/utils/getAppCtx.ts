@@ -1,4 +1,5 @@
 import { DBFacilityResourceCategoriesRepository } from "@/api/facilityResourceCategory/FacilityResourceCategoriesRepository";
+import { DBFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -33,6 +34,7 @@ const productionAppCtx: AppCtx = {
 	physicianReviewsRepository: new DBPhysicianReviewsRepository(),
 	passwordResetRepository: new DBPasswordResetRepository(),
 	facilityResourceCategoryRepository: new DBFacilityResourceCategoriesRepository(),
+	facilityTypeRepository: new DBFacilityTypesRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {
