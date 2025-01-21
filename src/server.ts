@@ -28,6 +28,7 @@ import { requestLogger } from "./middleware/requestLogger";
 import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
 import pgSession from "connect-pg-simple";
+import { facilityResourceCategoryRouter } from "./api/facilityResourceCategory/router";
 import { VIEW_NAMES } from "./common/constants";
 import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { logger } from "./common/utils/logger";
@@ -97,6 +98,7 @@ apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
+apiRouter.use("/facility-resource-categories", facilityResourceCategoryRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
