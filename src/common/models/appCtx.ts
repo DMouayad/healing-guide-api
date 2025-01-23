@@ -36,4 +36,5 @@ export type AppCtx = {
 	readonly facilityTypeRepository: IFacilityTypesRepository;
 	readonly facilityReceivedFeedbackRepository: IReceivedFeedbackRepository;
 	readonly facilityFeedbackRepository: IFeedbackRepository;
+	readonly facilityReviewsRepository: IReviewsRepository;
 };

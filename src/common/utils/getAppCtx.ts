@@ -8,6 +8,7 @@ import {
 	DBFacilityReceivedFeedbackRepository,
 	DBPhysicianReceivedFeedbackRepository,
 } from "@/api/feedbacks/ReceivedFeedbackRepository";
+import { DBFacilityReviewsRepository } from "@/api/medicalFacility/facilityReviewsRepository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -43,6 +44,7 @@ const productionAppCtx: AppCtx = {
 	facilityTypeRepository: new DBFacilityTypesRepository(),
 	facilityReceivedFeedbackRepository: new DBFacilityReceivedFeedbackRepository(),
 	facilityFeedbackRepository: new DBFacilityFeedbackRepository(),
+	facilityReviewsRepository: new DBFacilityReviewsRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

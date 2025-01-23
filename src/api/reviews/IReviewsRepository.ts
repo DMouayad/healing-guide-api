@@ -16,13 +16,14 @@ export interface IReviewsRepository {
 
 export abstract class BaseReviewsRepository implements IReviewsRepository {
 	protected constructor(
-		protected readonly tableName: "physician_reviews",
-		protected readonly entityIdColumn: "physician_id",
+		protected readonly tableName: "physician_reviews" | "facility_reviews",
+		protected readonly entityIdColumn: "physician_id" | "facility_id",
 	) {}
 
-	getReviweFromQueryResult(result: {
+	getReviewFromQueryResult(result: {
 		id: number;
 		physician_id: number;
+		facility_id: number;
 		review_stars: number | null;
 		review_text: string;
 		reviewer_id: number;
@@ -31,7 +32,7 @@ export abstract class BaseReviewsRepository implements IReviewsRepository {
 	}): Review {
 		return {
 			id: result.id,
-			reviewedId: result.physician_id,
+			reviewedId: result.facility_id ?? result.physician_id,
 			reviewerId: result.reviewer_id,
 			reviewerName: result.reviewer_name,
 			reviewStars: result.review_stars,
@@ -46,7 +47,7 @@ export abstract class BaseReviewsRepository implements IReviewsRepository {
 			.where(this.entityIdColumn, "=", id)
 			.selectAll()
 			.execute()
-			.then((results) => results.map(this.getReviweFromQueryResult));
+			.then((results) => results.map(this.getReviewFromQueryResult));
 	}
 
 	store(dto: CreateReviewDTO): Promise<Review> {
@@ -89,7 +90,7 @@ export abstract class BaseReviewsRepository implements IReviewsRepository {
 			.returningAll()
 			.executeTakeFirstOrThrow()
 			.catch(handleDBErrors)
-			.then(this.getReviweFromQueryResult);
+			.then(this.getReviewFromQueryResult);
 	}
 
 	async deleteReview(params: {

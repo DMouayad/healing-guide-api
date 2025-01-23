@@ -32,10 +32,15 @@ export const ZodUpdateReviewDTO = ZodReview.omit({ writtenAt: true }).partial({
 export type UpdateReviewDTO = z.infer<typeof ZodUpdateReviewDTO>;
 
 // Common request schemas
+export const FacilityIdParam = z.object({ facilityId: commonZodSchemas.id });
 export const PhysicianIdParam = z.object({ physicianId: commonZodSchemas.id });
 
 const ReviewedIdFromPhysicianId = PhysicianIdParam.transform((value) => ({
 	reviewedId: value.physicianId,
+}));
+
+const ReviewedIdFromFacilityId = FacilityIdParam.transform((value) => ({
+	reviewedId: value.facilityId,
 }));
 
 // Common request body schemas
@@ -51,6 +56,12 @@ const UpdateDeletePhysicianReviewParams = PhysicianIdParam.merge(
 	reviewedId: value.physicianId,
 	reviewId: value.reviewId,
 }));
+const UpdateDeleteFacilityReviewParams = FacilityIdParam.merge(ReviewIdParam).transform(
+	(value) => ({
+		reviewedId: value.facilityId,
+		reviewId: value.reviewId,
+	}),
+);
 
 // Review request schemas for both entity types
 
@@ -71,10 +82,34 @@ export const ReviewRequests = {
 			params: UpdateDeletePhysicianReviewParams,
 		},
 	},
+	facility: {
+		getReviews: {
+			params: ReviewedIdFromFacilityId,
+		},
+		addReviewByUser: {
+			params: ReviewedIdFromFacilityId,
+			body: CreateOrUpdateReviewBody,
+		},
+		updateReview: {
+			params: UpdateDeleteFacilityReviewParams,
+			body: CreateOrUpdateReviewBody,
+		},
+		deleteReview: {
+			params: UpdateDeleteFacilityReviewParams,
+		},
+	},
 };
-export type GetReviewsRequest = typeof ReviewRequests.physician.getReviews;
-export type AddReviewRequest = typeof ReviewRequests.physician.addReviewByUser;
+export type GetReviewsRequest =
+	| typeof ReviewRequests.facility.getReviews
+	| typeof ReviewRequests.physician.getReviews;
+export type AddReviewRequest =
+	| typeof ReviewRequests.facility.addReviewByUser
+	| typeof ReviewRequests.physician.addReviewByUser;
 
-export type UpdateReviewRequest = typeof ReviewRequests.physician.updateReview;
+export type UpdateReviewRequest =
+	| typeof ReviewRequests.facility.updateReview
+	| typeof ReviewRequests.physician.updateReview;
 
-export type DeleteReviewRequest = typeof ReviewRequests.physician.deleteReview;
+export type DeleteReviewRequest =
+	| typeof ReviewRequests.facility.deleteReview
+	| typeof ReviewRequests.physician.deleteReview;
