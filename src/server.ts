@@ -32,6 +32,10 @@ import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 import pgSession from "connect-pg-simple";
 import { facilityResourceCategoryRouter } from "./api/facilityResourceCategory/router";
 import { facilityTypesRouter } from "./api/facilityTypes/router";
+import {
+	medicalFacilityFeedbackRouter,
+	medicalFacilityRouter,
+} from "./api/medicalFacility/medicalFacility.router";
 import { VIEW_NAMES } from "./common/constants";
 import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { logger } from "./common/utils/logger";
@@ -87,7 +91,10 @@ app.use(rateLimiterByIP(defaultRateLimiterByIP));
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
+
+// Password Reset
 app.use(passwordResetRouter);
+
 // Restful API Routes - latest version
 const apiRouter: Router = Router();
 app.use("/mail-templates", mailTemplatesRouter);
@@ -103,6 +110,8 @@ apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
 apiRouter.use("/facility-resource-categories", facilityResourceCategoryRouter);
 apiRouter.use("/facility-types", facilityTypesRouter);
+apiRouter.use("/medical-facility-feedbacks", medicalFacilityFeedbackRouter);
+apiRouter.use("/medical-facilities", medicalFacilityRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

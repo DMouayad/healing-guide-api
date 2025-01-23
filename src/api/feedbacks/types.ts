@@ -1,5 +1,6 @@
 import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
+import { FacilityIdParam } from "../medicalFacility/medicalFacility.types";
 import { PhysicianIdParam } from "../physician/physician.types";
 
 export type FeedbackCategory = typeof FeedbackCategoryZodSchema._output;
@@ -85,14 +86,30 @@ export const feedbackRequests = {
 const ReceiverIdFromPhysicianId = PhysicianIdParam.transform((value) => {
 	return { receiverId: value.physicianId };
 });
+const ReceiverIdFromFacilityId = FacilityIdParam.transform((value) => {
+	return { receiverId: value.facilityId };
+});
+const ReceivedFeedbackBody = z.object({
+	response: z.boolean(),
+	questionId: commonZodSchemas.id,
+});
 export const receivedFeedbackRequests = {
 	physician: {
 		createOrUpdate: {
 			params: ReceiverIdFromPhysicianId,
-			body: z.object({ response: z.boolean(), questionId: commonZodSchemas.id }),
+			body: ReceivedFeedbackBody,
 		},
 		get: {
 			params: ReceiverIdFromPhysicianId,
+		},
+	},
+	facility: {
+		createOrUpdate: {
+			params: ReceiverIdFromFacilityId,
+			body: ReceivedFeedbackBody,
+		},
+		get: {
+			params: ReceiverIdFromFacilityId,
 		},
 	},
 };

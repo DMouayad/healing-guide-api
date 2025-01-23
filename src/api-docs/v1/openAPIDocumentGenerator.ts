@@ -6,6 +6,8 @@ import { registerFacilityTypePaths } from "./facilityTypes.openapi";
 import { registerLanguagesPaths } from "./languages.openapi";
 import { registerMedicalConditionsPaths } from "./medicalConditions.openapi";
 import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
+import { registerMedicalFacilityPaths } from "./medicalFacility.openapi";
+import { registerMedicalFacilityFeedbackPaths } from "./medicalFacilityFeedback.openapi";
 import { registerMedicalProceduresPaths } from "./medicalProcedures.openapi";
 import { registerMedicalSpecialtiesPaths } from "./medicalSpecialties.openapi";
 import { registerPasswordResetPaths } from "./passwordReset.openapi";
@@ -37,8 +39,10 @@ registerMedicalConditionsPaths(v1Registry, v1BaseUrl);
 registerPhysicianPaths(v1Registry, v1BaseUrl);
 registerPhysicianFeedbackPaths(v1Registry, v1BaseUrl);
 registerLanguagesPaths(v1Registry, v1BaseUrl);
-registerFacilityResourceCategoryPaths(v1Registry, v1BaseUrl);
+registerMedicalFacilityPaths(v1Registry, v1BaseUrl);
 registerFacilityTypePaths(v1Registry, v1BaseUrl);
+registerFacilityResourceCategoryPaths(v1Registry, v1BaseUrl);
+registerMedicalFacilityFeedbackPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
 	const generator = new OpenApiGeneratorV3(v1Registry.definitions);

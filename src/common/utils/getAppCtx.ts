@@ -1,7 +1,13 @@
 import { DBFacilityResourceCategoriesRepository } from "@/api/facilityResourceCategory/FacilityResourceCategoriesRepository";
 import { DBFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
-import { DBPhysicianFeedbackRepository } from "@/api/feedbacks/FeedbackRepository";
-import { DBPhysicianReceivedFeedbackRepository } from "@/api/feedbacks/ReceivedFeedbackRepository";
+import {
+	DBFacilityFeedbackRepository,
+	DBPhysicianFeedbackRepository,
+} from "@/api/feedbacks/FeedbackRepository";
+import {
+	DBFacilityReceivedFeedbackRepository,
+	DBPhysicianReceivedFeedbackRepository,
+} from "@/api/feedbacks/ReceivedFeedbackRepository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -35,6 +41,8 @@ const productionAppCtx: AppCtx = {
 	passwordResetRepository: new DBPasswordResetRepository(),
 	facilityResourceCategoryRepository: new DBFacilityResourceCategoriesRepository(),
 	facilityTypeRepository: new DBFacilityTypesRepository(),
+	facilityReceivedFeedbackRepository: new DBFacilityReceivedFeedbackRepository(),
+	facilityFeedbackRepository: new DBFacilityFeedbackRepository(),
 } as const;
 
 export function getAppCtx(): AppCtx {

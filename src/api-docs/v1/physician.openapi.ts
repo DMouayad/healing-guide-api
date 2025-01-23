@@ -1,4 +1,8 @@
-import { ZodFeedbackWithResponse, ZodReceivedFeedback } from "@/api/feedbacks/types";
+import {
+	ZodFeedbackWithResponse,
+	ZodReceivedFeedback,
+	receivedFeedbackRequests,
+} from "@/api/feedbacks/types";
 import { ZodLanguage } from "@api/languages/language.types";
 import { MedicalConditionZodSchema } from "@api/medicalConditions/types";
 import { MedicalProcedureZodSchema } from "@api/medicalProcedures/types";
@@ -206,11 +210,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician"],
 		security: [{ bearerAuth: [] }],
 		request: {
-			params: physicianRequests.createOrUpdateFeedback.params,
+			params: receivedFeedbackRequests.physician.createOrUpdate.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.createOrUpdateFeedback.body,
+						schema: receivedFeedbackRequests.physician.createOrUpdate.body,
 					},
 				},
 			},
@@ -230,11 +234,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.createOrUpdateFeedback.params,
+			params: receivedFeedbackRequests.physician.createOrUpdate.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.createOrUpdateFeedback.body,
+						schema: receivedFeedbackRequests.physician.createOrUpdate.body,
 					},
 				},
 			},
@@ -255,7 +259,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.getPhysicianFeedbacks.params,
+			params: receivedFeedbackRequests.physician.get.params,
 		},
 		responses: createApiResponses([
 			{

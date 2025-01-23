@@ -127,3 +127,79 @@ export class DBPhysicianReceivedFeedbackRepository extends DBReceivedFeedbackRep
 			});
 	}
 }
+export class DBFacilityReceivedFeedbackRepository extends DBReceivedFeedbackRepository {
+	async getFeedbackWithUserResponses(
+		receiverId: number,
+		userId?: number,
+	): Promise<FeedbackWithUserResponses[]> {
+		const query = db
+			.selectFrom("facility_feedback_questions as pfq") // Start from questions
+			.innerJoin("facility_feedback_categories as c", "pfq.category_id", "c.id")
+			.leftJoin("facility_feedback_categories as pc", "c.parent_category_id", "pc.id")
+			.leftJoin("facilities_received_feedbacks as prf", (join) =>
+				join
+					.onRef("pfq.id", "=", "prf.question_id")
+					.on("prf.facility_id", "=", receiverId),
+			)
+			.select([
+				"c.id as category_id",
+				"c.name as category_name",
+				"c.parent_category_id",
+				"pfq.id as question_id",
+				"pfq.question as question_text",
+			])
+			.select(({ fn }) =>
+				fn
+					.countAll<number>("prf")
+					.filterWhere("prf.facility_id", "=", receiverId)
+					.as("total_responses_count"),
+			)
+			.select(({ fn }) =>
+				fn
+					.countAll<number>("prf")
+					.filterWhere("prf.facility_id", "=", receiverId)
+					.filterWhere("prf.response", "=", true)
+					.as("positive_response_count"),
+			)
+			.$if(userId != null, (qb) => qb.select("prf.response as user_response"))
+
+			.orderBy(["c.id", "pfq.id"])
+			.groupBy(["c.id", "pfq.id", "prf.response"]);
+		const results = await query.execute();
+		return this.extractFeedbackFromQueryResult(results);
+	}
+	async create(feedback: ReceivedFeedback): Promise<void> {
+		await db
+			.insertInto("facilities_received_feedbacks")
+			.values({
+				facility_id: feedback.receiverId,
+				question_id: feedback.questionId,
+				response: feedback.response,
+				user_id: feedback.userId,
+			})
+			.onConflict((oc) =>
+				oc
+					.constraint("facilities_received_feedbacks_unique")
+					.doUpdateSet({ response: feedback.response }),
+			)
+			.executeTakeFirstOrThrow();
+	}
+	async updateFeedbackResponse(feedback: ReceivedFeedback): Promise<ReceivedFeedback> {
+		return await db
+			.updateTable("facilities_received_feedbacks")
+			.where("facility_id", "=", feedback.receiverId)
+			.where("question_id", "=", feedback.questionId)
+			.where("user_id", "=", feedback.userId)
+			.set("response", feedback.response)
+			.returningAll()
+			.executeTakeFirstOrThrow()
+			.then((res) => {
+				return {
+					questionId: res.question_id,
+					receiverId: res.facility_id,
+					response: res.response,
+					userId: res.user_id,
+				};
+			});
+	}
+}

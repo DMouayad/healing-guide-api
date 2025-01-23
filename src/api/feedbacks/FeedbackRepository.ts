@@ -24,8 +24,12 @@ export interface IFeedbackRepository {
 
 export class DBFeedbackRepository implements IFeedbackRepository {
 	constructor(
-		readonly questionsTable: "physician_feedback_questions",
-		readonly categoriesTable: "physician_feedback_categories",
+		readonly questionsTable:
+			| "physician_feedback_questions"
+			| "facility_feedback_questions",
+		readonly categoriesTable:
+			| "physician_feedback_categories"
+			| "facility_feedback_categories",
 	) {}
 	storeQuestion(dto: CreateFeedbackQuestionDTO): Promise<FeedbackQuestion> {
 		return db
@@ -127,5 +131,10 @@ export class DBFeedbackRepository implements IFeedbackRepository {
 export class DBPhysicianFeedbackRepository extends DBFeedbackRepository {
 	constructor() {
 		super("physician_feedback_questions", "physician_feedback_categories");
+	}
+}
+export class DBFacilityFeedbackRepository extends DBFeedbackRepository {
+	constructor() {
+		super("facility_feedback_questions", "facility_feedback_categories");
 	}
 }

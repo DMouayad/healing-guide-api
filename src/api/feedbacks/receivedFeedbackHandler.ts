@@ -9,7 +9,7 @@ export function receivedFeedbackHandler(
 	router: Router,
 	route: string,
 	repository: IReceivedFeedbackRepository,
-	type: "physician",
+	type: "physician" | "facility",
 ) {
 	router.post(route, authenticated, createAction);
 	router.patch(route, authenticated, updateAction);

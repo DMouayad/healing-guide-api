@@ -34,4 +34,6 @@ export type AppCtx = {
 	readonly passwordResetRepository: IPasswordResetRepository;
 	readonly facilityResourceCategoryRepository: IFacilityResourceCategoriesRepository;
 	readonly facilityTypeRepository: IFacilityTypesRepository;
+	readonly facilityReceivedFeedbackRepository: IReceivedFeedbackRepository;
+	readonly facilityFeedbackRepository: IFeedbackRepository;
 };
