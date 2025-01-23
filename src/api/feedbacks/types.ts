@@ -1,6 +1,5 @@
 import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
-import { FacilityIdParam } from "../medicalFacility/medicalFacility.types";
 import { PhysicianIdParam } from "../physician/physician.types";
 
 export type FeedbackCategory = typeof FeedbackCategoryZodSchema._output;
@@ -77,6 +76,8 @@ export type ReceivedFeedback = z.infer<typeof ZodReceivedFeedback>;
 /**
  * Requests
  */
+const FacilityIdParam = z.object({ facilityId: commonZodSchemas.id });
+
 export const feedbackRequests = {
 	addQuestion: CreateFeedbackQuestionDTOSchema,
 	updateQuestion: UpdateFeedbackQuestionDTOSchema,
