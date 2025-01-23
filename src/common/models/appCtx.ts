@@ -2,6 +2,7 @@ import type { IFacilityResourceCategoriesRepository } from "@/api/facilityResour
 import type { IFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
 import type { IFeedbackRepository } from "@/api/feedbacks/FeedbackRepository";
 import type { IReceivedFeedbackRepository } from "@/api/feedbacks/ReceivedFeedbackRepository";
+import type { IReviewsRepository } from "@/api/reviews/IReviewsRepository";
 import type { IMailNotifier } from "@/notifications/services/IMailNotifier";
 import type { ISmsNotifier } from "@/notifications/services/ISmsNotifier";
 import type { IPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -11,7 +12,6 @@ import type { IMedicalDepartmentsRepository } from "@api/medicalDepartments/Medi
 import type { IMedicalProceduresRepository } from "@api/medicalProcedures/MedicalProceduresRepository";
 import type { IMedicalSpecialtiesRepository } from "@api/medicalSpecialties/MedicalSpecialtiesRepository";
 import type { IPhysicianRepository } from "@api/physician/physician.repository";
-import type { IPhysicianReviewsRepository } from "@api/physician/physicianReviewsRepository";
 import type { IAuthTokensRepository } from "@interfaces/IAuthTokensRepository";
 import type { IUserRepository } from "@interfaces/IUserRepository";
 import type { IOtpRepository } from "@otp/otpRepository";
@@ -30,7 +30,7 @@ export type AppCtx = {
 	readonly physicianRepository: IPhysicianRepository;
 	readonly physicianReceivedFeedbackRepository: IReceivedFeedbackRepository;
 	readonly languagesRepository: ILanguageRepository;
-	readonly physicianReviewsRepository: IPhysicianReviewsRepository;
+	readonly physicianReviewsRepository: IReviewsRepository;
 	readonly passwordResetRepository: IPasswordResetRepository;
 	readonly facilityResourceCategoryRepository: IFacilityResourceCategoriesRepository;
 	readonly facilityTypeRepository: IFacilityTypesRepository;

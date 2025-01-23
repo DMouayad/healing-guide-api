@@ -7,13 +7,11 @@ import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
 import { getFeedbackRoutes } from "../feedbacks/feedback.utils";
 import { feedbackHandler } from "../feedbacks/feedbackHandlers";
 import { receivedFeedbackHandler } from "../feedbacks/receivedFeedbackHandler";
+import { createReviewActions } from "../reviews/reviews.actions";
+import { ReviewRequests } from "../reviews/reviews.types";
 import {
 	createAction,
-	createReviewByUser,
-	deleteReview,
-	editReview,
 	getByIdAction,
-	getPhysicianReviews,
 	setProvidedProcedures,
 	setSpecialties,
 	setSpokenLanguages,
@@ -77,10 +75,19 @@ router.post(
 	setSpokenLanguages,
 );
 /** Reviews  */
-router.get(routes.getReviews(), getPhysicianReviews);
-router.post(routes.createPhysicianReview(), authenticated, createReviewByUser);
-router.patch(routes.reviewById(), authenticated, editReview);
-router.delete(routes.reviewById(), authenticated, deleteReview);
+
+const reviewActions = createReviewActions(
+	ReviewRequests.physician,
+	getAppCtx().physicianReviewsRepository,
+);
+router.get(routes.getReviews(), reviewActions.getReviews);
+router.post(
+	routes.createPhysicianReview(),
+	authenticated,
+	reviewActions.createReviewByUser,
+);
+router.patch(routes.reviewById(), authenticated, reviewActions.editReview);
+router.delete(routes.reviewById(), authenticated, reviewActions.deleteReview);
 
 export const physicianRoutes = routes;
 export const physicianRouter = router;
