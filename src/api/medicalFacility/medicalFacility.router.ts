@@ -1,11 +1,14 @@
+import { APP_ROLES } from "@/common/types";
 import { getAppCtx } from "@/common/utils/getAppCtx";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
+import { authorized } from "../auth/middlewares/authorized";
 import { getFeedbackRoutes } from "../feedbacks/feedback.utils";
 import { feedbackHandler } from "../feedbacks/feedbackHandlers";
 import { receivedFeedbackHandler } from "../feedbacks/receivedFeedbackHandler";
 import { createReviewActions } from "../reviews/reviews.actions";
 import { ReviewRequests } from "../reviews/reviews.types";
+import { createFacilityResourceActions } from "./facilityResources.actions";
 
 const router: Router = express.Router();
 const routes = {
@@ -19,6 +22,9 @@ const routes = {
 	createFacilityReview: (facilityId = ":facilityId") => `/${facilityId}/reviews`,
 	reviewById: (facilityId = ":facilityId", reviewId = ":reviewId") =>
 		`/${facilityId}/reviews/${reviewId}`,
+	resources: (facilityId = ":facilityId") => `/${facilityId}/resources`,
+	resourceById: (facilityId = ":facilityId", resourceId = ":resourceId") =>
+		`/${facilityId}/resources/${resourceId}`,
 } as const;
 
 export const medicalFacilityRoutes = routes;
@@ -48,6 +54,28 @@ router.post(
 );
 router.patch(routes.reviewById(), authenticated, reviewActions.editReview);
 router.delete(routes.reviewById(), authenticated, reviewActions.deleteReview);
+
+// MedicalFacility Resources
+const resourceActions = createFacilityResourceActions();
+router.get(routes.resources(), resourceActions.getFacilityResources);
+router.post(
+	routes.resources(),
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.createResource,
+);
+router.patch(
+	routes.resourceById(),
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.updateResource,
+);
+router.delete(
+	routes.resourceById(),
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.deleteResource,
+);
 
 // MedicalFacility Received Feedbacks
 receivedFeedbackHandler(
