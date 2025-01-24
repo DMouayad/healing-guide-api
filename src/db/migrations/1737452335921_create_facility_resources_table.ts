@@ -15,9 +15,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 			["id"],
 		)
 		.addForeignKeyConstraint(
-			"facility_resources_facility_resource_categories_FK",
+			"facility_resources_patient_visitor_info_categories_FK",
 			["category_id"],
-			"facility_resource_categories",
+			"patient_visitor_info_categories",
 			["id"],
 		)
 		.ifNotExists()

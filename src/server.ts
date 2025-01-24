@@ -30,12 +30,12 @@ import { requestLogger } from "./middleware/requestLogger";
 import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
 import pgSession from "connect-pg-simple";
-import { facilityResourceCategoryRouter } from "./api/facilityResourceCategory/router";
 import { facilityTypesRouter } from "./api/facilityTypes/router";
 import {
 	medicalFacilityFeedbackRouter,
 	medicalFacilityRouter,
 } from "./api/medicalFacility/medicalFacility.router";
+import { patientVisitorInfoRouter } from "./api/patientVisitorInfo/router";
 import { VIEW_NAMES } from "./common/constants";
 import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { logger } from "./common/utils/logger";
@@ -108,7 +108,7 @@ apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
-apiRouter.use("/facility-resource-categories", facilityResourceCategoryRouter);
+apiRouter.use("/patient-visitor-info", patientVisitorInfoRouter);
 apiRouter.use("/facility-types", facilityTypesRouter);
 apiRouter.use("/medical-facility-feedbacks", medicalFacilityFeedbackRouter);
 apiRouter.use("/medical-facilities", medicalFacilityRouter);
