@@ -1,9 +1,9 @@
 import type { IFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
 import type { IFeedbackRepository } from "@/api/feedbacks/FeedbackRepository";
 import type { IReceivedFeedbackRepository } from "@/api/feedbacks/ReceivedFeedbackRepository";
-import type { IFacilityResourcesRepository } from "@/api/medicalFacility/facilityResources.repository";
 import type { IMedicalFacilityRepository } from "@/api/medicalFacility/medicalFacility.repository";
-import type { IPatientVisitorInfoCategoriesRepository } from "@/api/patientVisitorInfo/PatientVisitorInfoCategoriesRepository";
+import type { IPatientVisitorResourceCategoriesRepository } from "@/api/patientVisitorResource/PatientVisitorResourceCategoriesRepository";
+import type { IPatientVisitorResourceRepository } from "@/api/patientVisitorResource/PatientVisitorResourceRepository";
 import type { IReviewsRepository } from "@/api/reviews/IReviewsRepository";
 import type { IMailNotifier } from "@/notifications/services/IMailNotifier";
 import type { ISmsNotifier } from "@/notifications/services/ISmsNotifier";
@@ -34,11 +34,11 @@ export type AppCtx = {
 	readonly languagesRepository: ILanguageRepository;
 	readonly physicianReviewsRepository: IReviewsRepository;
 	readonly passwordResetRepository: IPasswordResetRepository;
-	readonly patientVisitorInfoCategoriesRepository: IPatientVisitorInfoCategoriesRepository;
+	readonly patientVisitorResourceCategoriesRepository: IPatientVisitorResourceCategoriesRepository;
 	readonly facilityTypeRepository: IFacilityTypesRepository;
 	readonly facilityReceivedFeedbackRepository: IReceivedFeedbackRepository;
 	readonly facilityFeedbackRepository: IFeedbackRepository;
 	readonly facilityReviewsRepository: IReviewsRepository;
-	readonly facilityResourcesRepository: IFacilityResourcesRepository;
+	readonly patientVisitorResourceRepository: IPatientVisitorResourceRepository;
 	readonly medicalFacilityRepository: IMedicalFacilityRepository;
 };

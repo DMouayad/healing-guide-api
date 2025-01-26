@@ -1,77 +1,90 @@
-import {
-	FacilityResourcesRequests,
-	ZodFacilityResource,
-} from "@/api/medicalFacility/facilityResources.types";
 import { medicalFacilityRoutes } from "@/api/medicalFacility/medicalFacility.router";
+import { PatientVisitorResourcesRequests } from "@/api/medicalFacility/patientVisitorResource.requests";
+import { ZodPatientVisitorResource } from "@/api/patientVisitorResource/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
 import { unauthenticatedResponse, unauthorizedResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
 import { v1BearerAuth } from "./openAPIDocumentGenerator";
 
-export function registerFacilityResourcesPaths(
+export function registerFacilityPatientVisitorResourcesPaths(
 	registry: OpenAPIRegistry,
 	baseUrl: string,
 ) {
-	const routes = medicalFacilityRoutes;
+	const routes = medicalFacilityRoutes.patientsAndVisitors;
 	const baseRoute = baseUrl + medicalFacilityRoutes.baseRoute;
 
+	// public routes
 	registry.registerPath({
 		method: "get",
-		path: baseRoute + routes.resources("{facilityId}"),
+		path: baseRoute + routes.publicRoutes.getFacilityItems("{facilityId}"),
 		description: "Retrieves a list of resources for a medical facility",
-		tags: ["Medical Facility Resources"],
+		tags: ["Medical Facility Patient-Visitor Resources"],
 		request: {
-			params: FacilityResourcesRequests.getByFacilityId.params,
+			params: PatientVisitorResourcesRequests.getByFacilityId.params,
 		},
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: returns a list of facility resources",
-				schema: ZodFacilityResource.array(),
+				schema: ZodPatientVisitorResource.array(),
 			},
 		]),
 	});
 
 	registry.registerPath({
+		method: "get",
+		path:
+			baseRoute +
+			routes.publicRoutes.getByIdAndFacilityId("{facilityId}", "{resourceId}"),
+		description: "Retrieves a resource for a medical facility",
+		tags: ["Medical Facility Patient-Visitor Resources"],
+		responses: createApiResponses([
+			{
+				statusCode: StatusCodes.OK,
+				description: "Success: returns the resource",
+				schema: ZodPatientVisitorResource,
+			},
+		]),
+	});
+	// Facility Manager Routes
+	registry.registerPath({
 		method: "post",
-		path: baseRoute + routes.resources("{facilityId}"),
-		description: "Creates a new resource for the medical facility",
-		tags: ["Medical Facility Resources"],
+		path: baseRoute + routes.managerRoutes.index,
+		description: "Create a new patient-visitor resource",
+		tags: ["Medical Facility Patient-Visitor Resources"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: FacilityResourcesRequests.create.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: FacilityResourcesRequests.create.body,
+						schema: PatientVisitorResourcesRequests.create.body,
 					},
 				},
 			},
 		},
 		responses: createApiResponses([
 			{
-				statusCode: StatusCodes.CREATED,
+				statusCode: StatusCodes.OK,
 				description: "Success: returns the created resource",
-				schema: ZodFacilityResource,
+				schema: ZodPatientVisitorResource,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
 		]),
 	});
-
 	registry.registerPath({
-		method: "patch",
-		path: baseRoute + routes.resourceById("{facilityId}", "{resourceId}"),
-		description: "Updates an existing facility resource",
-		tags: ["Medical Facility Resources"],
+		method: "put",
+		path: baseRoute + routes.managerRoutes.byId("{resourceId}"),
+		description: "Update an existing patient-visitor resource",
+		tags: ["Medical Facility Patient-Visitor Resources"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: FacilityResourcesRequests.update.params,
+			params: PatientVisitorResourcesRequests.update.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: FacilityResourcesRequests.update.body,
+						schema: PatientVisitorResourcesRequests.update.body,
 					},
 				},
 			},
@@ -80,7 +93,7 @@ export function registerFacilityResourcesPaths(
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: returns the updated resource",
-				schema: ZodFacilityResource,
+				schema: ZodPatientVisitorResource,
 			},
 			unauthenticatedResponse,
 			unauthorizedResponse,
@@ -89,12 +102,12 @@ export function registerFacilityResourcesPaths(
 
 	registry.registerPath({
 		method: "delete",
-		path: baseRoute + routes.resourceById("{facilityId}", "{resourceId}"),
+		path: baseRoute + routes.managerRoutes.byId("{resourceId}"),
 		description: "Deletes a facility resource",
-		tags: ["Medical Facility Resources"],
+		tags: ["Medical Facility Patient-Visitor Resources"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: FacilityResourcesRequests.delete.params,
+			params: PatientVisitorResourcesRequests.delete.params,
 		},
 		responses: createApiResponses([
 			{

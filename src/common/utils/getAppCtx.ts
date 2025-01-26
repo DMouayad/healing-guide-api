@@ -7,10 +7,10 @@ import {
 	DBFacilityReceivedFeedbackRepository,
 	DBPhysicianReceivedFeedbackRepository,
 } from "@/api/feedbacks/ReceivedFeedbackRepository";
-import { DBFacilityResourcesRepository } from "@/api/medicalFacility/facilityResources.repository";
 import { DBFacilityReviewsRepository } from "@/api/medicalFacility/facilityReviewsRepository";
 import { DBMedicalFacilityRepository } from "@/api/medicalFacility/medicalFacility.repository";
-import { DBPatientVisitorInfoCategoriesRepository } from "@/api/patientVisitorInfo/PatientVisitorInfoCategoriesRepository";
+import { DBPatientVisitorResourceCategoriesRepository } from "@/api/patientVisitorResource/PatientVisitorResourceCategoriesRepository";
+import { DBPatientVisitorResourceRepository } from "@/api/patientVisitorResource/PatientVisitorResourceRepository";
 import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
 import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
 import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
@@ -42,13 +42,13 @@ const productionAppCtx: AppCtx = {
 	physicianReceivedFeedbackRepository: new DBPhysicianReceivedFeedbackRepository(),
 	physicianReviewsRepository: new DBPhysicianReviewsRepository(),
 	passwordResetRepository: new DBPasswordResetRepository(),
-	patientVisitorInfoCategoriesRepository:
-		new DBPatientVisitorInfoCategoriesRepository(),
+	patientVisitorResourceCategoriesRepository:
+		new DBPatientVisitorResourceCategoriesRepository(),
 	facilityTypeRepository: new DBFacilityTypesRepository(),
 	facilityReceivedFeedbackRepository: new DBFacilityReceivedFeedbackRepository(),
 	facilityFeedbackRepository: new DBFacilityFeedbackRepository(),
 	facilityReviewsRepository: new DBFacilityReviewsRepository(),
-	facilityResourcesRepository: new DBFacilityResourcesRepository(),
+	patientVisitorResourceRepository: new DBPatientVisitorResourceRepository(),
 	medicalFacilityRepository: new DBMedicalFacilityRepository(),
 } as const;
 

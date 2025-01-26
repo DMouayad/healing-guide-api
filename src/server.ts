@@ -35,7 +35,7 @@ import {
 	medicalFacilityFeedbackRouter,
 	medicalFacilityRouter,
 } from "./api/medicalFacility/medicalFacility.router";
-import { patientVisitorInfoRouter } from "./api/patientVisitorInfo/router";
+import { patientVisitorResourceCategoryRouter } from "./api/patientVisitorResource/patientVisitorResourceCategoryRouter";
 import { VIEW_NAMES } from "./common/constants";
 import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { logger } from "./common/utils/logger";
@@ -108,7 +108,10 @@ apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
-apiRouter.use("/patient-visitor-info", patientVisitorInfoRouter);
+apiRouter.use(
+	"/patient-visitor-resources/categories",
+	patientVisitorResourceCategoryRouter,
+);
 apiRouter.use("/facility-types", facilityTypesRouter);
 apiRouter.use("/medical-facility-feedbacks", medicalFacilityFeedbackRouter);
 apiRouter.use("/medical-facilities", medicalFacilityRouter);

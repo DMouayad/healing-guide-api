@@ -8,7 +8,7 @@ import { feedbackHandler } from "../feedbacks/feedbackHandlers";
 import { receivedFeedbackHandler } from "../feedbacks/receivedFeedbackHandler";
 import { createReviewActions } from "../reviews/reviews.actions";
 import { ReviewRequests } from "../reviews/reviews.types";
-import { createFacilityResourceActions } from "./facilityResources.actions";
+import { createFacilityPatientVisitorResourceActions } from "./patientVisitorResource.actions";
 
 const router: Router = express.Router();
 const routes = {
@@ -22,13 +22,21 @@ const routes = {
 	createFacilityReview: (facilityId = ":facilityId") => `/${facilityId}/reviews`,
 	reviewById: (facilityId = ":facilityId", reviewId = ":reviewId") =>
 		`/${facilityId}/reviews/${reviewId}`,
-	resources: (facilityId = ":facilityId") => `/${facilityId}/resources`,
-	resourceById: (facilityId = ":facilityId", resourceId = ":resourceId") =>
-		`/${facilityId}/resources/${resourceId}`,
+	patientsAndVisitors: {
+		baseRoute: "patient-visitor-resources",
+		managerRoutes: {
+			index: "/me/patient-visitor-resources",
+			byId: (resourceId = ":resourceId") =>
+				`/me/patient-visitor-resources/${resourceId}`,
+		},
+		publicRoutes: {
+			getFacilityItems: (facilityId = ":facilityId") =>
+				`/${facilityId}/patient-visitor-resources`,
+			getByIdAndFacilityId: (facilityId = ":facilityId", resourceId = ":resourceId") =>
+				`/${facilityId}/patient-visitor-resources/${resourceId}`,
+		},
+	},
 } as const;
-
-export const medicalFacilityRoutes = routes;
-export const medicalFacilityRouter = router;
 
 // MedicalFacility Feedback questions & categories management (ADMIN)
 export const medicalFacilityFeedbackRouter: Router = express.Router();
@@ -55,28 +63,6 @@ router.post(
 router.patch(routes.reviewById(), authenticated, reviewActions.editReview);
 router.delete(routes.reviewById(), authenticated, reviewActions.deleteReview);
 
-// MedicalFacility Resources
-const resourceActions = createFacilityResourceActions();
-router.get(routes.resources(), resourceActions.getFacilityResources);
-router.post(
-	routes.resources(),
-	authenticated,
-	authorized(APP_ROLES.facilityManager),
-	resourceActions.createResource,
-);
-router.patch(
-	routes.resourceById(),
-	authenticated,
-	authorized(APP_ROLES.facilityManager),
-	resourceActions.updateResource,
-);
-router.delete(
-	routes.resourceById(),
-	authenticated,
-	authorized(APP_ROLES.facilityManager),
-	resourceActions.deleteResource,
-);
-
 // MedicalFacility Received Feedbacks
 receivedFeedbackHandler(
 	router,
@@ -84,3 +70,43 @@ receivedFeedbackHandler(
 	getAppCtx().facilityReceivedFeedbackRepository,
 	"facility",
 );
+
+// MedicalFacility Patients and Visitors Resources
+const resourceActions = createFacilityPatientVisitorResourceActions();
+// Facility Manager routes
+router.get(
+	routes.patientsAndVisitors.managerRoutes.index,
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.getItemsForCurrentUser,
+);
+router.post(
+	routes.patientsAndVisitors.managerRoutes.index,
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.create,
+);
+router.put(
+	routes.patientsAndVisitors.managerRoutes.byId(),
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.update,
+);
+router.delete(
+	routes.patientsAndVisitors.managerRoutes.byId(),
+	authenticated,
+	authorized(APP_ROLES.facilityManager),
+	resourceActions.delete,
+);
+// Public Patient-Visitor Resources routes
+router.get(
+	routes.patientsAndVisitors.publicRoutes.getFacilityItems(),
+	resourceActions.getItemsByFacilityId,
+);
+router.get(
+	routes.patientsAndVisitors.publicRoutes.getByIdAndFacilityId(),
+	resourceActions.getByIdAndFacilityId,
+);
+
+export const medicalFacilityRoutes = routes;
+export const medicalFacilityRouter = router;
