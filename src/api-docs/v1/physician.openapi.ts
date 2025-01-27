@@ -1,8 +1,13 @@
+import {
+	ZodFeedbackWithResponse,
+	ZodReceivedFeedback,
+	receivedFeedbackRequests,
+} from "@/api/feedbacks/types";
+import { ReviewRequests, ZodReview } from "@/api/reviews/reviews.types";
 import { ZodLanguage } from "@api/languages/language.types";
 import { MedicalConditionZodSchema } from "@api/medicalConditions/types";
 import { MedicalProcedureZodSchema } from "@api/medicalProcedures/types";
 import { MedicalSpecialtyZodSchema } from "@api/medicalSpecialties/types";
-import { ZodPhysicianReview } from "@api/physician/PhysicianReview";
 import { physicianRoutes } from "@api/physician/physician.router";
 import {
 	PhysicianZodSchema,
@@ -11,10 +16,6 @@ import {
 	ZodPhysicianResource,
 	physicianRequests,
 } from "@api/physician/physician.types";
-import {
-	ZodPhysicianFeedbackWithResponse,
-	ZodPhysicianReceivedFeedback,
-} from "@api/physicianFeedback/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
@@ -209,11 +210,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician"],
 		security: [{ bearerAuth: [] }],
 		request: {
-			params: physicianRequests.createOrUpdateFeedback.params,
+			params: receivedFeedbackRequests.physician.createOrUpdate.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.createOrUpdateFeedback.body,
+						schema: receivedFeedbackRequests.physician.createOrUpdate.body,
 					},
 				},
 			},
@@ -233,11 +234,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.createOrUpdateFeedback.params,
+			params: receivedFeedbackRequests.physician.createOrUpdate.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.createOrUpdateFeedback.body,
+						schema: receivedFeedbackRequests.physician.createOrUpdate.body,
 					},
 				},
 			},
@@ -246,7 +247,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: feedback was updated",
-				schema: ZodPhysicianReceivedFeedback,
+				schema: ZodReceivedFeedback,
 			},
 			unauthenticatedResponse,
 		]),
@@ -254,18 +255,18 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 	registry.registerPath({
 		method: "get",
 		path: physicianRoute + physicianRoutes.receivedFeedbacks("{physicianId}"),
-		description: "Retrieves feedbacks for a given physician",
+		description: "Retrieves given feedbacks for a physician",
 		tags: ["Physician"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.getPhysicianFeedbacks.params,
+			params: receivedFeedbackRequests.physician.get.params,
 		},
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.OK,
 				description:
 					"Success: returns the information of a physician received feedbacks",
-				schema: z.array(ZodPhysicianFeedbackWithResponse),
+				schema: z.array(ZodFeedbackWithResponse),
 			},
 		]),
 	});
@@ -278,13 +279,13 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		description: "Retrieves a list of `PhysicianReview` by physician id",
 		tags: ["Physician Reviews"],
 		request: {
-			params: physicianRequests.getPhysicianReviews.params,
+			params: ReviewRequests.physician.getReviews.params,
 		},
 		responses: createApiResponses([
 			{
 				statusCode: StatusCodes.OK,
-				description: "Success: returns a list of `MedicalCondition`",
-				schema: z.array(ZodPhysicianReview),
+				description: "Success: returns a list of `PhysicianReview`",
+				schema: z.array(ZodReview),
 			},
 		]),
 	});
@@ -296,11 +297,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician Reviews"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.addReviewByUser.params,
+			params: ReviewRequests.physician.addReviewByUser.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.addReviewByUser.body,
+						schema: ReviewRequests.physician.addReviewByUser.body,
 					},
 				},
 			},
@@ -309,7 +310,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: review was created",
-				schema: ZodPhysicianReview,
+				schema: ZodReview,
 			},
 			unauthenticatedResponse,
 		]),
@@ -321,11 +322,11 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician Reviews"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.updateReview.params,
+			params: ReviewRequests.physician.updateReview.params,
 			body: {
 				content: {
 					"application/json": {
-						schema: physicianRequests.updateReview.body,
+						schema: ReviewRequests.physician.updateReview.body,
 					},
 				},
 			},
@@ -334,7 +335,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 			{
 				statusCode: StatusCodes.OK,
 				description: "Success: review was updated",
-				schema: ZodPhysicianReview,
+				schema: ZodReview,
 			},
 			unauthenticatedResponse,
 		]),
@@ -346,7 +347,7 @@ export function registerPhysicianPaths(registry: OpenAPIRegistry, baseUrl: strin
 		tags: ["Physician Reviews"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
-			params: physicianRequests.deleteReview.params,
+			params: ReviewRequests.physician.deleteReview.params,
 		},
 		responses: createApiResponses([
 			{

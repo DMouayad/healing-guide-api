@@ -4,7 +4,7 @@ import {
 	FeedbackZodSchema,
 	UpdateFeedbackQuestionDTOSchema,
 } from "@/api/feedbacks/types";
-import { physicianFeedbackRoutes } from "@/api/physician/physician.router";
+import { medicalFacilityFeedbackRoutes } from "@/api/medicalFacility/medicalFacility.router";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
@@ -17,11 +17,11 @@ import {
 import { createApiResponses } from "../openAPIResponseBuilders";
 import { v1BearerAuth } from "./openAPIDocumentGenerator";
 
-export function registerPhysicianFeedbackPaths(
+export function registerMedicalFacilityFeedbackPaths(
 	registry: OpenAPIRegistry,
 	baseUrl: string,
 ) {
-	const routes = physicianFeedbackRoutes;
+	const routes = medicalFacilityFeedbackRoutes;
 	const basePath = baseUrl + routes.baseRoute;
 	registry.register("FeedbackCategory", FeedbackCategoryZodSchema);
 	registry.register("Feedback", FeedbackZodSchema);
@@ -31,7 +31,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "post",
 		path: basePath + routes.addCategory,
 		description: "Used to add a new `FeedbackCategory` to the database",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -60,7 +60,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "patch",
 		path: basePath + routes.editCategory("{id}"),
 		description: "Used to edit an existing `FeedbackCategory`",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -90,7 +90,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "delete",
 		path: basePath + routes.deleteCategory("{id}"),
 		description: "Used by an admin to delete a specific `FeedbackCategory`",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -110,7 +110,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "post",
 		path: basePath + routes.addQuestion,
 		description: "Used to add a new `FeedbackQuestion` to the database",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -139,7 +139,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "patch",
 		path: basePath + routes.editQuestion("{id}"),
 		description: "Used to edit an existing `FeedbackQuestion`",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -169,7 +169,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "delete",
 		path: basePath + routes.deleteQuestion("{id}"),
 		description: "Used by an admin to delete a specific `FeedbackQuestion`",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 
 		request: {
@@ -188,7 +188,7 @@ export function registerPhysicianFeedbackPaths(
 		method: "get",
 		path: basePath + routes.getAll,
 		description: "Used to retrieve a list of `Feedback`",
-		tags: ["Physician Feedback"],
+		tags: ["Medical Facility Feedback"],
 		security: [{ [v1BearerAuth.name]: [] }],
 		request: {
 			query: commonZodSchemas.queryParams,

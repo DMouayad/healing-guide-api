@@ -1,23 +1,22 @@
+import { getAppCtx } from "@/common/utils/getAppCtx";
 import { APP_ROLES } from "@common/types";
 import express, { type Router } from "express";
 import { authenticated } from "../auth/middlewares/authenticated";
 import { authorized } from "../auth/middlewares/authorized";
 import { identityConfirmed } from "../auth/middlewares/identityConfirmed";
+import { getFeedbackRoutes } from "../feedbacks/feedback.utils";
+import { feedbackHandler } from "../feedbacks/feedbackHandlers";
+import { receivedFeedbackHandler } from "../feedbacks/receivedFeedbackHandler";
+import { createReviewActions } from "../reviews/reviews.actions";
+import { ReviewRequests } from "../reviews/reviews.types";
 import {
 	createAction,
-	createFeedbackAction,
-	createReviewByUser,
-	deleteReview,
-	editReview,
 	getByIdAction,
-	getPhysicianFeedbacksAction,
-	getPhysicianReviews,
 	setProvidedProcedures,
 	setSpecialties,
 	setSpokenLanguages,
 	setTreatConditions,
 	updateAction,
-	updateFeedbackAction,
 } from "./physician.actions";
 
 const router: Router = express.Router();
@@ -47,11 +46,6 @@ router.patch(
 	identityConfirmed,
 	updateAction,
 );
-/** Received Feedbacks */
-router.post(routes.receivedFeedbacks(), authenticated, createFeedbackAction);
-router.patch(routes.receivedFeedbacks(), authenticated, updateFeedbackAction);
-router.get(routes.receivedFeedbacks(), getPhysicianFeedbacksAction);
-
 /** Treat Conditions */
 router.post(
 	routes.treatConditions,
@@ -81,10 +75,37 @@ router.post(
 	setSpokenLanguages,
 );
 /** Reviews  */
-router.get(routes.getReviews(), getPhysicianReviews);
-router.post(routes.createPhysicianReview(), authenticated, createReviewByUser);
-router.patch(routes.reviewById(), authenticated, editReview);
-router.delete(routes.reviewById(), authenticated, deleteReview);
+
+const reviewActions = createReviewActions(
+	ReviewRequests.physician,
+	getAppCtx().physicianReviewsRepository,
+);
+router.get(routes.getReviews(), reviewActions.getReviews);
+router.post(
+	routes.createPhysicianReview(),
+	authenticated,
+	reviewActions.createReviewByUser,
+);
+router.patch(routes.reviewById(), authenticated, reviewActions.editReview);
+router.delete(routes.reviewById(), authenticated, reviewActions.deleteReview);
 
 export const physicianRoutes = routes;
 export const physicianRouter = router;
+
+// Physician Feedback questions & categories management
+export const physicianFeedbackRouter: Router = express.Router();
+export const physicianFeedbackRoutes = getFeedbackRoutes("/physician-feedbacks");
+
+feedbackHandler(
+	physicianFeedbackRouter,
+	physicianFeedbackRoutes,
+	getAppCtx().physicianFeedbackRepository,
+);
+
+// Physician Received Feedbacks
+receivedFeedbackHandler(
+	router,
+	routes.receivedFeedbacks(),
+	getAppCtx().physicianReceivedFeedbackRepository,
+	"physician",
+);

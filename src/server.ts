@@ -16,8 +16,10 @@ import { medicalConditionsRouter } from "./api/medicalConditions/router";
 import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
 import { medicalProceduresRouter } from "./api/medicalProcedures/router";
 import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
-import { physicianRouter } from "./api/physician/physician.router";
-import { physicianFeedbackRouter } from "./api/physicianFeedback/router";
+import {
+	physicianFeedbackRouter,
+	physicianRouter,
+} from "./api/physician/physician.router";
 import { userRouter } from "./api/user/user.router";
 import { defaultRateLimiterByIP } from "./common/rateLimiters";
 import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";
@@ -28,6 +30,12 @@ import { requestLogger } from "./middleware/requestLogger";
 import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
 
 import pgSession from "connect-pg-simple";
+import { facilityTypesRouter } from "./api/facilityTypes/router";
+import {
+	medicalFacilityFeedbackRouter,
+	medicalFacilityRouter,
+} from "./api/medicalFacility/medicalFacility.router";
+import { patientVisitorResourceCategoryRouter } from "./api/patientVisitorResource/patientVisitorResourceCategoryRouter";
 import { VIEW_NAMES } from "./common/constants";
 import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { logger } from "./common/utils/logger";
@@ -83,7 +91,10 @@ app.use(rateLimiterByIP(defaultRateLimiterByIP));
 
 // Server Health Check endpoints
 app.use("/health-check", healthCheckRouter);
+
+// Password Reset
 app.use(passwordResetRouter);
+
 // Restful API Routes - latest version
 const apiRouter: Router = Router();
 app.use("/mail-templates", mailTemplatesRouter);
@@ -97,6 +108,13 @@ apiRouter.use("/medical-conditions", medicalConditionsRouter);
 apiRouter.use("/physician-feedbacks", physicianFeedbackRouter);
 apiRouter.use("/physicians", physicianRouter);
 apiRouter.use("/languages", languageRouter);
+apiRouter.use(
+	"/patient-visitor-resources/categories",
+	patientVisitorResourceCategoryRouter,
+);
+apiRouter.use("/facility-types", facilityTypesRouter);
+apiRouter.use("/medical-facility-feedbacks", medicalFacilityFeedbackRouter);
+apiRouter.use("/medical-facilities", medicalFacilityRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

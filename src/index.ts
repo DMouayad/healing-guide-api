@@ -2,7 +2,12 @@ import { app } from "@/server";
 import { env } from "@utils/envConfig";
 import { logger } from "@utils/logger";
 import { db } from "./db";
-import { migrateDBLatest, testDBConnection } from "./db/utils";
+import {
+	checkPostgisExtension,
+	enablePostGisExtension,
+	migrateDBLatest,
+	testDBConnection,
+} from "./db/utils";
 
 // start Express app
 initServer()
@@ -16,6 +21,10 @@ initServer()
 		process.exitCode = 1;
 	})
 	.then(() => migrateDBLatest())
+	.then(checkPostgisExtension)
+	.then((alreadyEnabled) =>
+		alreadyEnabled ? Promise.resolve() : enablePostGisExtension(),
+	)
 	.then(() => {
 		const { NODE_ENV, HOST, PORT } = env;
 		logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);

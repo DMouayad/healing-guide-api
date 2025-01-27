@@ -3,41 +3,37 @@ import { db } from "@db/index";
 import { handleDBErrors } from "@db/utils";
 import { objectToCamel, objectToSnake } from "ts-case-convert";
 import type {
-	CreatePhysicianFeedbackCategoryDTO,
-	CreatePhysicianFeedbackQuestionDTO,
-	PhysicianFeedback,
-	PhysicianFeedbackCategory,
-	PhysicianFeedbackQuestion,
-	UpdatePhysicianFeedbackCategoryDTO,
-	UpdatePhysicianFeedbackQuestionDTO,
+	CreateFeedbackCategoryDTO,
+	CreateFeedbackQuestionDTO,
+	Feedback,
+	FeedbackCategory,
+	FeedbackQuestion,
+	UpdateFeedbackCategoryDTO,
+	UpdateFeedbackQuestionDTO,
 } from "./types";
 
-export interface IPhysicianFeedbackRepository {
-	getAll(params: SimplePaginationParams): Promise<PhysicianFeedback[]>;
-	storeCategory(
-		dto: CreatePhysicianFeedbackCategoryDTO,
-	): Promise<PhysicianFeedbackCategory>;
-	updateCategory(
-		id: number,
-		dto: UpdatePhysicianFeedbackCategoryDTO,
-	): Promise<PhysicianFeedbackCategory>;
+export interface IFeedbackRepository {
+	getAll(params: SimplePaginationParams): Promise<Feedback[]>;
+	storeCategory(dto: CreateFeedbackCategoryDTO): Promise<FeedbackCategory>;
+	updateCategory(id: number, dto: UpdateFeedbackCategoryDTO): Promise<FeedbackCategory>;
 	deleteCategory(id: number): Promise<void>;
-	storeQuestion(
-		dto: CreatePhysicianFeedbackQuestionDTO,
-	): Promise<PhysicianFeedbackQuestion>;
-	updateQuestion(
-		id: number,
-		dto: UpdatePhysicianFeedbackQuestionDTO,
-	): Promise<PhysicianFeedbackQuestion>;
+	storeQuestion(dto: CreateFeedbackQuestionDTO): Promise<FeedbackQuestion>;
+	updateQuestion(id: number, dto: UpdateFeedbackQuestionDTO): Promise<FeedbackQuestion>;
 	deleteQuestion(id: number): Promise<void>;
 }
 
-export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackRepository {
-	storeQuestion(
-		dto: CreatePhysicianFeedbackQuestionDTO,
-	): Promise<PhysicianFeedbackQuestion> {
+export class DBFeedbackRepository implements IFeedbackRepository {
+	constructor(
+		readonly questionsTable:
+			| "physician_feedback_questions"
+			| "facility_feedback_questions",
+		readonly categoriesTable:
+			| "physician_feedback_categories"
+			| "facility_feedback_categories",
+	) {}
+	storeQuestion(dto: CreateFeedbackQuestionDTO): Promise<FeedbackQuestion> {
 		return db
-			.insertInto("physician_feedback_questions")
+			.insertInto(this.questionsTable)
 			.values(objectToSnake(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
@@ -46,10 +42,10 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 	}
 	updateQuestion(
 		id: number,
-		dto: UpdatePhysicianFeedbackQuestionDTO,
-	): Promise<PhysicianFeedbackQuestion> {
+		dto: UpdateFeedbackQuestionDTO,
+	): Promise<FeedbackQuestion> {
 		return db
-			.updateTable("physician_feedback_questions")
+			.updateTable(this.questionsTable)
 			.where("id", "=", id)
 			.$if(dto.question != null, (qb) => qb.set("question", dto.question!))
 			.$if(dto.categoryId != null, (qb) => qb.set("category_id", dto.categoryId!))
@@ -60,14 +56,14 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 	}
 	async deleteQuestion(id: number): Promise<void> {
 		await db
-			.deleteFrom("physician_feedback_questions")
+			.deleteFrom(this.questionsTable)
 			.where("id", "=", id)
 			.executeTakeFirstOrThrow();
 	}
-	async getAll(params: SimplePaginationParams): Promise<PhysicianFeedback[]> {
+	async getAll(params: SimplePaginationParams): Promise<Feedback[]> {
 		return db.transaction().execute(async (trx) => {
 			const questions = await trx
-				.selectFrom("physician_feedback_questions")
+				.selectFrom(this.questionsTable)
 				.orderBy("id", "asc")
 				.limit(params.perPage)
 				.$if(params.from != null, (qb) => qb.where("id", ">=", params.from))
@@ -81,12 +77,12 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 			const categoryIds = [...new Set(questions.map((q) => q.category_id))];
 
 			const categories = await trx
-				.selectFrom("physician_feedback_categories")
+				.selectFrom(this.categoriesTable)
 				.where("id", "in", categoryIds)
 				.select(["id as category_id", "name"])
 				.execute();
 			// Create a map for efficient question lookup by category ID
-			const questionsByCategoryId: Record<number, PhysicianFeedbackQuestion[]> = {};
+			const questionsByCategoryId: Record<number, FeedbackQuestion[]> = {};
 			for (const question of questions) {
 				if (!questionsByCategoryId[question.category_id]) {
 					questionsByCategoryId[question.category_id] = [];
@@ -95,7 +91,7 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 			}
 
 			// Combine categories and questions
-			const result: PhysicianFeedback[] = categories.map((category) => ({
+			const result: Feedback[] = categories.map((category) => ({
 				...objectToCamel(category),
 				questions: questionsByCategoryId[category.category_id] || [], // Use empty array if no questions
 			}));
@@ -105,9 +101,9 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 
 	updateCategory(
 		id: number,
-		dto: UpdatePhysicianFeedbackCategoryDTO,
-	): Promise<PhysicianFeedbackCategory> {
-		const q = db.updateTable("physician_feedback_categories").where("id", "=", id);
+		dto: UpdateFeedbackCategoryDTO,
+	): Promise<FeedbackCategory> {
+		const q = db.updateTable(this.categoriesTable).where("id", "=", id);
 		if (dto.name) {
 			q.set("name", dto.name);
 		}
@@ -116,11 +112,9 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 		}
 		return q.returningAll().executeTakeFirstOrThrow().catch(handleDBErrors);
 	}
-	storeCategory(
-		dto: CreatePhysicianFeedbackCategoryDTO,
-	): Promise<PhysicianFeedbackCategory> {
+	storeCategory(dto: CreateFeedbackCategoryDTO): Promise<FeedbackCategory> {
 		return db
-			.insertInto("physician_feedback_categories")
+			.insertInto(this.categoriesTable)
 			.values(objectToSnake(dto))
 			.returningAll()
 			.executeTakeFirstOrThrow()
@@ -128,8 +122,19 @@ export class DBPhysicianFeedbackRepository implements IPhysicianFeedbackReposito
 	}
 	async deleteCategory(id: number): Promise<void> {
 		await db
-			.deleteFrom("physician_feedback_categories")
+			.deleteFrom(this.categoriesTable)
 			.where("id", "=", id)
 			.executeTakeFirstOrThrow();
+	}
+}
+
+export class DBPhysicianFeedbackRepository extends DBFeedbackRepository {
+	constructor() {
+		super("physician_feedback_questions", "physician_feedback_categories");
+	}
+}
+export class DBFacilityFeedbackRepository extends DBFeedbackRepository {
+	constructor() {
+		super("facility_feedback_questions", "facility_feedback_categories");
 	}
 }

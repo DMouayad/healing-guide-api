@@ -1,12 +1,18 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { ZodPaginatedJsonResponse } from "@common/zod/common";
 import { registerAuthPaths } from "./auth.openapi";
+import { registerFacilityPatientVisitorResourcesPaths } from "./facilityPatientVisitorResource.openapi";
+import { registerMedicalFacilityReviewsPaths } from "./facilityReviews.openapi";
+import { registerFacilityTypePaths } from "./facilityTypes.openapi";
 import { registerLanguagesPaths } from "./languages.openapi";
 import { registerMedicalConditionsPaths } from "./medicalConditions.openapi";
 import { registerMedicalDepartmentsPaths } from "./medicalDepartments.openapi";
+import { registerMedicalFacilityPaths } from "./medicalFacility.openapi";
+import { registerMedicalFacilityFeedbackPaths } from "./medicalFacilityFeedback.openapi";
 import { registerMedicalProceduresPaths } from "./medicalProcedures.openapi";
 import { registerMedicalSpecialtiesPaths } from "./medicalSpecialties.openapi";
 import { registerPasswordResetPaths } from "./passwordReset.openapi";
+import { registerPatientVisitorResourceCategoryPaths } from "./patientVisitorResourceCategories.openapi";
 import { registerPhysicianPaths } from "./physician.openapi";
 import { registerPhysicianFeedbackPaths } from "./physicianFeedback.openapi";
 import { registerUserPaths } from "./user.openapi";
@@ -35,6 +41,12 @@ registerMedicalConditionsPaths(v1Registry, v1BaseUrl);
 registerPhysicianPaths(v1Registry, v1BaseUrl);
 registerPhysicianFeedbackPaths(v1Registry, v1BaseUrl);
 registerLanguagesPaths(v1Registry, v1BaseUrl);
+registerMedicalFacilityPaths(v1Registry, v1BaseUrl);
+registerFacilityTypePaths(v1Registry, v1BaseUrl);
+registerPatientVisitorResourceCategoryPaths(v1Registry, v1BaseUrl);
+registerMedicalFacilityFeedbackPaths(v1Registry, v1BaseUrl);
+registerMedicalFacilityReviewsPaths(v1Registry, v1BaseUrl);
+registerFacilityPatientVisitorResourcesPaths(v1Registry, v1BaseUrl);
 
 export function generateV1OpenAPIDocument() {
 	const generator = new OpenApiGeneratorV3(v1Registry.definitions);
