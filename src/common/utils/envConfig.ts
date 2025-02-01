@@ -56,7 +56,6 @@ export const env = cleanEnv(process.env, {
 		desc: "The time window in which the user considered identified",
 		devDefault: 60,
 	}),
-	APP_URL: str({ devDefault: "http://localhost:8080" }),
 	API_VERSION: str(),
 	ADMIN_EMAIL: str(),
 	ADMIN_PHONE: str(),
