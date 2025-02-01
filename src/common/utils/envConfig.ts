@@ -37,9 +37,11 @@ export const env = cleanEnv(process.env, {
 	SIGNUP_RATE_LIMIT: json<MultipleRateLimits>(),
 	FORGOT_PASSWORD_RATE_LIMIT: json<MultipleRateLimits>(),
 	RESET_PASSWORD_RATE_LIMIT: json<MultipleRateLimits>(),
-	DATABASE_URL: str({
-		example: "postgres://username:password@yourdomain.com/database",
-	}),
+	POSTGRES_HOST: str({ devDefault: "localhost" }),
+	POSTGRES_USER: str({ default: "postgres" }),
+	POSTGRES_PASSWORD_FILE: str(),
+	POSTGRES_DB: str({ default: "hguide" }),
+	POSTGRES_PORT: port({ devDefault: 5432 }),
 	PERSONAL_ACCESS_TOKEN_EXPIRATION: num({ desc: "Token expiration in minutes" }),
 	EMAIL_VERIFICATION_CODE_EXPIRATION: num({
 		desc: "Email verification code expiration in minutes",

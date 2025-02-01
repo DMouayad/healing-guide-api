@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import * as path from "node:path";
+import { env } from "@/common/utils/envConfig";
 import { PG_ERR_CODE } from "@common/constants";
 import AppError from "@common/models/appError";
 import { logger } from "@common/utils/logger";
@@ -19,13 +20,17 @@ export async function testDBConnection() {
 	logger.info("DB connection success");
 }
 function getMigratorInstance() {
+	const migrationsFolder = path.join(
+		__dirname,
+		env.isProduction ? "/db/migrations" : "migrations",
+	);
 	return new Migrator({
 		db,
 		allowUnorderedMigrations: true,
 		provider: new FileMigrationProvider({
 			fs,
 			path,
-			migrationFolder: path.join(__dirname, "migrations"),
+			migrationFolder: migrationsFolder,
 		}),
 	});
 }
