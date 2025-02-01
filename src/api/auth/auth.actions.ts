@@ -92,7 +92,7 @@ export function loginAction(limiters: MultipleRateLimiters) {
 		);
 		if (!user) {
 			await consumeByIP(limiters.byIP, req);
-			throw AppError.ACCOUNT_NOT_FOUND(); // Throw error to be caught below
+			throw AppError.WRONG_LOGIN_CREDS();
 		}
 
 		const credsAreValid = await checkCredentials(data, user);

@@ -83,16 +83,10 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 			},
 			{
 				statusCode: StatusCodes.UNAUTHORIZED,
-				description: "Failure: wrong login credentials",
+				description:
+					"Failure: wrong login credentials, email\\phone number or password",
 				schema: ZodAppErrorSchema,
-				examples: {
-					"wrong email\\phone number": {
-						value: ApiResponse.error(AppError.ACCOUNT_NOT_FOUND()),
-					},
-					"wrong password": {
-						value: ApiResponse.error(AppError.WRONG_LOGIN_CREDS()),
-					},
-				},
+				example: ApiResponse.error(AppError.WRONG_LOGIN_CREDS()),
 			},
 		]),
 	});

@@ -40,13 +40,6 @@ class AppError extends Error {
 	static ROUTE_NOT_FOUND(params?: ParamsOverride): AppError {
 		return constructErr(APP_ERR_CODES.ROUTE_NOT_FOUND, StatusCodes.NOT_FOUND, params);
 	}
-	static ACCOUNT_NOT_FOUND(params?: ParamsOverride): AppError {
-		return constructErr(
-			APP_ERR_CODES.ACCOUNT_NOT_FOUND,
-			StatusCodes.UNAUTHORIZED,
-			params,
-		);
-	}
 	static ACCOUNT_ALREADY_EXISTS(params?: ParamsOverride): AppError {
 		return constructErr(
 			APP_ERR_CODES.ACCOUNT_ALREADY_EXISTS,
