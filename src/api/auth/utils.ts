@@ -89,12 +89,17 @@ export function getAccessTokenApiResponse(token: NewAccessToken) {
 	return ApiResponse.success({ data: { token } });
 }
 
-export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
+export function getAuthorizedUserApiResponse(
+	user: IUser,
+	token: NewAccessToken,
+	newUser = false,
+) {
 	return ApiResponse.success({
 		data: { token, user: UserResource(user) },
-		statusCode: StatusCodes.CREATED,
+		statusCode: newUser ? StatusCodes.CREATED : StatusCodes.OK,
 	});
 }
+
 export function getSignupCodeUniqueIdentifier(params: {
 	role: Role;
 	phoneNumber: string;
@@ -104,6 +109,7 @@ export function getSignupCodeUniqueIdentifier(params: {
 		(params.email ? params.email : "") + params.phoneNumber + params.role.slug;
 	return sha256(input);
 }
+
 export async function sendSignupCode(signupCode: SignupCode, otp: OTPWithCode) {
 	switch (signupCode.receiveVia) {
 		case OTP_SENDING_METHODS.mail: {

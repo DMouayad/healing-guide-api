@@ -27,8 +27,7 @@ import { UserRegisteredEvent } from "../user/user.events";
 import { authRequests } from "./auth.requests";
 import {
 	checkCredentials,
-	getAccessTokenApiResponse,
-	getSignupApiResponse,
+	getAuthorizedUserApiResponse,
 	getSignupCodeUniqueIdentifier,
 	getUserFromResponse,
 	issuePersonalAccessToken,
@@ -78,7 +77,7 @@ export function signupAction(limiters: MultipleRateLimiters) {
 		myEventEmitter.emitAppEvent(new UserRegisteredEvent(newUser));
 
 		const token = await issuePersonalAccessToken(newUser, req.ip!);
-		return getSignupApiResponse(newUser, token).send(res);
+		return getAuthorizedUserApiResponse(newUser, token, true).send(res);
 	};
 }
 
@@ -104,8 +103,7 @@ export function loginAction(limiters: MultipleRateLimiters) {
 			});
 			const tokenFingerPrint = getClientIp(req) ?? `${user.id}_${Date.now()}`;
 			const token = await issuePersonalAccessToken(user, tokenFingerPrint);
-			const apiResponse = getAccessTokenApiResponse(token);
-			return apiResponse.send(res);
+			return getAuthorizedUserApiResponse(user, token).send(res);
 		} else {
 			await consumeByIP(limiters.byIP, req);
 			await limiters.byCredentials.consume(data.emailOrPhoneNo);

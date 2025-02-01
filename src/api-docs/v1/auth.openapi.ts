@@ -78,6 +78,7 @@ export function registerAuthPaths(registry: OpenAPIRegistry, baseUrl: string) {
 				description: "Success: login was success",
 				schema: z.object({
 					token: z.string(),
+					user: UserSchema.omit({ id: true, createdAt: true }),
 				}),
 			},
 			{
