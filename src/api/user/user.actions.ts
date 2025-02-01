@@ -21,7 +21,7 @@ export function getNonAdminUsersAction(req: Request, res: Response) {
 			APP_ROLES.patient,
 			APP_ROLES.physician,
 		])
-		.then((users) => ApiResponse.success({ data: users.map(UserResource.create) }))
+		.then((users) => ApiResponse.success({ data: users.map(UserResource) }))
 		.then((apiResponse) => apiResponse.send(res));
 }
 
@@ -45,6 +45,6 @@ export async function updateUser(req: Request, res: Response) {
 
 	return getAppCtx()
 		.userRepository.update(user, data.body)
-		.then((user) => ApiResponse.success({ data: UserResource.create(user!) }))
+		.then((user) => ApiResponse.success({ data: UserResource(user!) }))
 		.then((apiResponse) => apiResponse.send(res));
 }

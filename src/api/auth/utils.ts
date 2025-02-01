@@ -91,7 +91,7 @@ export function getAccessTokenApiResponse(token: NewAccessToken) {
 
 export function getSignupApiResponse(user: IUser, token: NewAccessToken) {
 	return ApiResponse.success({
-		data: { token, user: UserResource.create(user) },
+		data: { token, user: UserResource(user) },
 		statusCode: StatusCodes.CREATED,
 	});
 }
