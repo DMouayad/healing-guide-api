@@ -25,3 +25,6 @@ dist-ssr
 *.sln
 *.sw?
 src/db/password.txt
+
+# Local Netlify folder
+.netlify
