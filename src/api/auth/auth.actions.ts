@@ -40,17 +40,6 @@ export function signupAction(limiters: MultipleRateLimiters) {
 		const credsLimiterKey = getCredsRateLimitingKey(data);
 		await checkRateLimitsHavePoints(req, credsLimiterKey, limiters);
 
-		const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
-		const passwordHash = await bcryptHash(data.password);
-
-		const dto = new CreateUserDTO({
-			email: data.email,
-			phoneNumber: data.phoneNumber,
-			role: data.role,
-			activated: userAccountActivatedByDefault,
-			identityConfirmedAt: new Date(),
-			passwordHash,
-		});
 		try {
 			await validateSignupCode({ code: data.signupCode, ...data });
 		} catch (err) {
@@ -64,7 +53,17 @@ export function signupAction(limiters: MultipleRateLimiters) {
 			}
 			throw err; // Re-throw
 		}
+		const userAccountActivatedByDefault = data.role === APP_ROLES.patient;
+		const passwordHash = await bcryptHash(data.password);
 
+		const dto = new CreateUserDTO({
+			email: data.email,
+			phoneNumber: data.phoneNumber,
+			role: data.role,
+			activated: userAccountActivatedByDefault,
+			identityConfirmedAt: new Date(),
+			passwordHash,
+		});
 		const newUser = await getAppCtx().userRepository.create(dto);
 		if (!newUser) {
 			await consumeByIP(limiters.byIP, req);
