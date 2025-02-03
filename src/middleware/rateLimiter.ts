@@ -81,7 +81,7 @@ export function passwordResetRateLimiterByToken(limiter: RateLimiterAbstract) {
 }
 
 export const CredentialsForRateLimitSchema = z.object({
-	email: z.string().email().optional(),
+	email: z.string().email().nullable().optional(),
 	phoneNumber: commonZodSchemas.phoneNumber,
 });
 export type CredentialsForRateLimit = z.infer<typeof CredentialsForRateLimitSchema>;

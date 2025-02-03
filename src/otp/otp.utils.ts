@@ -128,7 +128,7 @@ export async function validatePhoneVerificationCode(code: string, user: IUser) {
 }
 export async function validateSignupCode(params: {
 	code: string;
-	email?: string;
+	email?: string | null;
 	phoneNumber: string;
 	role: Role;
 }) {

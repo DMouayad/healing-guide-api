@@ -103,7 +103,7 @@ export function getAuthorizedUserApiResponse(
 export function getSignupCodeUniqueIdentifier(params: {
 	role: Role;
 	phoneNumber: string;
-	email?: string;
+	email?: string | null;
 }) {
 	const input =
 		(params.email ? params.email : "") + params.phoneNumber + params.role.slug;

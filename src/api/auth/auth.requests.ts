@@ -3,15 +3,13 @@ import { commonZodSchemas } from "@common/zod/common";
 import { z } from "zod";
 import { ZodCreateSignupCodeDto } from "./auth.types";
 
-const signupRequestSchema = z
-	.object({
-		email: z.string().email(),
-		phoneNumber: commonZodSchemas.phoneNumber,
-		role: commonZodSchemas.role,
-		password: commonZodSchemas.password,
-		signupCode: z.string().length(env.SIGNUP_CODE_LENGTH),
-	})
-	.required();
+const signupRequestSchema = z.object({
+	email: z.string().email().nullable(),
+	phoneNumber: commonZodSchemas.phoneNumber,
+	role: commonZodSchemas.role,
+	password: commonZodSchemas.password,
+	signupCode: z.string().length(env.SIGNUP_CODE_LENGTH),
+});
 
 const loginRequestSchema = z.object({
 	emailOrPhoneNo: z.string().email().or(commonZodSchemas.phoneNumber),
