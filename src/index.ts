@@ -20,11 +20,11 @@ initServer()
 		logger.fatal(`DB connection failed | ${err}`);
 		process.exitCode = 1;
 	})
-	.then(() => migrateDBLatest())
 	.then(checkPostgisExtension)
 	.then((alreadyEnabled) =>
 		alreadyEnabled ? Promise.resolve() : enablePostGisExtension(),
 	)
+	.then(() => migrateDBLatest())
 	.then(() => {
 		const { NODE_ENV, HOST, PORT } = env;
 		logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
