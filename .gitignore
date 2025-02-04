@@ -28,3 +28,7 @@ src/db/password.txt
 
 # Local Netlify folder
 .netlify
+
+.vercel
+.env*.local
+*.local

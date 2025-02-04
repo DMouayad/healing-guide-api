@@ -17,15 +17,15 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.10.4
         version: 0.10.4
+      '@types/node':
+        specifier: ^22.13.1
+        version: 22.13.1
       '@types/nodemailer':
         specifier: ^6.4.17
         version: 6.4.17
       '@types/pg':
         specifier: ^8.11.11
         version: 8.11.11
-      '@types/ws':
-        specifier: ^8.5.14
-        version: 8.5.14
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -104,9 +104,6 @@ importers:
       uuid:
         specifier: ^11.0.5
         version: 11.0.5
-      ws:
-        specifier: ^8.18.0
-        version: 8.18.0
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -752,9 +749,6 @@ packages:
 
   '@types/swagger-ui-express@4.1.7':
     resolution: {integrity: sha512-ovLM9dNincXkzH4YwyYpll75vhzPBlWx6La89wwvYH7mHjVpf0X0K/vR/aUM7SRxmr5tt9z7E5XJcjQ46q+S3g==}
-
-  '@types/ws@8.5.14':
-    resolution: {integrity: sha512-bd/YFLW+URhBzMXurx7lWByOu+xzU9+kb3RboOteXYDfW+tr+JZa99OyNmPINEGB/ahzKrEuc8rcv4gnpJmxTw==}
 
   '@vitest/expect@3.0.5':
     resolution: {integrity: sha512-nNIOqupgZ4v5jWuQx2DSlHLEs7Q4Oh/7AYwNyE+k0UQzG7tSmjPXShUikn1mpNGzYEN2jJbTvLejwShMitovBA==}
@@ -2850,10 +2844,6 @@ snapshots:
       '@types/express': 5.0.0
       '@types/serve-static': 1.15.7
 
-  '@types/ws@8.5.14':
-    dependencies:
-      '@types/node': 22.13.1
-
   '@vitest/expect@3.0.5':
     dependencies:
       '@vitest/spy': 3.0.5
@@ -4538,7 +4528,8 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.18.0: {}
+  ws@8.18.0:
+    optional: true
 
   xtend@4.0.2: {}
 
