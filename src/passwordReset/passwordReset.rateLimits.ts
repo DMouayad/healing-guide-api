@@ -1,5 +1,5 @@
-import { memoryRateLimiter } from "@/common/rateLimiters";
-import { env } from "@/common/utils/envConfig";
+import { memoryRateLimiter } from "src/common/rateLimiters";
+import { env } from "src/common/utils/envConfig";
 
 export const passwordResetRateLimits = {
 	forgotPassword: {

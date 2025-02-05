@@ -1,11 +1,11 @@
-import { patientVisitorResourceCategoryRoutes } from "@/api/patientVisitorResource/patientVisitorResourceCategoryRouter";
+import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { StatusCodes } from "http-status-codes";
+import { commonZodSchemas } from "src/common/zod/common";
+import { patientVisitorResourceCategoryRoutes } from "src/rest-api/patientVisitorResource/patientVisitorResourceCategoryRouter";
 import {
 	PatientVisitorResourceCategorySchema,
 	PatientVisitorResourceCategorySchemas,
-} from "@/api/patientVisitorResource/types";
-import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { commonZodSchemas } from "@common/zod/common";
-import { StatusCodes } from "http-status-codes";
+} from "src/rest-api/patientVisitorResource/types";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,

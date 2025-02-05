@@ -1,12 +1,12 @@
-import { APP_ERR_CODES } from "@/common/models/errorCodes";
-import { passwordResetRoutes } from "@/passwordReset/passwordReset.router";
-import ApiResponse from "@common/models/apiResponse";
-import AppError, { RateLimitError } from "@common/models/appError";
-import { toAppError } from "@common/utils/toAppError";
-import { logErrIfNeeded } from "@utils/logger";
 import type { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { SignatureError } from "signed";
+import ApiResponse from "src/common/models/apiResponse";
+import AppError, { RateLimitError } from "src/common/models/appError";
+import { APP_ERR_CODES } from "src/common/models/errorCodes";
+import { logErrIfNeeded } from "src/common/utils/logger";
+import { toAppError } from "src/common/utils/toAppError";
+import { passwordResetRoutes } from "src/passwordReset/passwordReset.router";
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 	if (err instanceof RateLimitError) {

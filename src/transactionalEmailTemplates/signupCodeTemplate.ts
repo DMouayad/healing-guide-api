@@ -1,7 +1,7 @@
-import type { SignupCodeMailNotification } from "@/notifications/MailNotification";
-import { LOGO_IMG_CID } from "@/notifications/services/NodemailerEmailNotifier";
-import { HEALING_GUIDE_WEBSITE } from "@common/constants";
-import { env } from "@common/utils/envConfig";
+import { HEALING_GUIDE_WEBSITE } from "src/common/constants";
+import { env } from "src/common/utils/envConfig";
+import type { SignupCodeMailNotification } from "src/notifications/MailNotification";
+import { LOGO_IMG_CID } from "src/notifications/services/NodemailerEmailNotifier";
 
 function getTimeToExpiration(): number {
 	const d = new Date();
@@ -23,15 +23,15 @@ export function signupCodeMailTemplate(notification: SignupCodeMailNotification)
   /**
    * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
    */
-  @media screen {
-    @font-face {
+  src/media screen {
+    src/font-face {
       font-family: 'Source Sans Pro';
       font-style: normal;
       font-weight: 400;
       src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
     }
 
-    @font-face {
+    src/font-face {
       font-family: 'Source Sans Pro';
       font-style: normal;
       font-weight: 700;

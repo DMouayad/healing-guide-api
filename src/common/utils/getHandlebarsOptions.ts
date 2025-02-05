@@ -1,4 +1,4 @@
-import { passwordResetRoutes } from "@/passwordReset/passwordReset.router";
+import { passwordResetRoutes } from "src/passwordReset/passwordReset.router";
 import type { ViewName } from "../constants";
 import { env } from "./envConfig";
 

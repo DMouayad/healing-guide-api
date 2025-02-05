@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 			cb.onDelete("set null"),
 		)
 		.addColumn("email", "varchar(255)", (col) => col.unique())
-		.addColumn("phone_number", "varchar(255)", (col) => col.notNull().unique())
+		.addColumn("phone_number", "varchar(255)", (col) => col.unique())
 		.addColumn("password_hash", "varchar", (col) => col.notNull().unique())
 		.addColumn("email_verified_at", "timestamp")
 		.addColumn("phone_number_verified_at", "timestamp")

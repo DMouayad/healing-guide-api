@@ -1,8 +1,8 @@
-import { facilityTypesRoutes } from "@/api/facilityTypes/router";
-import { FacilityTypeZodSchema } from "@/api/facilityTypes/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
+import { commonZodSchemas } from "src/common/zod/common";
+import { facilityTypesRoutes } from "src/rest-api/facilityTypes/router";
+import { FacilityTypeZodSchema } from "src/rest-api/facilityTypes/types";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,

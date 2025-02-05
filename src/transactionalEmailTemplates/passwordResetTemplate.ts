@@ -1,7 +1,7 @@
-import type { PasswordResetMailNotification } from "@/notifications/MailNotification";
-import { LOGO_IMG_CID } from "@/notifications/services/NodemailerEmailNotifier";
-import { HEALING_GUIDE_WEBSITE } from "@common/constants";
-import { env } from "@common/utils/envConfig";
+import { HEALING_GUIDE_WEBSITE } from "src/common/constants";
+import { env } from "src/common/utils/envConfig";
+import type { PasswordResetMailNotification } from "src/notifications/MailNotification";
+import { LOGO_IMG_CID } from "src/notifications/services/NodemailerEmailNotifier";
 export function getExpiration() {
 	const date = new Date();
 	date.setHours(0, env.PASSWORD_RESET_CODE_EXPIRATION, 0, 0);
@@ -21,15 +21,15 @@ export function passwordResetMailTemplate(notification: PasswordResetMailNotific
   /**
    * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
    */
-  @media screen {
-    @font-face {
+  src/media screen {
+    src/font-face {
       font-family: 'Source Sans Pro';
       font-style: normal;
       font-weight: 400;
       src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
     }
 
-    @font-face {
+    src/font-face {
       font-family: 'Source Sans Pro';
       font-style: normal;
       font-weight: 700;
@@ -101,7 +101,7 @@ export function passwordResetMailTemplate(notification: PasswordResetMailNotific
       border-left: 18px solid #FF6136;
     }
     
-    @media only screen and (max-width: 500px) {
+    src/media only screen and (max-width: 500px) {
       .button {
         width: 100% !important;
         text-align: center !important;
@@ -263,7 +263,7 @@ export function passwordResetMailTemplate(notification: PasswordResetMailNotific
            <p style="">
               Did not request a password reset? you can safely ignore this email and the link will expire on its own and your password will not be changed.
               </p>
-              <b>Need further assistance?</b> contact us at <a href="mailto:healingguide@zohomail.eu" target="_blank">healingguide@zohomail.eu</a>
+              <b>Need further assistance?</b> contact us at <a href="mailto:healingguidesrc/zohomail.eu" target="_blank">healingguidesrc/zohomail.eu</a>
 
               </td>
           </tr>

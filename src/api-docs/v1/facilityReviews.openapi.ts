@@ -1,7 +1,7 @@
-import { medicalFacilityRoutes } from "@/api/medicalFacility/medicalFacility.router";
-import { ReviewRequests, ZodReview } from "@/api/reviews/reviews.types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
+import { medicalFacilityRoutes } from "src/rest-api/medicalFacility/medicalFacility.router";
+import { ReviewRequests, ZodReview } from "src/rest-api/reviews/reviews.types";
 import { z } from "zod";
 import { unauthenticatedResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";

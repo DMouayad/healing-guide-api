@@ -1,9 +1,9 @@
-import ApiResponse from "@common/models/apiResponse";
-import AppError from "@common/models/appError";
-import { APP_ERR_CODES } from "@common/models/errorCodes";
-import { ZodAppErrorSchema } from "@common/zod/appError.zod";
-import { ZodPaginatedJsonResponse } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
+import ApiResponse from "src/common/models/apiResponse";
+import AppError from "src/common/models/appError";
+import { APP_ERR_CODES } from "src/common/models/errorCodes";
+import { ZodAppErrorSchema } from "src/common/zod/appError.zod";
+import { ZodPaginatedJsonResponse } from "src/common/zod/common";
 import { type ZodTypeAny, z } from "zod";
 
 export const unauthenticatedResponse = {

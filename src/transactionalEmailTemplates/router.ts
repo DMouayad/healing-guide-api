@@ -1,22 +1,22 @@
+import { faker } from "@faker-js/faker";
+import express, { type Request, type Response } from "express";
+import { createUser } from "src/common/factories/userFactory";
+import { APP_ROLES } from "src/common/types";
+import { env } from "src/common/utils/envConfig";
 import {
 	MailNotification,
 	SignupCodeMailNotification,
-} from "@/notifications/MailNotification";
+} from "src/notifications/MailNotification";
 import {
 	generateEmailVerificationOTP,
 	generateIdentityConfirmationOTP,
-} from "@/otp/otp.utils";
+} from "src/otp/otp.utils";
 import {
 	generatePasswordResetLink,
 	generatePasswordResetToken,
-} from "@/passwordReset/passwordReset.utils";
-import { OTP_SENDING_METHODS } from "@api/auth/auth.types";
-import { isAdmin } from "@api/auth/middlewares/isAdmin";
-import { createUser } from "@common/factories/userFactory";
-import { APP_ROLES } from "@common/types";
-import { env } from "@common/utils/envConfig";
-import { faker } from "@faker-js/faker";
-import express, { type Request, type Response } from "express";
+} from "src/passwordReset/passwordReset.utils";
+import { OTP_SENDING_METHODS } from "src/rest-api/auth/auth.types";
+import { isAdmin } from "src/rest-api/auth/middlewares/isAdmin";
 import { emailVerificationMailTemplate } from "./emailVerificationTemplate";
 import { identityConfirmationMailTemplate } from "./identityConfirmationTemplate";
 import { passwordResetMailTemplate } from "./passwordResetTemplate";
@@ -26,7 +26,7 @@ export const mailTemplatesRouter = express.Router();
 if (env.NODE_ENV !== "development") {
 	mailTemplatesRouter.use(isAdmin);
 }
-mailTemplatesRouter.get("/email-verification", async (_req: Request, res: Response) => {
+mailTemplatesRouter.get("/email-verification", async (_req, res) => {
 	const user = await createUser();
 	const otp = generateEmailVerificationOTP(user);
 	const notification = MailNotification.emailVerification(user, otp);

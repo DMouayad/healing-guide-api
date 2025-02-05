@@ -1,13 +1,13 @@
+import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { StatusCodes } from "http-status-codes";
+import { commonZodSchemas } from "src/common/zod/common";
 import {
 	FeedbackCategoryZodSchema,
 	FeedbackQuestionZodSchema,
 	FeedbackZodSchema,
 	UpdateFeedbackQuestionDTOSchema,
-} from "@/api/feedbacks/types";
-import { physicianFeedbackRoutes } from "@/api/physician/physician.router";
-import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { commonZodSchemas } from "@common/zod/common";
-import { StatusCodes } from "http-status-codes";
+} from "src/rest-api/feedbacks/types";
+import { physicianFeedbackRoutes } from "src/rest-api/physician/physician.router";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,

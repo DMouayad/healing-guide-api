@@ -1,5 +1,5 @@
-import AppError from "@common/models/appError";
 import type { NextFunction, Request, Response } from "express";
+import AppError from "src/common/models/appError";
 
 function skipRequest(req: Request) {
 	return !["POST", "PUT", "PATCH"].includes(req.method);

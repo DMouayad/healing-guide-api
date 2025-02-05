@@ -1,11 +1,11 @@
-import { ASSIGNABLE_ROLES } from "@common/constants";
+import { ASSIGNABLE_ROLES } from "src/common/constants";
 import {
 	APP_ROLES,
 	type ClassProperties,
 	type RequireAtLeastOne,
 	type Role,
-} from "@common/types";
-import { logger } from "@common/utils/logger";
+} from "src/common/types";
+import { logger } from "src/common/utils/logger";
 import { IHasAuthorization } from "./IHasAuthorization";
 
 export type IUserProps = ClassProperties<IUser>;

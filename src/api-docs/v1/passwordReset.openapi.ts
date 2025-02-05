@@ -1,9 +1,9 @@
-import { passwordResetRoutes } from "@/passwordReset/passwordReset.router";
+import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { passwordResetRoutes } from "src/passwordReset/passwordReset.router";
 import {
 	forgotPasswordRequest,
 	resetPasswordRequest,
-} from "@/passwordReset/passwordReset.types";
-import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+} from "src/passwordReset/passwordReset.types";
 import { invalidPasswordResetResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
 

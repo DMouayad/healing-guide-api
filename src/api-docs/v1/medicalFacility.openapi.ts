@@ -1,11 +1,11 @@
+import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
+import { StatusCodes } from "http-status-codes";
 import {
 	ZodFeedbackWithResponse,
 	ZodReceivedFeedback,
 	receivedFeedbackRequests,
-} from "@/api/feedbacks/types";
-import { medicalFacilityRoutes } from "@/api/medicalFacility/medicalFacility.router";
-import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { StatusCodes } from "http-status-codes";
+} from "src/rest-api/feedbacks/types";
+import { medicalFacilityRoutes } from "src/rest-api/medicalFacility/medicalFacility.router";
 import { z } from "zod";
 import { unauthenticatedResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";

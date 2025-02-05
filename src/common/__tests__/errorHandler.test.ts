@@ -2,7 +2,7 @@ import express, { type Express } from "express";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
-import errorHandler from "@/middleware/errorHandler";
+import errorHandler from "src/middleware/errorHandler";
 
 describe("Error Handler Middleware", () => {
 	let app: Express;

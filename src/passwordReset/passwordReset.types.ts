@@ -1,5 +1,5 @@
-import { OTP_SENDING_METHODS } from "@/api/auth/auth.types";
-import { commonZodSchemas } from "@/common/zod/common";
+import { commonZodSchemas } from "src/common/zod/common";
+import { OTP_SENDING_METHODS } from "src/rest-api/auth/auth.types";
 import { z } from "zod";
 
 export const ZodPasswordReset = z.object({

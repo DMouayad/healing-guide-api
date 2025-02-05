@@ -1,4 +1,4 @@
-import type { Role } from "@common/types";
+import type { Role } from "src/common/types";
 
 export abstract class IHasAuthorization {
 	readonly role!: Role;

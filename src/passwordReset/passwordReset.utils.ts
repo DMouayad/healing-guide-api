@@ -1,9 +1,9 @@
 import { createHmac } from "node:crypto";
-import AppError from "@/common/models/appError";
-import { env } from "@/common/utils/envConfig";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import { generateRandomString } from "@/common/utils/hashing";
 import signed from "signed";
+import AppError from "src/common/models/appError";
+import { env } from "src/common/utils/envConfig";
+import { getAppCtx } from "src/common/utils/getAppCtx";
+import { generateRandomString } from "src/common/utils/hashing";
 import { passwordResetRoutes } from "./passwordReset.router";
 import type { PasswordReset } from "./passwordReset.types";
 

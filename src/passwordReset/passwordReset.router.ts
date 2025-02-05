@@ -1,10 +1,10 @@
-import { VIEW_NAMES } from "@/common/constants";
+import { Router } from "express";
+import { VIEW_NAMES } from "src/common/constants";
 import {
 	forgotPasswordRateLimiterByCreds,
 	passwordResetRateLimiterByToken,
 	rateLimiterByIP,
-} from "@/middleware/rateLimiter";
-import { Router } from "express";
+} from "src/middleware/rateLimiter";
 import { forgotPasswordAction, resetPasswordAction } from "./passwordReset.actions";
 import { passwordResetRateLimits as rateLimits } from "./passwordReset.rateLimits";
 import { passwordResetUrlSignature } from "./passwordReset.utils";
@@ -54,7 +54,7 @@ router.get(routes.resetPassword(), passwordResetUrlSignature.verifier(), (req, r
 	});
 });
 router.get(routes.forgotPasswordEnd, (req, res) => {
-	//@ts-ignore
+	//src/ts-ignore
 	const emailOrPhone = req.flash("forgotPassword.identifier");
 	if (emailOrPhone.length === 1) {
 		res.locals.emailOrPhone = emailOrPhone;

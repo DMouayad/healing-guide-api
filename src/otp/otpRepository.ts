@@ -1,7 +1,7 @@
-import type { SignupCode } from "@/api/auth/auth.types";
-import { getSignupCodeUniqueIdentifier } from "@/api/auth/utils";
-import { db } from "@/db";
-import type { IUser } from "@/interfaces/IUser";
+import { db } from "src/db";
+import type { IUser } from "src/interfaces/IUser";
+import type { SignupCode } from "src/rest-api/auth/auth.types";
+import { getSignupCodeUniqueIdentifier } from "src/rest-api/auth/utils";
 import { type OTP, OTP_PURPOSES, type OtpPurpose } from "./otp.types";
 
 export type OtpFilter = { unexpiredOnly: boolean };
@@ -68,7 +68,7 @@ export class DBOtpRepository extends IOtpRepository {
 			.then(this.otpFromQueryResult);
 	}
 	async store(otp: OTP): Promise<OTP> {
-		//@ts-ignore
+		//src/ts-ignore
 		return db
 			.insertInto("otps")
 			.values({

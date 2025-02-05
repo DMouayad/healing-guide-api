@@ -1,4 +1,4 @@
-import { db } from "@/db";
+import { db } from "src/db";
 import { objectToCamel } from "ts-case-convert";
 import type { PasswordReset } from "./passwordReset.types";
 

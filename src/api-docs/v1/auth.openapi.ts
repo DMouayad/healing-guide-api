@@ -1,11 +1,11 @@
-import { authRequests } from "@api/auth/auth.requests";
-import { authRoutes } from "@api/auth/authRouter";
-import { UserSchema } from "@api/user/user.model";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import ApiResponse from "@common/models/apiResponse";
-import AppError from "@common/models/appError";
-import { ZodAppErrorSchema } from "@common/zod/appError.zod";
 import { StatusCodes } from "http-status-codes";
+import ApiResponse from "src/common/models/apiResponse";
+import AppError from "src/common/models/appError";
+import { ZodAppErrorSchema } from "src/common/zod/appError.zod";
+import { authRequests } from "src/rest-api/auth/auth.requests";
+import { authRoutes } from "src/rest-api/auth/authRouter";
+import { UserSchema } from "src/rest-api/user/user.model";
 import { z } from "zod";
 import { unauthenticatedResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";

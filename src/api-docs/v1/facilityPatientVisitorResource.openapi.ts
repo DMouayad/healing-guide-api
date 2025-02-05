@@ -1,8 +1,8 @@
-import { medicalFacilityRoutes } from "@/api/medicalFacility/medicalFacility.router";
-import { PatientVisitorResourcesRequests } from "@/api/medicalFacility/patientVisitorResource.requests";
-import { ZodPatientVisitorResource } from "@/api/patientVisitorResource/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { StatusCodes } from "http-status-codes";
+import { medicalFacilityRoutes } from "src/rest-api/medicalFacility/medicalFacility.router";
+import { PatientVisitorResourcesRequests } from "src/rest-api/medicalFacility/patientVisitorResource.requests";
+import { ZodPatientVisitorResource } from "src/rest-api/patientVisitorResource/types";
 import { unauthenticatedResponse, unauthorizedResponse } from "../common";
 import { createApiResponses } from "../openAPIResponseBuilders";
 import { v1BearerAuth } from "./openAPIDocumentGenerator";

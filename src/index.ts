@@ -1,6 +1,6 @@
-import { app } from "@/server";
-import { env } from "@utils/envConfig";
-import { logger } from "@utils/logger";
+import { env } from "src/common/utils/envConfig";
+import { logger } from "src/common/utils/logger";
+import { app } from "src/server";
 import { db } from "./db";
 import {
 	checkPostgisExtension,

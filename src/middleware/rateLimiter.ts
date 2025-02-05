@@ -1,14 +1,14 @@
-import { getUserFromResponse } from "@/api/auth/utils";
+import type { NextFunction, Request, Response } from "express";
+import { type RateLimiterAbstract, RateLimiterRes } from "rate-limiter-flexible";
+import AppError from "src/common/models/appError";
+import { getRetryAfterSecs } from "src/common/rateLimiters";
+import { getClientIp } from "src/common/utils/getClientIp";
+import { commonZodSchemas } from "src/common/zod/common";
 import {
 	forgotPasswordRequest,
 	resetPasswordRequest,
-} from "@/passwordReset/passwordReset.types";
-import AppError from "@common/models/appError";
-import { getRetryAfterSecs } from "@common/rateLimiters";
-import { getClientIp } from "@common/utils/getClientIp";
-import { commonZodSchemas } from "@common/zod/common";
-import type { NextFunction, Request, Response } from "express";
-import { type RateLimiterAbstract, RateLimiterRes } from "rate-limiter-flexible";
+} from "src/passwordReset/passwordReset.types";
+import { getUserFromResponse } from "src/rest-api/auth/utils";
 import { z } from "zod";
 
 function baseRateLimiter(limiter: RateLimiterAbstract, key?: string | number) {

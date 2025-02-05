@@ -2,49 +2,48 @@ import cors from "cors";
 import express, { type Request, type Response, Router, type Express } from "express";
 import helmet from "helmet";
 
-import { openAPIRouter } from "@api-docs/openAPIRouter";
-import { healthCheckRouter } from "@api/healthCheck/healthCheckRouter";
-import { env } from "@common/utils/envConfig";
+import { openAPIRouter } from "src/api-docs/openAPIRouter";
+import { env } from "src/common/utils/envConfig";
+import { healthCheckRouter } from "src/rest-api/healthCheck/healthCheckRouter";
 
 import path from "node:path";
 
+import pgSession from "connect-pg-simple";
 import { engine } from "express-handlebars";
 import session from "express-session";
-import { authRouter } from "./api/auth/authRouter";
-import { languageRouter } from "./api/languages/language.router";
-import { medicalConditionsRouter } from "./api/medicalConditions/router";
-import { medicalDepartmentsRouter } from "./api/medicalDepartments/router";
-import { medicalProceduresRouter } from "./api/medicalProcedures/router";
-import { medicalSpecialtiesRouter } from "./api/medicalSpecialties/router";
-import {
-	physicianFeedbackRouter,
-	physicianRouter,
-} from "./api/physician/physician.router";
-import { userRouter } from "./api/user/user.router";
+import { VIEW_NAMES } from "./common/constants";
 import { defaultRateLimiterByIP } from "./common/rateLimiters";
+import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
 import { getTrustedProxiesFromEnv } from "./common/utils/getTrustedProxies";
+import { logger } from "./common/utils/logger";
 import { errorHandler, handleInvalidPasswordReset } from "./middleware/errorHandler";
+import handleFlashedZodErrors from "./middleware/handleFlashedZodErrors";
 import { hasValidContentType } from "./middleware/hasValidContentType";
 import { rateLimiterByIP } from "./middleware/rateLimiter";
 import { requestLogger } from "./middleware/requestLogger";
-import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
-
-import pgSession from "connect-pg-simple";
-import { facilityTypesRouter } from "./api/facilityTypes/router";
+import { passwordResetRouter } from "./passwordReset/passwordReset.router";
+import { authRouter } from "./rest-api/auth/authRouter";
+import { facilityTypesRouter } from "./rest-api/facilityTypes/router";
+import { languageRouter } from "./rest-api/languages/language.router";
+import { medicalConditionsRouter } from "./rest-api/medicalConditions/router";
+import { medicalDepartmentsRouter } from "./rest-api/medicalDepartments/router";
 import {
 	medicalFacilityFeedbackRouter,
 	medicalFacilityRouter,
-} from "./api/medicalFacility/medicalFacility.router";
-import { patientVisitorResourceCategoryRouter } from "./api/patientVisitorResource/patientVisitorResourceCategoryRouter";
-import { VIEW_NAMES } from "./common/constants";
-import getHandlebarsOptions from "./common/utils/getHandlebarsOptions";
-import { logger } from "./common/utils/logger";
-import { getDbPool } from "./db";
-import handleFlashedZodErrors from "./middleware/handleFlashedZodErrors";
-import { passwordResetRouter } from "./passwordReset/passwordReset.router";
-const flash = require("connect-flash");
+} from "./rest-api/medicalFacility/medicalFacility.router";
+import { medicalProceduresRouter } from "./rest-api/medicalProcedures/router";
+import { medicalSpecialtiesRouter } from "./rest-api/medicalSpecialties/router";
+import { patientVisitorResourceCategoryRouter } from "./rest-api/patientVisitorResource/patientVisitorResourceCategoryRouter";
+import {
+	physicianFeedbackRouter,
+	physicianRouter,
+} from "./rest-api/physician/physician.router";
+import { userRouter } from "./rest-api/user/user.router";
+import { mailTemplatesRouter } from "./transactionalEmailTemplates/router";
+
 import { localDbPool } from "./db";
 
+const flash = require("connect-flash");
 const app: Express = express();
 // Set the application to trust the reverse proxy
 app.set("trust proxy", getTrustedProxiesFromEnv());
@@ -95,10 +94,14 @@ app.use("/health-check", healthCheckRouter);
 // Password Reset
 app.use(passwordResetRouter);
 
-// Restful API Routes - latest version
-const apiRouter: Router = Router();
+// Transactional email templates
 app.use("/mail-templates", mailTemplatesRouter);
+
+// Restful API Routes
+const apiRouter: Router = Router();
+// specify the current API version
 app.use(`/api/${env.API_VERSION}`, apiRouter);
+
 apiRouter.use("/users", userRouter);
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/medical-departments", medicalDepartmentsRouter);

@@ -1,5 +1,5 @@
-import AppError from "@common/models/appError";
 import type { NextFunction, Request, Response } from "express";
+import AppError from "src/common/models/appError";
 
 export const hasRequestBody = (req: Request, _res: Response, next: NextFunction) => {
 	if (skipRequest(req)) {

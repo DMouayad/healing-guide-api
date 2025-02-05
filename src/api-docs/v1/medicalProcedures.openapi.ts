@@ -1,8 +1,8 @@
-import { medicalProceduresRoutes } from "@api/medicalProcedures/router";
-import { MedicalProcedureZodSchema } from "@api/medicalProcedures/types";
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { commonZodSchemas } from "@common/zod/common";
 import { StatusCodes } from "http-status-codes";
+import { commonZodSchemas } from "src/common/zod/common";
+import { medicalProceduresRoutes } from "src/rest-api/medicalProcedures/router";
+import { MedicalProcedureZodSchema } from "src/rest-api/medicalProcedures/types";
 import {
 	duplicateResourceResponse,
 	paginatedJsonResponse,

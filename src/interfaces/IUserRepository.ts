@@ -1,4 +1,4 @@
-import type { Role } from "@common/types";
+import type { Role } from "src/common/types";
 import type { CreateUserDTO, IUser, UpdateUserDTO } from "./IUser";
 
 export interface IUserRepository<User extends IUser = IUser> {

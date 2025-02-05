@@ -1,29 +1,29 @@
-import { DBFacilityTypesRepository } from "@/api/facilityTypes/facilityTypesRepository";
+import { FakeSmsNotifier } from "src/notifications/services/FakeSmsNotifier";
+import { NodemailerEmailNotifier } from "src/notifications/services/NodemailerEmailNotifier";
+import { DBOtpRepository } from "src/otp/otpRepository";
+import { DBPasswordResetRepository } from "src/passwordReset/passwordReset.repository";
+import { DBAuthTokensRepository } from "src/rest-api/auth/authTokens.repository";
+import { DBFacilityTypesRepository } from "src/rest-api/facilityTypes/facilityTypesRepository";
 import {
 	DBFacilityFeedbackRepository,
 	DBPhysicianFeedbackRepository,
-} from "@/api/feedbacks/FeedbackRepository";
+} from "src/rest-api/feedbacks/FeedbackRepository";
 import {
 	DBFacilityReceivedFeedbackRepository,
 	DBPhysicianReceivedFeedbackRepository,
-} from "@/api/feedbacks/ReceivedFeedbackRepository";
-import { DBFacilityReviewsRepository } from "@/api/medicalFacility/facilityReviewsRepository";
-import { DBMedicalFacilityRepository } from "@/api/medicalFacility/medicalFacility.repository";
-import { DBPatientVisitorResourceCategoriesRepository } from "@/api/patientVisitorResource/PatientVisitorResourceCategoriesRepository";
-import { DBPatientVisitorResourceRepository } from "@/api/patientVisitorResource/PatientVisitorResourceRepository";
-import { FakeSmsNotifier } from "@/notifications/services/FakeSmsNotifier";
-import { NodemailerEmailNotifier } from "@/notifications/services/NodemailerEmailNotifier";
-import { DBPasswordResetRepository } from "@/passwordReset/passwordReset.repository";
-import { DBAuthTokensRepository } from "@api/auth/authTokens.repository";
-import { DBLanguageRepository } from "@api/languages/LanguageRepository";
-import { DBMedicalConditionsRepository } from "@api/medicalConditions/MedicalConditionsRepository";
-import { DBMedicalDepartmentsRepository } from "@api/medicalDepartments/MedicalDepartmentsRepository";
-import { DBMedicalProceduresRepository } from "@api/medicalProcedures/MedicalProceduresRepository";
-import { DBMedicalSpecialtiesRepository } from "@api/medicalSpecialties/MedicalSpecialtiesRepository";
-import { DBPhysicianRepository } from "@api/physician/physician.repository";
-import { DBPhysicianReviewsRepository } from "@api/physician/physicianReviewsRepository";
-import { DBUserRepository } from "@api/user/user.repository";
-import { DBOtpRepository } from "@otp/otpRepository";
+} from "src/rest-api/feedbacks/ReceivedFeedbackRepository";
+import { DBLanguageRepository } from "src/rest-api/languages/LanguageRepository";
+import { DBMedicalConditionsRepository } from "src/rest-api/medicalConditions/MedicalConditionsRepository";
+import { DBMedicalDepartmentsRepository } from "src/rest-api/medicalDepartments/MedicalDepartmentsRepository";
+import { DBFacilityReviewsRepository } from "src/rest-api/medicalFacility/facilityReviewsRepository";
+import { DBMedicalFacilityRepository } from "src/rest-api/medicalFacility/medicalFacility.repository";
+import { DBMedicalProceduresRepository } from "src/rest-api/medicalProcedures/MedicalProceduresRepository";
+import { DBMedicalSpecialtiesRepository } from "src/rest-api/medicalSpecialties/MedicalSpecialtiesRepository";
+import { DBPatientVisitorResourceCategoriesRepository } from "src/rest-api/patientVisitorResource/PatientVisitorResourceCategoriesRepository";
+import { DBPatientVisitorResourceRepository } from "src/rest-api/patientVisitorResource/PatientVisitorResourceRepository";
+import { DBPhysicianRepository } from "src/rest-api/physician/physician.repository";
+import { DBPhysicianReviewsRepository } from "src/rest-api/physician/physicianReviewsRepository";
+import { DBUserRepository } from "src/rest-api/user/user.repository";
 import type { AppCtx } from "../models/appCtx";
 
 const productionAppCtx: AppCtx = {

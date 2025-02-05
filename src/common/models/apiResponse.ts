@@ -31,7 +31,7 @@ export default abstract class ApiResponse {
 
 	/**
 	 * Sends this object as a JSON response using the provided Express `Response` object.
-	 * @param res - Express `Response` object to use.
+	 * src/param res - Express `Response` object to use.
 	 */
 	send(res: Response): void {
 		res.status(this.statusCode).json(this);

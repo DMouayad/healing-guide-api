@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { IUser, type IUserProps } from "@interfaces/IUser";
 import parsePhoneNumber from "libphonenumber-js";
+import { IUser, type IUserProps } from "src/interfaces/IUser";
 import { APP_ROLES } from "../types";
 import { bcryptHash } from "../utils/hashing";
 
@@ -16,7 +16,7 @@ export async function createUser(params?: UserFactoryParams) {
 
 	const password = params?.userProps?.passwordHash ?? (await bcryptHash(email));
 	return new FakeUser({
-		// @ts-ignore
+		// src/ts-ignore
 		id: params?.userProps?.id ?? faker.string.numeric(),
 		passwordHash: password,
 		role: params?.userProps?.role ?? APP_ROLES.guest,

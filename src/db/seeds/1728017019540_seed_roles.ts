@@ -1,5 +1,5 @@
-import { APP_ROLES } from "@common/types";
 import type { Kysely } from "kysely";
+import { APP_ROLES } from "src/common/types";
 
 export async function seed(db: Kysely<any>): Promise<void> {
 	const rolesToInsert: { id: number; slug: string }[] = [];

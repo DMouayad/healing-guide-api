@@ -1,12 +1,18 @@
-import { OTP_SENDING_METHODS, type OtpSendingMethod } from "@/api/auth/auth.types";
-import ApiResponse from "@/common/models/apiResponse";
-import { getAppCtx } from "@/common/utils/getAppCtx";
-import { bcryptHash } from "@/common/utils/hashing";
-import type { IUser } from "@/interfaces/IUser";
-import { MailNotification } from "@/notifications/MailNotification";
-import { SmsNotification } from "@/notifications/SmsNotification";
-import { sendMailNotification, sendSmsNotification } from "@/notifications/mail.utils";
 import type { Request, Response } from "express";
+import ApiResponse from "src/common/models/apiResponse";
+import { getAppCtx } from "src/common/utils/getAppCtx";
+import { bcryptHash } from "src/common/utils/hashing";
+import type { IUser } from "src/interfaces/IUser";
+import { MailNotification } from "src/notifications/MailNotification";
+import { SmsNotification } from "src/notifications/SmsNotification";
+import {
+	sendMailNotification,
+	sendSmsNotification,
+} from "src/notifications/mail.utils";
+import {
+	OTP_SENDING_METHODS,
+	type OtpSendingMethod,
+} from "src/rest-api/auth/auth.types";
 import { passwordResetRoutes } from "./passwordReset.router";
 import { forgotPasswordRequest, resetPasswordRequest } from "./passwordReset.types";
 import {

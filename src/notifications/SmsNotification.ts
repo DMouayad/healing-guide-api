@@ -1,7 +1,7 @@
-import type { SignupCodedViaSMS } from "@api/auth/auth.types";
-import type { ObjectValues } from "@common/types";
-import type { IUser } from "@interfaces/IUser";
-import type { OTPWithCode } from "@otp/otp.types";
+import type { ObjectValues } from "src/common/types";
+import type { IUser } from "src/interfaces/IUser";
+import type { OTPWithCode } from "src/otp/otp.types";
+import type { SignupCodedViaSMS } from "src/rest-api/auth/auth.types";
 
 export const SMS_NOTIFICATIONS = {
 	phoneVerification: "PHONE_VERIFICATION_NOTIFICATION",

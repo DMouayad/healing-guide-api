@@ -1,4 +1,4 @@
-import type { ObjectValues } from "@common/types";
+import type { ObjectValues } from "src/common/types";
 
 export const OTP_PURPOSES = {
 	emailVerification: "EMAIL_VERIFICATION",

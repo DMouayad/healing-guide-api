@@ -1,9 +1,5 @@
 import { promises as fs } from "node:fs";
-import * as path from "node:path";
-import { env } from "@/common/utils/envConfig";
-import { PG_ERR_CODE } from "@common/constants";
-import AppError from "@common/models/appError";
-import { logger } from "@common/utils/logger";
+import path from "node:path";
 import {
 	FileMigrationProvider,
 	type MigrationResultSet,
@@ -13,6 +9,10 @@ import {
 	sql,
 } from "kysely";
 import { DatabaseError as PgDatabaseError } from "pg";
+import { PG_ERR_CODE } from "src/common/constants";
+import AppError from "src/common/models/appError";
+import { env } from "src/common/utils/envConfig";
+import { logger } from "src/common/utils/logger";
 import { db } from ".";
 
 export async function testDBConnection() {

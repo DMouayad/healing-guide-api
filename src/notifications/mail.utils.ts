@@ -1,5 +1,5 @@
-import type { MailNotification } from "@/notifications/MailNotification";
-import type { IUser } from "@interfaces/IUser";
+import type { IUser } from "src/interfaces/IUser";
+import type { MailNotification } from "src/notifications/MailNotification";
 import type { SocketNotification } from "../common/types";
 import { getAppCtx } from "../common/utils/getAppCtx";
 import type { SmsNotification } from "./SmsNotification";

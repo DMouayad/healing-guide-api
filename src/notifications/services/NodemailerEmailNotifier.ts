@@ -1,21 +1,21 @@
-import { env } from "@common/utils/envConfig";
 import nodemailer from "nodemailer";
+import { env } from "src/common/utils/envConfig";
 import type { IMailNotifier } from "./IMailNotifier";
 
+import type Mail from "nodemailer/lib/mailer";
+import { IMAGES } from "src/common/constants";
+import AppError from "src/common/models/appError";
 import {
 	MAIL_NOTIFICATIONS,
 	type MailNotification,
 	OTPMailNotification,
 	PasswordResetMailNotification,
 	SignupCodeMailNotification,
-} from "@/notifications/MailNotification";
-import { emailVerificationMailTemplate } from "@/transactionalEmailTemplates/emailVerificationTemplate";
-import { identityConfirmationMailTemplate } from "@/transactionalEmailTemplates/identityConfirmationTemplate";
-import { passwordResetMailTemplate } from "@/transactionalEmailTemplates/passwordResetTemplate";
-import { signupCodeMailTemplate } from "@/transactionalEmailTemplates/signupCodeTemplate";
-import { IMAGES } from "@common/constants";
-import AppError from "@common/models/appError";
-import type Mail from "nodemailer/lib/mailer";
+} from "src/notifications/MailNotification";
+import { emailVerificationMailTemplate } from "src/transactionalEmailTemplates/emailVerificationTemplate";
+import { identityConfirmationMailTemplate } from "src/transactionalEmailTemplates/identityConfirmationTemplate";
+import { passwordResetMailTemplate } from "src/transactionalEmailTemplates/passwordResetTemplate";
+import { signupCodeMailTemplate } from "src/transactionalEmailTemplates/signupCodeTemplate";
 
 export const LOGO_IMG_CID = "template_logo_img";
 
@@ -82,7 +82,7 @@ function getSender() {
 function getReceiver(notification: MailNotification) {
 	return env.NODE_ENV === "production"
 		? notification.getReceiver()
-		: "mouayad.alhamwi.ma@gmail.com";
+		: "mouayad.alhamwi.masrc/gmail.com";
 }
 function getClient() {
 	return nodemailer.createTransport({
