@@ -24,11 +24,7 @@ initServer()
 	.then((alreadyEnabled) =>
 		alreadyEnabled ? Promise.resolve() : enablePostGisExtension(),
 	)
-	.then(() => migrateDBLatest())
-	.then(() => {
-		const { NODE_ENV, HOST, PORT } = env;
-		logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
-	});
+	.then(() => migrateDBLatest());
 
 async function initServer() {
 	return await new Promise((resolve) => {
@@ -36,6 +32,9 @@ async function initServer() {
 		server.addListener("close", async () => {
 			await db.destroy();
 		});
+
+		const { NODE_ENV, HOST, PORT } = env;
+		logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
 		resolve(true);
 	});
 }
