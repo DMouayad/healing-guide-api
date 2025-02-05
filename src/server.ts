@@ -43,6 +43,7 @@ import { getDbPool } from "./db";
 import handleFlashedZodErrors from "./middleware/handleFlashedZodErrors";
 import { passwordResetRouter } from "./passwordReset/passwordReset.router";
 const flash = require("connect-flash");
+import { localDbPool } from "./db";
 
 const app: Express = express();
 // Set the application to trust the reverse proxy
@@ -54,10 +55,9 @@ const sessionCookieOpts: session.CookieOptions = {
 };
 app.use(
 	session({
-		store: new (pgSession(session))({
-			pool: getDbPool(),
-			tableName: "sessions",
-		}),
+		store: env.isDev
+			? new (pgSession(session))({ pool: localDbPool, tableName: "sessions" })
+			: undefined,
 		secret: env.SESSION_SECRETS,
 		resave: false,
 		cookie: sessionCookieOpts,

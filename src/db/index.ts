@@ -7,18 +7,16 @@ import pg, { types } from "pg";
 pg.types.setTypeParser(types.builtins.INT8, Number.parseInt);
 pg.types.setTypeParser(types.builtins.INT4, Number.parseInt);
 
-export const db = new Kysely<DB>({
-	dialect: new PostgresDialect({
-		pool: getDbPool(),
-	}),
-});
-export function getDbPool() {
-	return new pg.Pool({
-		connectionString: getDbURL(),
-	});
-}
+export const localDbPool = new pg.Pool({ connectionString: getDbURL() });
 
-function getDbURL() {
+export const db = new Kysely<DB>({
+	dialect: env.isProd
+		? new NeonDialect({connectionString: env.DATABASE_URL })
+		: new PostgresDialect({ pool: localDbPool }),
+});
+
+
+export function getDbURL() {
 	const {
 		POSTGRES_DB,
 		POSTGRES_HOST,
