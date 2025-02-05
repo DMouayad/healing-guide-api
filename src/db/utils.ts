@@ -22,7 +22,7 @@ export async function testDBConnection() {
 function getMigratorInstance() {
 	const migrationsFolder = path.join(
 		__dirname,
-		env.isProduction ? "/db/migrations" : "migrations",
+		env.isDocker ? "/db/migrations" : "migrations",
 	);
 	return new Migrator({
 		db,
